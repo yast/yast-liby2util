@@ -1,11 +1,12 @@
-/*
- * y2logging
+/* y2logging.h
  *
- * Description:
- *   core logging implementation
+ * YaST2: Core system
  *
- * Authors:
- *	Klaus Kaempf <kkaempf@suse.de>
+ * YaST2 logging implementation
+ *
+ * Authors: Mathias Kettner <kettner@suse.de>
+ *          Michal Svec <msvec@suse.cz>
+ *          Arvin Schnell <arvin@suse.de>
  *
  * $Id$
  */

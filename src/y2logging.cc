@@ -1,23 +1,15 @@
-/*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
-\----------------------------------------------------------------------/
-
-   File:       logging.cc
-
-   Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
-
-   Purpose:	keep common logging functions for y2util/Y2SLog
-		and ycp/y2log here.
-/-*/
+/* y2logging.cc
+ *
+ * YaST2: Core system
+ *
+ * YaST2 logging implementation
+ *
+ * Authors: Mathias Kettner <kettner@suse.de>
+ *          Michal Svec <msvec@suse.cz>
+ *          Arvin Schnell <arvin@suse.de>
+ *
+ * $Id$
+ */
 
 #include <stdio.h>
 #include <stdarg.h>
