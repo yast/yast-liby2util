@@ -309,4 +309,55 @@ template <class CB> class Report : protected CB {
 
 ///////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME :
+/**
+ * @short Temporarily redirect @ref Report to some recipient
+ *
+ * Restores original redirection in destructor.
+ **/
+template <class CB> class ReportRedirect {
+  ReportRedirect( const ReportRedirect & rhs );             // FORBIDDEN
+  ReportRedirect & operator=( const ReportRedirect & rhs ); // FORBIDDEN
+  private:
+    Report<CB> & _report;
+    CB *         _redirect;
+    CB *         _oredirect;
+  public:
+    ReportRedirect( Report<CB> & report_r, CB & redirect_r )
+      : _report( report_r )
+      , _redirect( &redirect_r )
+    {
+      _oredirect = _report.redirectTo( _redirect );
+    }
+    ReportRedirect( Report<CB> & report_r, CB * redirect_r )
+      : _report( report_r )
+      , _redirect( redirect_r )
+    {
+      _oredirect = _report.redirectTo( _redirect );
+    }
+    virtual ~ReportRedirect() {
+      _report.redirectTo( _oredirect );
+    };
+};
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME :
+/**
+ * @short Temporarily redirect @ref Report to this recipient.
+ *
+ * Restores original redirection in destructor.
+ **/
+template <class CB> struct ReportReceive : public CB, public ReportRedirect<CB> {
+  ReportReceive( Report<CB> & report_r )
+    : ReportRedirect<CB>( report_r, static_cast<CB*>(this) )
+  {}
+};
+
+///////////////////////////////////////////////////////////////////
+
 #endif // CallBack_h
