@@ -16,7 +16,7 @@
   Maintainer: Michael Andres <ma@suse.de>
 
   Textdomain "iso-languages"
-  
+
 /-*/
 
 #define TEXTDOMAIN "iso-languages"
@@ -55,6 +55,9 @@ struct ISOLanguage::_D : public _Body {
   Index _index;
 
   Index _assert( const std::string & code_r ) {
+    if ( _defCodeMap.empty() ) {
+      _defCodeMap = defaultCodeMap();
+    }
     CodeMap::iterator dit = _defCodeMap.find( code_r );
     if ( dit != _defCodeMap.end() ) {
       return dit;
@@ -103,7 +106,7 @@ struct ISOLanguage::_D : public _Body {
   }
 };
 
-ISOLanguage::_D::CodeMap ISOLanguage::_D::_defCodeMap( defaultCodeMap() );
+ISOLanguage::_D::CodeMap ISOLanguage::_D::_defCodeMap;
 ISOLanguage::_D::CodeMap ISOLanguage::_D::_altCodeMap;
 
 const string ISOLanguage::_D::_noCode( "" );
@@ -201,7 +204,7 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
 
   bindtextdomain( TEXTDOMAIN, LOCALEDIR );
   bind_textdomain_codeset( TEXTDOMAIN, "UTF-8" );
-  
+
   CodeMap cm;
   cm["default"] = _( "Default" );
   cm["aa"] = _( "Afar" );

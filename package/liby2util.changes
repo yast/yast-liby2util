@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 18 19:51:07 CET 2005 - ma@suse.de
+
+- Enabled translation of language and country names.
+- 2.11.4
+
+-------------------------------------------------------------------
 Tue Feb  8 17:36:49 CET 2005 - ma@suse.de
 
 - Compile with gcc4.

@@ -56,6 +56,9 @@ struct ISOCountry::_D : public _Body {
   Index _index;
 
   Index _assert( const std::string & code_r ) {
+    if ( _defCodeMap.empty() ) {
+      _defCodeMap = defaultCodeMap();
+    }
     CodeMap::iterator dit = _defCodeMap.find( code_r );
     if ( dit != _defCodeMap.end() ) {
       return dit;
@@ -104,7 +107,7 @@ struct ISOCountry::_D : public _Body {
   }
 };
 
-ISOCountry::_D::CodeMap ISOCountry::_D::_defCodeMap( defaultCodeMap() );
+ISOCountry::_D::CodeMap ISOCountry::_D::_defCodeMap;
 ISOCountry::_D::CodeMap ISOCountry::_D::_altCodeMap;
 
 const string ISOCountry::_D::_noCode( "" );
@@ -200,10 +203,9 @@ ISOCountry::_D::CodeMap ISOCountry:: _D::defaultCodeMap()
   // Using dgettext() to avoid interfering with a previously set textdomain
 #define _(MSG) dgettext(TEXTDOMAIN, (MSG))
 
-  setlocale (LC_ALL, "de_DE.utf8");
   bindtextdomain( TEXTDOMAIN, LOCALEDIR );
   bind_textdomain_codeset( TEXTDOMAIN, "UTF-8" );
-    
+
   CodeMap cm;
   cm["AD"] = _( "Andorra" ); 				// :AND:020:
   cm["AE"] = _( "United Arab Emirates" ); 		// :ARE:784:
