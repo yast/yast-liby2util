@@ -25,19 +25,24 @@
 //
 //	CLASS NAME : Rep
 /**
- * Base class for representations carrying a reference count. Actual
- * reference counting is done by class constRepPtr.
+ * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
  *
- * The initial reference count is zero. This way you're able to create and
- * destroy objects, which were not referenced by any constRepPtr. But as soon as
- * a constRepPtr references the object, any attempt to delete it will lead to an
- * exeption.
+ * <CODE>Rep</CODE> provides the reference counter that tracks the number
+ * of outstanding refrences to an object.
  *
- * Rep must be virtual base class in case of multiple derivation, as it's not
- * advisable to have multiple reference counters for a single object.
+ * <B>Data classes should be virtual derived from <CODE>Rep</CODE></B>, because in
+ * case of multiple inheritance it's not advisable to have multiple reference
+ * counters within a single object.
  *
- * @short Base class for representations carrying a reference count.
- * @see   constRepPtr
+ * The initial reference count is zero. In this state it's ok to manualy delete
+ * the object again. But as soon as there are outstanding references, any attempt
+ * to manualy delete it will lead to an exeption. The object will be automaticaly
+ * deleted after the last reference left.
+ *
+ * Derived Classes may want to overload <CODE>rep_name()</CODE> and <CODE>dumpOn()</CODE>.
+ * Besides this, they don't need to care about <CODE>Rep</CODE>.
+ *
+ * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>data</CODE> classes. Provides the reference counter.
  **/
 class Rep {
 
@@ -138,7 +143,7 @@ class Rep {
     unsigned rep_cnt() const { return  rep_cnt_i; }
 
     /**
-     * Objects name used in dumpOn()
+     * Objects name used in dumpOn().
      **/
     virtual const char * rep_name() const { return "Rep"; }
 
@@ -147,13 +152,13 @@ class Rep {
      * numerical id and total ammount of objects.
      *
      * Derived classes may overload this to realize std::ostream & operator<< for
-     * representation and handle classes.
+     * data and pointer classes.
      * @see constRepPtr
      **/
     virtual std::ostream & dumpOn( std::ostream & str ) const;
 
     /**
-     * Default output operator for representation classes realized via 'virtual Rep::dumpOn()'.
+     * Default output operator for data classes realized via 'virtual Rep::dumpOn()'.
      **/
     friend std::ostream & operator<<( std::ostream & str, const Rep & obj );
 };
@@ -164,19 +169,19 @@ class Rep {
 //
 //	CLASS NAME : constRepPtr
 /**
- * constRepPtr realizes a 'const Rep *' to an allocated object derived from Rep.
- * Thus a 'const constRepPtr' is a 'const Rep *const'.
+ * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
  *
- * On construction, deletion and assignment, constRepPtr adjusts the reference
- * count of the Rep object it is pointing to. Once referenced by a constRepPtr,
- * the Rep object will delete itself, after the last constRepPtr drops its reference
- * to it.
+ * <CODE>constRepPtr</CODE> realizes a '<CODE>const Rep *</CODE>' to an allocated object derived from <CODE>Rep</CODE>.
+ * Thus a '<CODE>const constRepPtr</CODE>' is a '<CODE>const Rep *const</CODE>'.
  *
- * Derived classes should provide an appropriate operator->() to access the
- * representation class.
+ * On construction, deletion and assignment, <CODE>constRepPtr</CODE> adjusts the reference
+ * count of the <CODE>Rep</CODE> object it is pointing to. Once referenced by a <CODE>constRepPtr</CODE>,
+ * the <CODE>Rep</CODE> object will delete itself, after the reference is dropped.
  *
- * @short Base class for reference counted class Rep pointer.
- * @see   Rep
+ * <B>Derived classes should provide an appropriate operator->()</B> to access the
+ * data class.
+ *
+ * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>const pointer</CODE> classes. Manages reference counting.
  **/
 class constRepPtr {
 
@@ -263,7 +268,7 @@ class constRepPtr {
     const Rep *const baseRep() const { return rep_p; }
 
     /**
-     * Return other handles rep_p.
+     * Return other pointers rep_p.
      **/
     const Rep *const baseRep( const constRepPtr & rhs ) const { return rhs.rep_p; }
 
@@ -275,7 +280,7 @@ class constRepPtr {
     operator const void *() const { return rep_p; }
 
     /**
-     * Default output operator for handle classes realized via 'virtual Rep::dumpOn()'.
+     * Default output operator for pointer classes realized via 'virtual Rep::dumpOn()'.
      * @see Rep
      **/
     friend std::ostream & operator<<( std::ostream & str, const constRepPtr & obj );
@@ -287,12 +292,15 @@ class constRepPtr {
 //
 //	CLASS NAME : RepPtr
 /**
- * RepPtr realizes a 'Rep *' to an allocated object derived from Rep.
- * Thus a 'const RepPtr' is a 'Rep *const'.
+ * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
  *
- * @short Base class for reference counted class Rep pointer.
- * @see   Rep
- * @see   constRepPtr
+ * <CODE>RepPtr</CODE> realizes a '<CODE>Rep *</CODE>' to an allocated object derived from <CODE>Rep</CODE>.
+ * Thus a '<CODE>const RepPtr</CODE>' is a '<CODE>Rep *const</CODE>'.
+ *
+ * <B>Derived classes should provide an appropriate operator->()</B> to access the
+ * data class.
+ *
+ * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>pointer</CODE> classes. Manages reference counting.
  **/
 class RepPtr : virtual public constRepPtr {
 
@@ -339,7 +347,7 @@ class RepPtr : virtual public constRepPtr {
     Rep *const baseRep() const { return rep_p; }
 
     /**
-     * Return other handles rep_p.
+     * Return other pointers rep_p.
      **/
     Rep *const baseRep( const RepPtr & rhs ) const { return rhs.rep_p; }
 
