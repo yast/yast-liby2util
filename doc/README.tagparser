@@ -55,8 +55,8 @@ How to use the naked Tagparser (y2util/TagParser.h)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Call lookupTag with a stream as argument and the Tagparser will read
 the stream until it finds something which is seperated by a colon.
-(e.g Label: bla blub) Now call startTag to retrieve a string wich
-contains the name of the Tag found (e.g Label). Depending of you
+(e.g Label: bla blub) Now call startTag to retrieve a string which
+contains the name of the Tag found (e.g Label). Depending of your
 knowledge of the tag you can either call retrieveData to get
 remaining data on the line (bla blub). Alternative you can call
 parseData with a Endtag as Argument, in this case the Tagparser will
