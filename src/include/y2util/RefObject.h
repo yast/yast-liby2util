@@ -21,10 +21,9 @@
 
 #include <iosfwd>
 
-#define RefObjectDEBUG
-
 #ifdef RefObjectDEBUG
 #include <iostream>
+extern std::ostream & RefObject_debug;
 extern unsigned RefObject_total_i;
 extern unsigned RefObject_ids_i;
 #endif // RefObjectDEBUG
@@ -49,14 +48,11 @@ template <class ObjT> class RefObject {
       Ref & operator=( const Ref & ); // no assign
       Ref * operator&();              // no address
 
-#ifdef RefObjectDEBUG
       public:
+
+#ifdef RefObjectDEBUG
 	unsigned id_i;
 #endif //RefObjectDEBUG
-
-      private:
-
-	friend class RefObject;
 
 	ObjT &   obj_p;
 	unsigned cnt_i;
@@ -68,29 +64,24 @@ template <class ObjT> class RefObject {
 #ifdef RefObjectDEBUG
 	  ++RefObject_total_i;
 	  id_i = ++RefObject_ids_i;
-	  std::cerr << "+++Ref(" << id_i << "/" << RefObject_total_i << ")" << std::endl;
+	  RefObject_debug << "+++Ref(" << id_i << "/" << RefObject_total_i << ") "
+		    << cnt_i << ":" << (void*)this << " -> " << (void*)&obj_p << std::endl;
 #endif // RefObjectDEBUG
 	}
 
 	~Ref() {
+#ifdef RefObjectDEBUG
+	  --RefObject_total_i;
+	  RefObject_debug << "---Ref(" << id_i << "/" << RefObject_total_i << ") "
+		    << cnt_i << ":" << (void*)this << " -> " << (void*)&obj_p << std::endl;
+#endif // RefObjectDEBUG
 	  if ( cnt_i )
 	    throw( this );
 	  delete &obj_p;
 #ifdef RefObjectDEBUG
-	  --RefObject_total_i;
-	  std::cerr << "---Ref(" << id_i << "/" << RefObject_total_i << ")" << std::endl;
+	  RefObject_debug << "---Ref" << std::endl;
 #endif // RefObjectDEBUG
 	}
-
-      public:
-
-	operator void *() const { return &obj_p; }
-
-	const ObjT * operator->() const { return &obj_p; }
-	ObjT *       operator->()       { return &obj_p; }
-
-	const ObjT & operator*() const { return obj_p; }
-	ObjT &       operator*()       { return obj_p; }
     };
     ///////////////////////////////////////////////////////////////////
 
@@ -108,10 +99,10 @@ template <class ObjT> class RefObject {
       }
     }
 
-    Ref & assert_body() const {
+    ObjT * assert_body() const {
       if ( !body_p )
 	throw( this );
-      return *body_p;
+      return &body_p->obj_p;
     }
 
   public:
@@ -135,31 +126,50 @@ template <class ObjT> class RefObject {
 
   public:
 
-    //RefObject * operator&();              // no address
+    operator void *()  const { return ( body_p ? (void*)&body_p->obj_p : (void*)0 ); }
 
-    void * null()  const { return ( body_p != (void*)0 ? *body_p : (void*)0 ); }
-    operator void *()  const { return ( body_p != (void*)0 ? *body_p : (void*)0 ); }
-
-    Ref & operator->() const { return assert_body(); }
-
-    ObjT & operator*() const { return *assert_body(); }
+    ObjT * operator->() const { return assert_body(); }
 
     friend std::ostream & operator<<( std::ostream & str, RefObject & obj ) {
 #ifdef RefObjectDEBUG
-      str << "(";
       if ( obj )
-	str << "   Ref(" << (*obj.body_p).id_i << "/" << RefObject_total_i << ")";
+	str << "   Ref(" << obj.body_p->id_i << "/" << RefObject_total_i << ") "
+	    << obj.body_p->cnt_i << ":" << (void*)obj.body_p << " -> " << (void*)&obj.body_p->obj_p << std::endl;
       else
-	str << "NULL";
-      return str << ")";
-#else
-      return str;
+	str << "   Ref(NULL)";
 #endif // RefObjectDEBUG
+      return str;
     }
 };
 ///////////////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : DerRefObject
+//
+//	DESCRIPTION :
+//
+template <class ObjT, class BaseT> class DerRefObject : public RefObject<BaseT> {
+
+  public:
+
+    DerRefObject( ObjT * obj_pr = 0 )             : RefObject<BaseT>( obj_pr ) {}
+    DerRefObject( const DerRefObject & handle_v ) : RefObject<BaseT>( handle_v ) {}
+
+    DerRefObject & operator=( const DerRefObject & handle_v ) {
+      RefObject<BaseT>::operator=( handle_v );
+      return *this;
+    }
+
+    virtual ~DerRefObject() {}
+
+  public:
+
+    ObjT * operator->() const { return static_cast<ObjT*>(assert_body()); }
+};
+
+///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 //
