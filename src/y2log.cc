@@ -68,6 +68,9 @@ static bool log_debug = false;
 static bool log_to_file = true;
 static bool log_to_syslog = false;
 
+static bool log_all_variable = false;
+static bool log_debug_variable = false;
+
 static FILE *Y2LOG_STDERR = stderr;		/* Default output */
 
 /* static prototypes */
@@ -333,6 +336,9 @@ static void read_logconf() {
 
     did_read_logconf = true;
 
+    if(getenv(Y2LOG_VAR_DEBUG)) log_debug_variable = true;
+    if(getenv(Y2LOG_VAR_ALL)) log_all_variable = true;
+
     /* Read the logconf.ycp */
     struct passwd *pw = getpwuid(geteuid());
     if(pw) {
@@ -371,10 +377,6 @@ bool should_be_logged (int loglevel, string componentname) {
     /* Only debug level is controllable */
     if(loglevel > 0) return true;
 
-    /* Everything should be logged */
-    if (getenv(Y2LOG_VAR_ALL))
-	return true;
-
     /* Prepare the logfile name. */
     if(!did_set_logname)
 	set_log_filename("");
@@ -383,12 +385,15 @@ bool should_be_logged (int loglevel, string componentname) {
     if(!did_read_logconf)
 	read_logconf();
 
+    /* Everything should be logged */
+    if(log_all_variable) return true;
+
     /* Specific component */
     if(logconf.find(componentname) != logconf.end())
 	return logconf[componentname] == "true";
 
     /* Environment variable */
-    if(getenv (Y2LOG_VAR_DEBUG) != NULL) return true;
+    if(log_debug_variable) return true;
 
     /* Config setting */
     return log_debug;
