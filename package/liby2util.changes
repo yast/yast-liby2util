@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 24 15:39:47 CET 2004 - msvec@suse.cz
+
+- use normal log behavior in ycpc when Y2DEBUG is set
+
+-------------------------------------------------------------------
 Mon Feb 23 17:12:43 CET 2004 - mvidner@suse.cz
 
 - Reread log.conf on SIGUSR1

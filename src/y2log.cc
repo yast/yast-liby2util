@@ -417,7 +417,7 @@ void set_log_conf(string confname) {
  */
 bool should_be_logged (int loglevel, string componentname) {
 
-    if(log_simple) return loglevel > 1;
+    if(log_simple && !log_debug) return loglevel > 1;
 
     /* Only debug level is controllable */
     if(loglevel > 0) return true;
