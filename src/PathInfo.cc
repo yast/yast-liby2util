@@ -221,7 +221,7 @@ int PathInfo::assert_dir( const Pathname & path, unsigned mode )
     else
 	lastpos=1;
 
-    DBG << "about to create " << spath << endl;
+//    DBG << "about to create " << spath << endl;
     while((pos = spath.find('/',lastpos)) != string::npos )
     {
 	string dir = spath.substr(0,pos);
@@ -234,7 +234,7 @@ int PathInfo::assert_dir( const Pathname & path, unsigned mode )
 	    else
 		ret=errno;
 	}
-	DBG << "creating directory " << dir << (ret?" failed":" succeeded") << endl;
+//	DBG << "creating directory " << dir << (ret?" failed":" succeeded") << endl;
 	lastpos = pos+1;
     }
     return ret;
