@@ -138,14 +138,18 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    return;
 	}
     }
-
-    MIL << "Executing \'";
+   
+    // do not remove the single quotes around every argument, copy&paste of
+    // command to shell will not work otherwise!
+    MIL << "Executing ";
     for(int i=0; argv[i]; i++)
     {
+	if(i>0) MIL << ' ';
+	MIL << '\'';
 	MIL << argv[i];
-	MIL << " ";
+	MIL << '\'';
     }
-    MIL << "'" << endl;
+    MIL << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
