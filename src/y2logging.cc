@@ -280,17 +280,18 @@ setLogfileName (const char *filename)
 	|| (*filename == 0))
     {		/* No filename --> use defaults */
 	if (geteuid()) {			/* Non root */
-	    if (!pw) {
+	    if (!pw)
+	    {
 		fprintf( Y2LOG_STDERR,
 			 "Cannot read pwd entry of user id %d. Logfile will be '%s'.\n",
 			 geteuid(), Y2LOG_FALLBACK );
 
 		loggingname = Y2LOG_FALLBACK;
 	    }
-	    else {
+	    else
+	    {
 		loggingname = (char *)malloc (strlen (pw->pw_dir) + strlen (Y2LOG_USER) + 1);
-		*loggingname = 0;
-		strcat (loggingname, pw->pw_dir);
+		strcpy (loggingname, pw->pw_dir);
 		strcat (loggingname, Y2LOG_USER);
 	    }
 	}
