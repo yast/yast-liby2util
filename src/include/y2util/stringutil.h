@@ -29,6 +29,7 @@
 #include <iosfwd>
 #include <vector>
 #include <string>
+#include <list>
 
 /**
  * Utility functions for std::strings. Most of them based on stringutil::form.
@@ -197,8 +198,31 @@ extern unsigned split( const std::string          line_r,
                        const std::string &        sep_t       = " \t",
                        const bool                 singlesep_r = false );
 
+/**
+ * Join strinngs in words_r using separator sep_r
+ **/
 extern std::string join( const std::vector<std::string> & words_r,
 			 const std::string & sep_r = " " );
+
+
+/**
+ * Split string into a list of lines using <b>any<\b> char in sep_r as line
+ * delimiter. The delimiter is stripped from the line.
+ *
+ * <PRE>
+ * splitToLines( "start\n\nend" ) -> { "start", "", "end" }
+ * </PRE>
+ **/
+inline std::list<std::string> splitToLines( const std::string text_r, const std::string & sep_r = "\n" )
+{
+  std::vector<std::string> lines;
+  stringutil::split( text_r, lines, "\n", true );
+  std::list<std::string> ret;
+  for ( unsigned i = 0; i < lines.size(); ++i ) {
+    ret.push_back( lines[i] );
+  }
+  return ret;
+}
 
 /**
  * Strip the first word (delimited by blank or tab) from value, and return it.
@@ -231,6 +255,12 @@ inline std::string  trim( const std::string & s ) { return ltrim( rtrim( s ) ); 
  **/
 extern std::string toLower( const std::string & s );
 extern std::string toUpper( const std::string & s );
+
+/**
+ * Helper for stream output
+ **/
+extern std::ostream & dumpOn( std::ostream & str, const std::list<std::string> & l, const bool numbered = false );
+extern std::ostream & dumpOn( std::ostream & str, const std::vector<std::string> & l, const bool numbered = false );
 
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil

@@ -248,6 +248,43 @@ std::string toUpper( const std::string & s )
   return ret;
 }
 
+/******************************************************************
+**
+**
+**	FUNCTION NAME : dumpOn
+**	FUNCTION TYPE : std::ostream &
+**
+**	DESCRIPTION :
+*/
+std::ostream & dumpOn( std::ostream & str, const std::list<std::string> & l, const bool numbered )
+{
+  unsigned i = 0;
+  for ( std::list<std::string>::const_iterator it = l.begin(); it != l.end(); ++it, ++i ) {
+    if ( numbered )
+      str << '[' << i << ']';
+    str << *it << endl;
+  }
+  return str;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : dumpOn
+**	FUNCTION TYPE : std::ostream &
+**
+**	DESCRIPTION :
+*/
+std::ostream & dumpOn( std::ostream & str, const std::vector<std::string> & l, const bool numbered )
+{
+  for ( unsigned i = 0; i < l.size(); ++i ) {
+    if ( numbered )
+      str << '[' << i << ']';
+    str << l[i] << endl;
+  }
+  return str;
+}
+
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil
 ///////////////////////////////////////////////////////////////////
