@@ -9,7 +9,7 @@ using namespace std;
 
 int main( int argc, char **argv )
 {
-  Y2Logging::setLogfileName("-");
+  set_log_filename("-");
 
   if ( argc != 2 ) {
     cerr << "Usage: test_sysconfig <filepath>" << endl;

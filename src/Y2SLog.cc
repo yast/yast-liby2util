@@ -50,8 +50,9 @@ bool dbg_enabled_bm( init() );
 **	DESCRIPTION :
 */
 static bool init() {
-  Y2Logging::setLogfileName (getenv( "Y2SLOG_FILE" ));
-  return (getenv( "Y2SLOG_DEBUG" ) != NULL);
+    if(getenv("Y2SLOG_FILE") == NULL) return false;
+    set_log_filename (getenv( "Y2SLOG_FILE" ));
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -95,7 +96,7 @@ class Y2Loglinebuf : public streambuf {
 	for ( int i = 0; i < n; ++i, ++c ) {
 	  if ( *c == '\n' ) {
 	    buffer += string( s, c-s );
-	    Y2Logging::y2_logger( level, name, file, line, func, "%s", buffer.c_str() );
+	    y2_logger( level, name, file, line, func, "%s", buffer.c_str() );
 	    buffer = "";
 	    s = c+1;
 	  }

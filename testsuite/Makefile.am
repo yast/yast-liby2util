@@ -7,6 +7,8 @@ AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(top_srcdir)/src/include
 
+AM_CPPFLAGS = -DY2LOG=\"liby2util-testsuite\" 
+
 AM_LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
 	$(top_builddir)/src/liby2util.la	\

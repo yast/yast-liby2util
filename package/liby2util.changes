@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Dec 12 20:46:22 CET 2003 - msvec@suse.cz
+
+- merge again the logging functionality from core
+- implement better logging configuration
+- 2.9.3
+
+-------------------------------------------------------------------
 Thu Nov 13 22:07:39 CET 2003 - ma@suse.de
 
 - Fixed ProgressCounter::updateIfNewPercent. After reset, update

@@ -6,42 +6,42 @@ pkgincludedir = $(includedir)/y2util
 
 # these go to $(pkgincludedir)
 
-pkginclude_HEADERS = \
-	stringutil.h		\
-	hash.h			\
-	y2logging.h		\
-	Ustring.h		\
-	LangCode.h		\
-	Vendor.h		\
-	Pathname.h		\
-	PathInfo.h		\
-	Rep.h			\
-	RepDef.h		\
-	RefObject.h		\
-	Y2SLog.h		\
-	TagParser.h		\
-	TaggedParser.h		\
-	TagRetrievalPos.h	\
-	TagCacheRetrieval.h	\
-	TagCacheRetrievalPtr.h	\
-	TaggedFile.h		\
+pkginclude_HEADERS =		\
+	CallBack.h		\
 	CommonPkdParser.h	\
-	timeclass.h		\
+	Date.h			\
+	DiskSpace.h		\
 	ExternalDataSource.h	\
 	ExternalProgram.h	\
-	Url.h			\
-	Date.h			\
 	FSize.h			\
+	GPGCheck.h		\
+	LangCode.h		\
+	PathInfo.h		\
+	Pathname.h		\
+	ProgressCounter.h	\
+	RefObject.h		\
+	Rep.h			\
+	RepDef.h		\
+	SysConfig.h		\
+	TagCacheRetrieval.h	\
+	TagCacheRetrievalPtr.h	\
+	TagParser.h		\
+	TagRetrievalPos.h	\
+	TaggedFile.h		\
+	TaggedParser.h		\
 	TreeItem.h		\
+	Url.h			\
+	Ustring.h		\
+	Vendor.h		\
+	Y2SLog.h		\
 	YRpmGroupsTree.h	\
-	diff.h			\
 	YStringTree.h		\
-	YTransText.h            \
-	DiskSpace.h             \
-        GPGCheck.h              \
-        SysConfig.h		\
-        CallBack.h		\
-	ProgressCounter.h	
+	YTransText.h		\
+	diff.h			\
+	hash.h			\
+	stringutil.h		\
+	timeclass.h		\
+	y2log.h
 
 
 #<INSTALL-HEADER-TARGET>

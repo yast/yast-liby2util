@@ -132,7 +132,7 @@ void inst() {
 */
 int main( int argc, char ** argv )
 {
-  Y2Logging::setLogfileName("-");
+  set_log_filename("-");
   INT << "START" << endl;
 
   inst();

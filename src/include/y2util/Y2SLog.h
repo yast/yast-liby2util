@@ -20,7 +20,7 @@
 #define Y2SLog_h
 
 #include <iostream>
-#include <y2util/y2logging.h>
+#include <y2util/y2log.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -50,9 +50,6 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 //        #define Y2LOG "foo"
 //        DBG << ....
 //
-#ifndef Y2LOG
-#define Y2LOG "DEFINE_Y2LOG"
-#endif
 
 #define _DBG(c) _Y2SLOG( c, 0 )
 #define _MIL(c) _Y2SLOG( c, 1 )
