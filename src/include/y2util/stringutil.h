@@ -27,7 +27,6 @@
 #include <cstdarg>
 
 #include <string>
-#include <iostream>
 
 /**
  * Utility functions for std::strings. Most of them based on stringutil::form.
