@@ -14,7 +14,6 @@ clean-local:
 	rm -f tmp.* ycp.log ycp.sum site.exp libycp.log \
 	libycp.sum site.bak
 
-EXTRA_DIST =
 
 #==================================================================
 #
@@ -26,6 +25,7 @@ EXTRA_DIST =
 # 'make test_prog_test'   tests prog_test
 #
 noinst_PROGRAMS = 	hier_test const_test
+noinst_HEADERS = PtrHier.h
 
 hier_test_SOURCES = 	hier.cc
 const_test_SOURCES = 	const.cc
