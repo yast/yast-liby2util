@@ -73,13 +73,13 @@ class FSize {
      **/
     static const char * unit( const Unit unit_r ) {
       switch ( unit_r ) {
-      case T: return "T";
-      case G: return "G";
-      case M: return "M";
-      case K: return "K";
+      case T: return "TB";
+      case G: return "GB";
+      case M: return "MB";
+      case K: return "kB";
       case B: break;
       }
-      return "b";
+      return "B";
     }
 
   public:
@@ -128,17 +128,19 @@ class FSize {
     /**
      * Return string representation in given Unit. Parameter <code>fw</code> and
      * <code>prec</code> denote field width and precision as in a "%*.*f" printf
-     * format string. If <code>showunit</code> ist true, the string representaion
+     * format string. <code>prec</code> -1 automatically picks an appropriate
+     * precision depending on the unit.
+     * If <code>showunit</code> ist true, the string representaion
      * of Unit is <em>appended<em> separated by a single blank.
      *
      * If Unit is <b>B</b>yte, precision is set to zero.
      **/
-    std::string form( const Unit unit_r, unsigned fw = 0, unsigned prec = 1, const bool showunit = true ) const;
+    std::string form( const Unit unit_r, unsigned fw = 0, unsigned prec = -1, const bool showunit = true ) const;
 
     /**
      * Return string representation in bestUnit.
      **/
-    std::string form( unsigned fw = 0, unsigned prec = 1, const bool showunit = true ) const {
+    std::string form( unsigned fw = 0, unsigned prec = -1, const bool showunit = true ) const {
       return form( bestUnit(), fw, prec, showunit );
     }
 

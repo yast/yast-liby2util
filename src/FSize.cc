@@ -57,6 +57,17 @@ FSize::Unit FSize::bestUnit() const
 //
 std::string FSize::form( const Unit unit_r, unsigned fw, unsigned prec, const bool showunit ) const
 {
+  if ( prec < 0 ) {
+    switch ( unit_r )
+    {
+      case T:  prec = 3; break;
+      case G:  prec = 2; break;
+      case M:  prec = 1; break;
+      case K:  prec = 1; break;
+      case B:  prec = 0; break;
+    }
+  }
+	
   if ( unit_r == B )
     prec = 0; // doesn't make sense for Byte
 
