@@ -281,7 +281,8 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 		// no data on this line
 
 		_startPos = _endPos = _tagPos + streamoff(currentLine.size());
-		_bufferPos = -1;
+		_bufferPos = 0;
+		_bufferLen = 0;
 	    }
 	    else
 	    {
@@ -291,6 +292,8 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 		_startPos = _tagPos + streamoff(delim_ii);
 
 		_bufferLen = currentLine.find_last_not_of (" \t") + 1 - delim_ii;
+		if (_bufferLen == string::npos)
+		    _bufferLen = 0;
 		_endPos = _startPos + streamoff (_bufferLen);
 	    }
 

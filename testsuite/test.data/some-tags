@@ -7,6 +7,9 @@
 =Loc: blah.blubb
 # single line, with language
 =Loc.de: deutsch
+=Empty:
+=Space: 
+=Tab:	
 
 # multi line, no language
 +Fil:
