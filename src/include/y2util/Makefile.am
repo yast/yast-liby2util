@@ -19,7 +19,6 @@ pkginclude_HEADERS =		\
 	PathInfo.h		\
 	Pathname.h		\
 	ProgressCounter.h	\
-	RefObject.h		\
 	Rep.h			\
 	RepDef.h		\
 	SysConfig.h		\
