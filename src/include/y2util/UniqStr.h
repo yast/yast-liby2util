@@ -3,7 +3,7 @@
 #define _PkgDb_UniqStr_h
 
 #include <cstring>
-#include <hash.h>
+#include <y2util/hash.h>
 
 // UniqStrInternal is used as content type of the UniqStr hash; the comparison
 // function is strcmp() so that existing strings can be found by hash

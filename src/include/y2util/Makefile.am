@@ -11,6 +11,7 @@ pkginclude_HEADERS = \
 	UniqStr.h	\
 	Pathname.h	\
 	PathInfo.h	\
+	RefObject.h	\
 	timeclass.h
 
 #<INSTALL-HEADER-TARGET>
