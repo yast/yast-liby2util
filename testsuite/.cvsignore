@@ -11,3 +11,7 @@ tmp.log*
 *.prg
 runy2util
 bla
+validate_packages
+validate_packages_lang
+validate_selection
+validate_tagged
