@@ -4,11 +4,10 @@
 
 htmldir = $(docdir)/autodocs
 
-html_DATA = index.html $(wildcard *.html)
+html_DATA = index.html $(wildcard *.html *.png) doxygen.css @RPMNAME@.tag
 
-CLEANFILES = $(html_DATA)
+CLEANFILES = $(html_DATA) doxygen.log
 
 header_dir = $(srcdir)/../../src/include
-$(filter-out index.html, $(html_DATA)): index.html
 index.html: $(header_dir)/*.h $(header_dir)/y2util/*.h
-	@ybindir@/ydoc @RPMNAME@ --private --url $(htmldir) $^
+	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@ TAGFILES=

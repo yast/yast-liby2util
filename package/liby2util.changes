@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  5 10:21:33 CET 2003 - mvidner@suse.cz
+
+- Switched autodocs from kdoc to doxygen
+- 2.9.0
+
+-------------------------------------------------------------------
 Tue Sep 23 19:59:52 CEST 2003 - ma@suse.de
 
 - Added PathInfo::symlink
