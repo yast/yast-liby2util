@@ -35,7 +35,7 @@ Url::Url( const string & url )
     clearifinvalid(_valid);
 }
 
-bool Url::operator==( const Url &url )
+bool Url::operator==( const Url &url ) const
 {
   return ( saveAsString() == url.saveAsString() );
 }
