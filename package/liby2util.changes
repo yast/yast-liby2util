@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 25 09:57:18 CET 2003 - gs@suse.de
+
+- 2.7.12   #include <assert.h> added 
+
+-------------------------------------------------------------------
 Mon Feb 24 13:23:43 CET 2003 - cschum@suse.de
 
 - Don't report missing config file as error (#23799).
