@@ -11,9 +11,12 @@
 using namespace std;
 
 GPGCheck::GPGCheck ()
-    : _keyring ("/usr/lib/rpm/gnupg/pubring.gpg"),
-      _gnupghome( "/var/lib/YaST2/.gnupg" )
+    : _keyring ("/usr/lib/rpm/gnupg/pubring.gpg")
 {
+  if ( getuid() == 0 ) {
+    _gnupghome = "/var/lib/YaST2/.gnupg";
+  }
+
   PathInfo p( _gnupghome + "/options" );
   if ( !p.isExist() ) {
     system( assembleCommand( "dummy" ).c_str() );
@@ -66,7 +69,7 @@ string GPGCheck::assembleCommand( const string &args )
 {
   string cmd = "/usr/bin/gpg";
   cmd += " 2>/dev/null >/dev/null";
-  cmd += " --homedir " + _gnupghome;
+  if ( !_gnupghome.empty() ) cmd += " --homedir " + _gnupghome;
   cmd += " --no-default-keyring";
   cmd += " --keyring " + _keyring;
   cmd += " " + args;
