@@ -1,0 +1,79 @@
+Tag Types
+~~~~~~~~~
+
+Basic
+=====
+
+Tagname: some data
+Tagname2: some other data
+
+Basic Multiline
+===============
+
+Starttag:
+data1
+data2
+Gattrats:
+
+i.e. the endtag is the reversed starttag with only the first letter
+capitalized.
+
+Language dependant
+==================
+
+Tagname: english text
+Tagname.de: deutscher Text
+Tagname.de_AT: österreicher Text
+
+Language dependant multi line (Selection style)
+===============================================
+
+Tagname.de:
+data1
+data2
+Temangat.de:
+
+
+Language dependant multi line (YOU style)
+=========================================
+
+Tagname.german:
+data1
+data2
+Namreg.emangat:
+
+
+There are also different actions what to do with Language tags. It
+is possible to have the localized version replace the original value
+or to have in fact two different tags, one without locale and
+another tag which can only hold locale specific data (see selections
+for example).
+
+
+
+How to use the naked Tagparser (y2util/TagParser.h)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Call lookupTag with a stream as argument and the Tagparser will read
+the stream until it finds something which is seperated by a colon.
+(e.g Label: bla blub) Now call startTag to retrieve a string wich
+contains the name of the Tag found (e.g Label). Depending of you
+knowledge of the tag you can either call retrieveData to get
+remaining data on the line (bla blub). Alternative you can call
+parseData with a Endtag as Argument, in this case the Tagparser will
+continue parsing until it finds Endtag. retrieveData will return
+everything between the start and endtag then.
+
+How to use the CommonPkdTagParser (y2util/CommonPkdParser.h)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CommonPkdTagParser operates with Tags and a TagSet. The Tag class
+stores data about a tag and information about how to deal with it
+when found in a file (single line or multi line, locale or not
+locale). TagSet holds map which associates Tagname with Tag objects.
+After calling your parsers startTag function, you just have to give
+the assing function of the Tagset the stream, parser and tagname. It
+then searches if is responsible for the tag and if so, calls the
+tag's assign function. This function in turn will take the
+neccessary actions to retreive the data and maybe overwrite its
+contents because of a better matching locale. It return whether it
+has done this successfully or not. See InstSrcCommonPkd.cc for
+coding example.
