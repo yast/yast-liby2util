@@ -355,4 +355,50 @@ class RepPtr : virtual public constRepPtr {
 
 ///////////////////////////////////////////////////////////////////
 
+/**
+ * Comparison of constRepPtr and Rep*. Provided because all pointer
+ * classes provide an <CODE>operator const void *()</CODE> that returns
+ * the internal Rep*'s value. But a data classes this pointer needs
+ * not to have the same value as the inherited class Rep's one.
+ **/
+inline bool operator==( const constRepPtr & lhs, const Rep * rhs )
+{
+  return ( (const void *)lhs == (const void *)rhs );
+}
+
+/**
+ * Comparison of constRepPtr and Rep*. Provided because all pointer
+ * classes provide an <CODE>operator const void *()</CODE> that returns
+ * the internal Rep*'s value. But a data classes this pointer needs
+ * not to have the same value as the inherited class Rep's one.
+ **/
+inline bool operator==( const Rep * lhs, const constRepPtr & rhs )
+{
+  return ( (const void *)lhs == (const void *)rhs );
+}
+
+/**
+ * Comparison of constRepPtr and Rep*. Provided because all pointer
+ * classes provide an <CODE>operator const void *()</CODE> that returns
+ * the internal Rep*'s value. But a data classes this pointer needs
+ * not to have the same value as the inherited class Rep's one.
+ **/
+inline bool operator!=( const constRepPtr & lhs, const Rep * rhs )
+{
+  return ( ! operator==( lhs, rhs ) );
+}
+
+/**
+ * Comparison of constRepPtr and Rep*. Provided because all pointer
+ * classes provide an <CODE>operator const void *()</CODE> that returns
+ * the internal Rep*'s value. But a data classes this pointer needs
+ * not to have the same value as the inherited class Rep's one.
+ **/
+inline bool operator!=( const Rep * lhs, const constRepPtr & rhs )
+{
+  return ( ! operator==( lhs, rhs ) );
+}
+
+///////////////////////////////////////////////////////////////////
+
 #endif // Rep_h

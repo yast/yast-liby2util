@@ -26,7 +26,19 @@ class REP_CLASS(Obj), public Slv {
   REP_BODY(Obj)
     public:
     Obj(){}
+
+    ObjPtr getPtr();
 };
+
+ObjPtr Obj::getPtr() {
+  ObjPtr r;
+  r = this;
+  DBG << "r=" << r << endl;
+  DBG << "r==this" << (r==this) << endl;
+  DBG << "r==(void*)this" << (r==(void*)this) << endl;
+  DBG << "r==(void*)(Rep*)this" << (r==(void*)(Rep*)this) << endl;
+  return this;
+}
 
 IMPL_HANDLES(Obj);
 
@@ -104,6 +116,13 @@ int main()
 {
   Y2SLog::setLogfileName("-");
   DBG << "START" << endl;
+
+  ObjPtr x( new Obj );
+  DBG << x << endl;
+  ObjPtr y( x->getPtr() );
+  DBG << y << endl;
+  return 0;
+
 
 #if 0
 #define TT(X) INT << setw(5) << #X << " " << sizeof( X ) << endl

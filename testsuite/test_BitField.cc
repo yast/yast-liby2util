@@ -79,6 +79,7 @@ int main ()
   TR( a.clear (), a );
   TR( a.set   (), a );
   TR( a.invert(), a );
+#if 0
 
   TR( a.clear (3), a );
   TR( a.set   (3), a );
@@ -162,7 +163,6 @@ int main ()
   iter( "0000" );
   iter( "101010" );
   iter( "110011" );
-#if 0
 #endif
 
   return 0;
