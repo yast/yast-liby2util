@@ -274,7 +274,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 	toread_ii;
 	expect_ii -= toread_ii, toread_ii = min( expect_ii, bufferLen_i ) ) {
     stream_fr.read( buffer_ac, toread_ii );
-    if ( stream_fr.gcount() != toread_ii ) {
+    if ( stream_fr.gcount() != (int)toread_ii ) {
       data_tr.erase();
       y2internal(( "not as many data available as expected %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) ));
       return false; // not as many data available as expected
