@@ -19,6 +19,7 @@ liby2util_la_SOURCES =		\
 	FSize.cc		\
 	GPGCheck.cc		\
 	LangCode.cc		\
+	MemUsage.cc		\
 	PathInfo.cc		\
 	Pathname.cc		\
 	ProgressCounter.cc	\

@@ -16,6 +16,7 @@ pkginclude_HEADERS =		\
 	FSize.h			\
 	GPGCheck.h		\
 	LangCode.h		\
+	MemUsage.h		\
 	PathInfo.h		\
 	Pathname.h		\
 	ProgressCounter.h	\
