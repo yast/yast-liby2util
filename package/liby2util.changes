@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 29 17:30:46 CET 2003 - ma@suse.de
+
+- Added FSize::fillBlock (and FSize::fullBlock) to adjust (return adjusted)
+  size to provided blocksize boundary.
+- 2.7.6
+
+-------------------------------------------------------------------
 Thu Jan 23 12:15:42 CET 2003 - ma@suse.de
 
 - Added class PathInfo::devino_cache. Standalone simple cache

@@ -116,6 +116,16 @@ class FSize {
     FSize operator--(int/*postfix*/) { return _size--; }
 
     /**
+     * Adjust size to multiple of <code>blocksize_r</code>
+     **/
+    FSize & fillBlock( FSize blocksize_r = KB );
+
+    /**
+     * Return size adjusted to multiple of <code>blocksize_r</code>
+     **/
+    FSize fullBlock( FSize blocksize_r = KB ) const { FSize ret( _size ); return ret.fillBlock(  blocksize_r );	}
+
+    /**
      * Return size in Unit ( not rounded )
      **/
     long long operator()( const Unit unit_r ) const { return _size / factor( unit_r ); }

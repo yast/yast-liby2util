@@ -28,6 +28,27 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : FSize::fillBlock
+//	METHOD TYPE : FSize &
+//
+//	DESCRIPTION :
+//
+FSize & FSize::fillBlock( FSize blocksize_r )
+{
+  if ( _size && blocksize_r ) {
+    long long diff = _size % blocksize_r;
+    if ( diff ) {
+      if ( _size > 0 )
+	_size += blocksize_r;
+      _size -= diff;
+    }
+  }
+  return *this;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : FSize::bestUnit
 //	METHOD TYPE : FSize::Unit
 //
