@@ -60,6 +60,12 @@ class Rep {
     friend class constRepPtr;
 
     /**
+     * Class basicPtr provides a minimal interface to handle reference counting.
+     * @see basicPtr
+     **/
+    friend class basicPtr;
+
+    /**
      * Increment reference counter.
      * @see constRepPtr
      **/
@@ -402,6 +408,27 @@ inline bool operator!=( const Rep * lhs, const constRepPtr & rhs )
 {
   return ( ! operator==( lhs, rhs ) );
 }
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : basicPtr
+/**
+ * @short Minimal interface to handle reference counter Rep
+ * @see rep
+ **/
+class basicPtr {
+  protected:
+    void _rep_change( const Rep * from_r, const Rep * to_r ) {
+      if ( from_r != to_r ) {
+	if ( from_r )
+	  from_r->rep_unref();
+	if ( to_r )
+	  to_r->rep_ref();
+      }
+    }
+};
 
 ///////////////////////////////////////////////////////////////////
 
