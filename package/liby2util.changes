@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 29 16:04:30 CEST 2003 - cschum@suse.de
+
+- Suppress ".." in PathInfo::readDir().
+
+-------------------------------------------------------------------
 Mon Jul 28 15:28:14 CEST 2003 - cschum@suse.de
 
 - Fix test suite for autobuild.

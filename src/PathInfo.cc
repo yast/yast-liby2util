@@ -410,7 +410,7 @@ int PathInfo::readdir( std::list<std::string> & retlist,
 	continue;
       if ( entry->d_name[1] == '\0'
 	   || (    entry->d_name[1] == '.'
-		&& entry->d_name[1] == '\0' ) )
+		&& entry->d_name[2] == '\0' ) )
 	continue;
     }
     retlist.push_back( entry->d_name );
