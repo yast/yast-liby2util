@@ -107,9 +107,18 @@ bool should_be_logged (int loglevel, string componentname);
  * application the first call to y2log sets the logfile name as follows:
  * users: $HOME/.y2log
  * root: /var/log/YaST2/y2log
+ *
  * The logname "-" is special: The log messages are written to stderr.
  */
 void set_log_filename (string filename);
 string get_log_filename();
+
+/**
+ * Read an alternate logconf file @ref y2log. If this is not done by the
+ * application the first call to y2log sets the logconf file as follows:
+ * users: $HOME/.yast2/log.conf
+ * root: /etc/YaST2/log.conf
+ */
+void set_log_conf(string confname);
 
 #endif /* _y2log_h */

@@ -75,7 +75,6 @@ static FILE *Y2LOG_STDERR = stderr;		/* Default output */
 
 /* static prototypes */
 static void shift_log_files(string filename);
-static void read_logconf();
 
 /**
  * y2log must use a private copy of stderr, esp. in case we're always logging
@@ -248,7 +247,7 @@ void set_log_filename (string fname)
 {
     did_set_logname = true;
 
-    if(!did_read_logconf) read_logconf();
+    if(!did_read_logconf) set_log_conf("");
 
     if(log_to_syslog) openlog("yast2", LOG_PID, LOG_DAEMON);
     if(!log_to_file) return;
@@ -332,40 +331,42 @@ static void shift_log_files(string filename)
 /**
  * Parse the log.conf
  */
-static void read_logconf() {
+void set_log_conf(string confname) {
 
     did_read_logconf = true;
 
-    if(getenv(Y2LOG_VAR_DEBUG)) log_debug_variable = true;
-    if(getenv(Y2LOG_VAR_ALL)) log_all_variable = true;
-
-    /* Read the logconf.ycp */
-    struct passwd *pw = getpwuid(geteuid());
-    if(pw) {
-
-	string logconfname;
+    string logconfname = confname;
+    if(logconfname == "") {
+	/* Read the logconf.ycp */
+	struct passwd *pw = getpwuid(geteuid());
+	if(!pw) {
+	    fprintf (stderr, "Cannot read pwd entry for user "
+		    "id %d. No logconf, using defaults.\n", geteuid ());
+	    return;
+	}
 	if(getuid())
 	    logconfname = string (pw->pw_dir) + "/.yast2/" + Y2LOG_CONF;
 	else
 	    logconfname = "/etc/YaST2/" Y2LOG_CONF;
-
-	/* We have to remember the errno. Otherwise a call of
-	 * y2error ("error: %m") can display a wrong message. */
-	int save_errno = errno;
-	inifile i = miniini(logconfname.c_str());
-	logconf = i["Debug"];
-
-	log_to_file = i["Log"]["file"] != "false";
-	log_to_syslog = i["Log"]["syslog"] == "true";
-	log_debug = i["Log"]["debug"] == "true";
-
-	errno = save_errno;
     }
-    else
-    {
-	fprintf (stderr, "Cannot read pwd entry for user "
-		 "id %d. No logconf, using defaults.\n", geteuid ());
-    }
+
+    if(getenv(Y2LOG_VAR_DEBUG)) log_debug_variable = true;
+    if(getenv(Y2LOG_VAR_ALL)) log_all_variable = true;
+
+    /* We have to remember the errno. Otherwise a call of
+     * y2error ("error: %m") can display a wrong message. */
+    int save_errno = errno;
+    inifile i = miniini(logconfname.c_str());
+    logconf = i["Debug"];
+
+    log_to_file = i["Log"]["file"] != "false";
+    log_to_syslog = i["Log"]["syslog"] == "true";
+    log_debug = i["Log"]["debug"] == "true";
+
+    if(i["Log"]["filename"] != "")
+	logname = strdup(i["Log"]["filename"].c_str());
+
+    errno = save_errno;
 }
 
 
@@ -383,7 +384,7 @@ bool should_be_logged (int loglevel, string componentname) {
 
     /* Read log configuration. */
     if(!did_read_logconf)
-	read_logconf();
+	set_log_conf("");
 
     /* Everything should be logged */
     if(log_all_variable) return true;
