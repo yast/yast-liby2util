@@ -11,6 +11,7 @@ AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES = \
+	stringutil.cc	\
 	hash.cc \
 	LangCode.cc	\
 	Rep.cc \

@@ -26,6 +26,7 @@
 #include <cstdio>
 #include <cstdarg>
 
+#include <vector>
 #include <string>
 
 /**
@@ -127,6 +128,45 @@ inline std::string octstring( int n,           int w = 5 ) { return form( "%#0*o
 inline std::string octstring( unsigned n,      int w = 5 ) { return form( "%#0*o",    w, n ); }
 inline std::string octstring( long n,          int w = 5 ) { return form( "%#0*lo",   w, n ); }
 inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*lo",   w, n ); }
+
+/**
+ * Split line into words
+ *
+ * <b>singlesep_r = false</b>: Separator is any nonenmpty sequence of characters listed in sep_t.
+ * Leading trailing separators are ignored.
+ *
+ * <b>Example:</b> singlesep_r = false, sep_t = ":"
+ * <PRE>
+ * ""        -> words 0
+ * ":"       -> words 0
+ * "a"       -> words 1  |a|
+ * "::a"     -> words 1  |a|
+ * "::a::"   -> words 1  |a|
+ * ":a::b:c:"-> words 3  |a|b|c|
+ * </PRE>
+ *
+ * <b>singlesep_r = true</b>: Separator is any single character occuring in sep_t.
+ * Leading trailing separators are not ignored (i.e will cause an empty word).
+ *
+ * <b>Example:</b> singlesep_r = true, sep_t = ":"
+ * <PRE>
+ * ""        -> words 0
+ * ":"       -> words 2  |||
+ * "a"       -> words 1  |a|
+ * ":a"      -> words 2  ||a|
+ * "a:"      -> words 2  |a||
+ * ":a:"     -> words 3  ||a||
+ * </PRE>
+ *
+ **/
+extern unsigned split( const std::string          line_r,
+                       std::vector<std::string> & words_r,
+                       const std::string &        sep_t       = " \t",
+                       const bool                 singlesep_r = false );
+
+extern std::string join( const std::vector<std::string> & words_r,
+			 const std::string & sep_r = " " );
+
 
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil
