@@ -26,6 +26,8 @@
 #include <pty.h> // openpty
 #include <stdlib.h> // setenv
 
+#include <cstring> // strsignal
+
 #include <y2util/Y2SLog.h>
 #include <y2util/ExternalProgram.h>
 
@@ -220,6 +222,8 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    outputfile = fdopen(to_external[1], "w");
 	}
 
+	DBG << "pid " << pid << " launched" << endl;
+
 	if (!inputfile || !outputfile)
 	{
 	    ERR << "Cannot create streams to external program " << argv[0] << endl;
@@ -241,21 +245,34 @@ ExternalProgram::close()
 	do
 	{
 	    ret = waitpid(pid, &status, 0);
-	    DBG << "waitpid called" << endl;
+//	    DBG << "waitpid called" << endl;
 	}
 	while (ret == -1 && errno == EINTR);
 
 	if (ret != -1)
 	{
 	    if (WIFEXITED (status))
+	    {
 		status = WEXITSTATUS (status);
+		if(status)
+		{
+		    DBG << "pid " << pid << " exited with status " << status << endl;
+		}
+	    }
 	    else if (WIFSIGNALED (status))
-		status = WTERMSIG (status) + 128;
-	    else if (WCOREDUMP (status)) {
-		ERR << "external program exited with core dump" << endl;
-//		abort ();
-	    } else {
-		ERR << "external program exited with unknown error" << endl;
+	    {
+		status = WTERMSIG (status);
+		WAR << "pid " << pid << " was killed by signal " << status
+			<< " (" << strsignal(status);
+		if (WCOREDUMP (status))
+		{
+		    WAR << ", core dumped";
+		}
+		WAR << ")" << endl;
+		status+=128;
+	    }
+	    else {
+		ERR << "pid " << pid << " exited with unknown error" << endl;
 //		abort ();
 	    }
 	}
