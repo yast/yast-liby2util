@@ -168,9 +168,8 @@ ExternalProgram::start_program (const char *const *argv, const Environment & env
 	if (use_pty)
 	{
 	    setsid();
-	    dup2   (slave_tty, 0);	  // set new stdin
+	    renumber_fd (slave_tty, 0);	  // set new stdin
 	    dup2   (slave_tty, 1);	  // set new stdout
-	    ::close(slave_tty);		  // dup2 has duplicated it
 	    ::close(master_tty);	  // Belongs to father process
 
 	    // We currently have no controlling terminal (due to setsid).
@@ -183,12 +182,10 @@ ExternalProgram::start_program (const char *const *argv, const Environment & env
 	}
 	else
 	{
-	    dup2   (to_external	 [0], 0); // set new stdin
-	    ::close(to_external	 [0]);	  // dup2 has duplicated it
+	    renumber_fd (to_external[0], 0); // set new stdin
 	    ::close(from_external[0]);	  // Belongs to father process
 
-	    dup2   (from_external[1], 1); // set new stdout
-	    ::close(from_external[1]);	  // dup2 has duplicated it
+	    renumber_fd (from_external[1], 1); // set new stdout
 	    ::close(to_external	 [1]);	  // Belongs to father process
 	}
 
@@ -379,5 +376,18 @@ ExternalProgram::running()
         _exitStatus = status;
         pid = -1;
         return false;
+    }
+}
+
+// origfd will be accessible as newfd and closed (unless they were equal)
+void ExternalProgram::renumber_fd (int origfd, int newfd)
+{
+    // It may happen that origfd is already the one we want
+    // (Although in our circumstances, that would mean somebody has closed
+    // our stdin or stdout... weird but has appened to Cray, #49797)
+    if (origfd != newfd)
+    {
+	dup2 (origfd, newfd);
+	::close (origfd);
     }
 }

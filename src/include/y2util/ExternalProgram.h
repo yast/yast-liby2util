@@ -108,6 +108,11 @@ public:
      * */
     pid_t getpid() { return pid; }
 
+    /**
+     * origfd will be accessible as newfd and closed (unless they were equal)
+     */
+    static void renumber_fd (int origfd, int newfd);
+
 protected:
     int checkStatus( int );
 
