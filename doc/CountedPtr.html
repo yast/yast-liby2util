@@ -52,12 +52,12 @@ of <CODE>class Rep</CODE>.
 
 <table border=0 cellspacing=0 width="100%" bgcolor="#f96500" cellpadding=1><tr><td><table width="100%" bgcolor="#ffc080" cellspacing=0 cellpadding=3 border=0><tr><td>
 <PRE>
-class Data : virtual public <A HREF="autodocs/Rep.html">Rep</A> {
+<B>class Data : virtual public <A HREF="autodocs/Rep.html">Rep</A></B> {
 
   public:
-    // You might want to overload these two, but you don't have to
-    (1) virtual const char *   rep_name() const { return "Data"; }
-    (2) virtual std::ostream & dumpOn( std::ostream & str ) const;
+    <B>// You might want to overload these two, but you don't have to</B>
+    <B>(1) virtual const char *   rep_name() const { return "Data"; }</B>
+    <B>(2) virtual std::ostream & dumpOn( std::ostream & str ) const;</B>
 
   // The rest is up to class Data...
   private:
@@ -180,13 +180,13 @@ can easily be distributed throughout the code.
 
 #include &lt;iosfwd&gt;
 
-#include &lt;y2pm/DataPtr.h&gt;
+<B>#include &lt;y2pm/DataPtr.h></B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : Data
 ///////////////////////////////////////////////////////////////////
-class REP_CLASS(Data) {
-  REP_BODY(Data)
+<B>class Data : virtual public Rep</B> {
+  <B>REP_BODY(Data);               // the ';' to make ydoc happy</B>
 
   // The rest is up to class Data...
   private:
@@ -195,18 +195,17 @@ class REP_CLASS(Data) {
     Data();
     virtual ~Data();
     ....
-    virtual std::ostream & dumpOn( std::ostream & str ) const;
+    <B>virtual std::ostream & dumpOn( std::ostream & str ) const;</B>
 };
 #endif // Data_h
 </PRE>
 </td></tr></table></td></tr></table>
 
-<p> <CODE>class REP_CLASS(Data)</CODE> is just an abbreviation of <CODE>class Data : virtual public Rep </CODE>.
-</p>
-
 <p> <CODE>REP_BODY(Data)</CODE> currently overloads <CODE>Rep::rep_name()</CODE> to return the
 class name <CODE>"Data"</CODE>. You should use it anyway, as it serves as hook to overload or introduce
 other functions that may become necessary.
+</p>
+<p> Overloading <CODE>Rep::dumpOn</CODE> is optional.
 </p>
 
 
@@ -217,13 +216,13 @@ other functions that may become necessary.
 #ifndef DataPtr_h
 #define DataPtr_h
 
-#include &lt;y2util/RepDef.h&gt;
+<B>#include &lt;y2util/RepDef.h&gt;</B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : DataPtr
 // CLASS NAME : constDataPtr
 ///////////////////////////////////////////////////////////////////
-DEFINE_BASIC_HANDLES(Data);
+<B>DEFINE_BASIC_HANDLES(Data);</B>
 
 #endif // DataPtr_h
 </PRE>
@@ -240,7 +239,7 @@ would contain nothing but <CODE>class Data;</CODE>.
 <PRE>
 #include &lt;iostream&gt;
 
-#include &lt;y2pm/Data.h&gt;
+<B>#include &lt;y2pm/Data.h&gt;</B>
 
 using namespace std;
 
@@ -248,7 +247,7 @@ using namespace std;
 // CLASS NAME : DataPtr
 // CLASS NAME : constDataPtr
 ///////////////////////////////////////////////////////////////////
-IMPL_HANDLES(Data);
+<B>IMPL_HANDLES(Data);</B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : Data
@@ -295,14 +294,14 @@ and how to create the pointer classes <CODE>MoreDataPtr</CODE> and <CODE>constMo
 
 #include &lt;iosfwd&gt;
 
-#include &lt;y2pm/MoreDataPtr.h&gt;
-#include &lt;y2pm/Data.h&gt;
+<B>#include &lt;y2pm/MoreDataPtr.h&gt;</B>
+<B>#include &lt;y2pm/Data.h&gt;</B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : MoreData
 ///////////////////////////////////////////////////////////////////
-class REP_CLASS(MoreData), public Data {
-  REP_BODY(MoreData)
+<B>class MoreData : virtual public Rep, public Data</B> {
+  <B>REP_BODY(MoreData);               // the ';' to make ydoc happy</B>
 
   // The rest is up to class MoreData...
   private:
@@ -311,20 +310,18 @@ class REP_CLASS(MoreData), public Data {
     MoreData();
     virtual ~MoreData();
     ....
-    virtual std::ostream & dumpOn( std::ostream & str ) const;
+    <B>virtual std::ostream & dumpOn( std::ostream & str ) const;</B>
 };
 #endif // MoreData_h
 </PRE>
 </td></tr></table></td></tr></table>
 
-<p> Note that <CODE>class REP_CLASS(MoreData)</CODE> reads <CODE>class MoreData : virtual public Rep</CODE>,
-thus the additional base class <CODE>Data</CODE> is separated by a <CODE>','</CODE>.
-</p>
 <p> <CODE>REP_BODY(MoreData)</CODE> again overloads <CODE>Rep::rep_name()</CODE> to return the
 class name <CODE>"MoreData"</CODE>. You should use it anyway, as it serves as hook to overload
 or introduce other functions that may become necessary.
 </p>
-
+<p> Overloading <CODE>Rep::dumpOn</CODE> is optional.
+</p>
 
 <H4>MoreDataPtr.h</H4>
 
@@ -333,13 +330,13 @@ or introduce other functions that may become necessary.
 #ifndef MoreDataPtr_h
 #define MoreDataPtr_h
 
-#include &lt;y2pm/DataPtr.h&gt;
+<B>#include &lt;y2pm/DataPtr.h&gt;</B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : MoreDataPtr
 // CLASS NAME : constMoreDataPtr
 ///////////////////////////////////////////////////////////////////
-DEFINE_DERIVED_HANDLES( MoreData, public, Data );
+<B>DEFINE_DERIVED_HANDLES( MoreData, public, Data );</B>
 
 #endif // MoreDataPtr_h
 </PRE>
@@ -356,7 +353,7 @@ Note that the macro arguments are always the names of the corresponding data cla
 <PRE>
 #include &lt;iostream&gt;
 
-#include &lt;y2pm/MoreData.h&gt;
+<B>#include &lt;y2pm/MoreData.h&gt;</B>
 
 using namespace std;
 
@@ -364,7 +361,7 @@ using namespace std;
 // CLASS NAME : MoreDataPtr
 // CLASS NAME : constMoreDataPtr
 ///////////////////////////////////////////////////////////////////
-IMPL_HANDLES(MoreData);
+<B>IMPL_HANDLES(MoreData);</B>
 
 ///////////////////////////////////////////////////////////////////
 // CLASS NAME : MoreData

@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#define REP_CLASS(n) n : virtual public Rep
+
 //---------------------------------------------------
 
 DEFINE_BASIC_HANDLES(Slv);
