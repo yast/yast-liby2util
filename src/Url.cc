@@ -7,13 +7,15 @@
 |                        |_|\__,_|____/ |_| |_____|                    |
 |                                                                      |
 |                               core system                            |
-|                                                     (C) 2002 SuSE AG |
+|                                                                      |
+|                                         (C) 2002, 2003 SuSE Linux AG |
 \----------------------------------------------------------------------/
 
    File:       Url.cc
    Purpose:    An URL class
-   Author:     Ludwig Nussel <lnussel@suse.de>
-   Maintainer: Ludwig Nussel <lnussel@suse.de>
+   Authors:    Ludwig Nussel <lnussel@suse.de>
+               Cornelius Schumacher <cschum@suse.de>
+   Maintainer: Cornelius Schumacher <cschum@suse.de>
 
 /-*/
 
@@ -25,14 +27,32 @@
 
 using namespace std;
 
+Url::ProtocolStrings::ProtocolStrings()
+{
+  insert( value_type( unknown, ""      ) );
+  insert( value_type( file,    "file"  ) );
+  insert( value_type( ftp,     "ftp"   ) );
+  insert( value_type( http,    "http"  ) );
+  insert( value_type( https,   "https" ) );
+  insert( value_type( cd,      "cd"    ) );
+  insert( value_type( dvd,     "dvd"   ) );
+  insert( value_type( nfs,     "nfs"   ) );
+  insert( value_type( dir,     "dir"   ) );
+  insert( value_type( hd,      "hd"    ) );
+  insert( value_type( smb,     "smb"   ) );
+}
+
+Url::ProtocolStrings Url::_protocolStrings;
+
 Url::Url()
-    : _valid( false )
+    : _protocol( unknown ), _valid( false )
 {
 }
 
 Url::Url( const string & url )
 {
-    _valid = split( url, _protocol, _username, _password, _host, _port, _path, _options );
+    _valid = split( url, _protocol, _protocolString, _username, _password,
+                    _host, _port, _path, _options );
     clearifinvalid(_valid);
 }
 
@@ -45,23 +65,31 @@ void Url::clearifinvalid( bool valid )
 {
     if ( valid) return;
 
-    _protocol = _username = _password = _host.erase();
+    _protocolString = _username = _password = _path = _host.erase();
+    _protocol = unknown;
     _port = -1;
-    _path = Pathname();
     _options.erase( _options.begin(), _options.end() );
 }
 
 bool Url::set( const string url )
 {
-    _valid = split( url, _protocol, _username, _password, _host, _port, _path , _options);
+    _valid = split( url, _protocol, _protocolString, _username, _password,
+                    _host, _port, _path , _options);
     clearifinvalid(_valid);
 
     return _valid;
 }
 
-void Url::setProtocol( const std::string &str )
+void Url::setProtocol( Protocol p )
 {
-  _protocol = str;
+  _protocol = p;
+  _protocolString = protocolToString( p );
+}
+
+void Url::setProtocolString( const std::string &str )
+{
+  _protocolString = str;
+  _protocol = stringToProtocol( str );
 }
 
 void Url::setUsername( const std::string &str )
@@ -84,14 +112,18 @@ void Url::setPort( int port )
   _port = port;
 }
 
-void Url::setPath( const Pathname &path )
+void Url::setPath( const string &path )
 {
   _path = path;
 }
 
 string Url::asString( bool path, bool options, bool plainpassword )   const
 {
-    string url(_protocol+"://");
+    if ( _protocol == file ) {
+        return _protocolString + ":" + _path;
+    }
+
+    string url( _protocolString + "://" );
     if(!_username.empty())
     {
 	url+=_username;
@@ -114,7 +146,7 @@ string Url::asString( bool path, bool options, bool plainpassword )   const
 
     if(path)
     {
-	url += _path.asString();
+	url += _path;
 	if(options)
 	{
 	    for(OptionMapType::const_iterator i = _options.begin();
@@ -144,67 +176,80 @@ string Url::option(const string& key) const
 }
 
 bool Url::split( const string &url,
-	         string &protocol,
+                 Url::Protocol &protocol,
+	         string &protocolString,
 	         string &username,
 	         string &password,
 	         string &hostname,
 	         int &port,
-	         Pathname &path,
+	         string &path,
 	         OptionMapType &options )
 {
-    string::size_type pos;
-    string::size_type lastpos = 0;
-
-    protocol = username = password = hostname = string();
+    protocolString = username = password = hostname = path = string();
+    protocol = unknown;
     port = -1;
-    path = Pathname();
 
     // protocol
-    pos = url.find(':');
-    if ( pos != string::npos && pos != 0 )
-	protocol = url.substr(0,pos);
-    else
-	return false;
+    string::size_type posColon = url.find(':');
+    string::size_type posSlash = url.find('/');
 
-    D__ << "protocol " << protocol << endl;
+    bool hasScheme = ( posColon != string::npos ) &&
+                     ( posSlash == string::npos || posColon < posSlash );
 
-    lastpos = pos+1;
+    if ( hasScheme ) {
+        protocolString = url.substr( 0, posColon );
+        protocol = stringToProtocol( protocolString );
+        if ( protocolString.empty() ) return false;
+    } else {
+        protocol = file;
+        protocolString = protocolToString( protocol );
+    }
 
-    // check for hierarchical url
-    if( url.substr(lastpos,2) != "//" )
-	return false;
+    D__ << "protocol " << protocolString << endl;
 
-    lastpos = pos = lastpos + 2;
+    if ( protocol == file ) {
+        if ( hasScheme ) path = url.substr( posColon + 1,
+                                            url.size() - posColon );
+        else path = url;
+    } else {
+        string::size_type lastpos = posColon + 1;
 
-    // check if non local url
-    if( url[lastpos] != '/' )
-    {
-	D__ << "nonlocal url " << url.substr(lastpos) << endl;
-	// optional username&password
-	pos = url.find('@',lastpos);
-	if ( pos != string::npos )
-	{
-	    string userandpass = url.substr(lastpos,pos-lastpos);
-	    // set marker behind @
-	    lastpos=pos+1;
-	    // optional password
-	    pos = userandpass.find(':');
+        // check for hierarchical url
+        if( url.substr(lastpos,2) != "//" )
+	    return false;
+
+        lastpos = lastpos + 2;
+
+        // check if non local url
+        if( url[lastpos] != '/' )
+        {
+	    D__ << "nonlocal url " << url.substr(lastpos) << endl;
+	    // optional username&password
+	    string::size_type pos = url.find('@',lastpos);
 	    if ( pos != string::npos )
 	    {
-		// no username?
-		if(pos==0) return false;
+	        string userandpass = url.substr(lastpos,pos-lastpos);
+	        // set marker behind @
+	        lastpos=pos+1;
+	        // optional password
+	        pos = userandpass.find(':');
+	        if ( pos != string::npos )
+	        {
+		    // no username?
+		    if(pos==0) return false;
 
-		password = userandpass.substr(pos+1);
-		D__ << "password " << string( password.size(), '*' ) << endl;
+		    password = userandpass.substr(pos+1);
+		    D__ << "password " << string( password.size(), '*' ) << endl;
+	        }
+	        username = userandpass.substr(0,pos);
+	        D__ << "username " << username << endl;
 	    }
-	    username = userandpass.substr(0,pos);
-	    D__ << "username " << username << endl;
-	}
 
-	// hostname&port
-	pos = url.find('/',lastpos);
-	if ( pos != string::npos && pos != lastpos )
-	{
+	    // hostname&port
+	    pos = url.find('/',lastpos);
+            if ( pos == string::npos ) pos = url.size();
+            if ( pos == lastpos ) return false;
+
 	    string hostandport = url.substr(lastpos,pos-lastpos);
 	    // set marker on /
 	    lastpos=pos;
@@ -224,47 +269,69 @@ bool Url::split( const string &url,
             }
 	    hostname = hostandport.substr(0,pos);
 	    D__ << "hostname " << hostname << endl;
-	}
-	// url must have path behind hostname
-	else
-	    return false;
-    }
+        }
 
-    // locate options
-    pos = url.find(';',lastpos);
+        // locate options
+        string::size_type pos = url.find(';',lastpos);
 
-    path = url.substr(lastpos,pos-lastpos);
-    D__ << "path " << path << endl;
+        path = url.substr(lastpos,pos-lastpos);
+        D__ << "path " << path << endl;
 
-    options = OptionMapType();
+        options = OptionMapType();
 
-    if(pos != string::npos)
-    {
-	string optionstr = url.substr(pos+1);
-	string::size_type pos2;
-	while( !optionstr.empty() )
-	{
-	    pos2 = optionstr.find(';');
-	    string option = optionstr.substr(0,pos2);
-	    if( pos2 != string::npos )
-		optionstr = optionstr.substr(pos2+1);
-	    else
-		optionstr.erase();
-
-	    // options consist of key=value
-	    pos2 = option.find('=');
-	    if( pos2 != string::npos )
+        if(pos != string::npos)
+        {
+	    string optionstr = url.substr(pos+1);
+	    string::size_type pos2;
+	    while( !optionstr.empty() )
 	    {
-		string key = option.substr(0,pos2);
-		string value = option.substr(pos2+1);
-		options[key]=value;
+	        pos2 = optionstr.find(';');
+	        string option = optionstr.substr(0,pos2);
+	        if( pos2 != string::npos )
+		    optionstr = optionstr.substr(pos2+1);
+	        else
+		    optionstr.erase();
+
+	        // options consist of key=value
+	        pos2 = option.find('=');
+	        if( pos2 != string::npos )
+	        {
+		    string key = option.substr(0,pos2);
+		    string value = option.substr(pos2+1);
+		    options[key]=value;
+	        }
+	        else
+		    return false;
 	    }
-	    else
-		return false;
-	}
+        }
     }
 
     return true;
+}
+
+Url::Protocol Url::stringToProtocol( const string &protocolString )
+{
+  map<Protocol,string>::const_iterator it;
+  for ( it = _protocolStrings.begin(); it != _protocolStrings.end(); ++it ) {
+    if ( it->second == protocolString ) return it->first;
+  }
+  
+  return unknown;
+}
+
+std::string Url::protocolToString( Url::Protocol p )
+{
+  return _protocolStrings[ p ];
+}
+
+bool Url::isLocal() const
+{
+  return _host.empty();
+}
+
+bool Url::isValid() const
+{
+  return _valid;
 }
 
 /******************************************************************

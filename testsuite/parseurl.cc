@@ -21,7 +21,7 @@ int main( int argc, char *argv[] )
   cout << "asString: " << url.asString() << endl;
   cout << "isValid: " << ( url.isValid() ? "true" : "false" ) << endl;
   cout << "isLocal: " << ( url.isLocal() ? "true" : "false" ) << endl;
-  cout << "protocol: " << url.protocol() << endl;
+  cout << "protocol: " << url.protocolString() << endl;
   cout << "host: " << url.host() << endl;
   cout << "port: " << url.port() << endl;
   cout << "path: " << url.path() << endl;

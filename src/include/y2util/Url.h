@@ -7,20 +7,20 @@
 |                        |_|\__,_|____/ |_| |_____|                    |
 |                                                                      |
 |                               core system                            |
-|                                                     (C) 2002 SuSE AG |
+|                                                                      |
+|                                         (C) 2002, 2003 SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-   File:       Url.h
+   File:       Url.cc
    Purpose:    An URL class
-   Author:     Ludwig Nussel <lnussel@suse.de>
-   Maintainer: Ludwig Nussel <lnussel@suse.de>
+   Authors:    Ludwig Nussel <lnussel@suse.de>
+               Cornelius Schumacher <cschum@suse.de>
+   Maintainer: Cornelius Schumacher <cschum@suse.de>
 
 /-*/
 
 #ifndef _Url_h_
 #define _Url_h_
-
-#include "Pathname.h"
 
 #include <iosfwd>
 
@@ -41,14 +41,26 @@ class Url
 
 	typedef std::map<std::string,std::string> OptionMapType;
 
+        enum Protocol { unknown, file, ftp, http, https, cd, dvd, nfs, dir,
+                        hd, smb };
+
     private:
 
-	std::string _protocol;
+        class ProtocolStrings : public std::map<Protocol,std::string>
+        {
+          public:
+            ProtocolStrings();
+        };
+
+        static ProtocolStrings _protocolStrings;
+
+	Protocol _protocol;
+	std::string _protocolString;
 	std::string _username;
 	std::string _password;
 	std::string _host;
 	int _port;
-	Pathname _path;
+	std::string _path;
 	OptionMapType _options;
 
 	bool _valid;
@@ -57,7 +69,7 @@ class Url
 	 *
 	 * @param valid clear if this parameter is false, do nothing if true
 	 * */
-	void clearifinvalid(bool valid);
+	void clearifinvalid( bool valid );
 
     public:
 
@@ -75,20 +87,22 @@ class Url
 
         bool operator==( const Url & ) const;
 
-        void setProtocol( const std::string &str );
+        void setProtocol( Protocol );
+        void setProtocolString( const std::string &str );
         void setUsername( const std::string &str );
         void setPassword( const std::string &str );
 	void setHost( const std::string &str );
 	void setPort( int );
-	void setPath( const Pathname &path );
+	void setPath( const std::string &path );
 
-	const std::string & protocol() const { return _protocol; }
-	const std::string & username() const { return _username; }
-	const std::string & password() const { return _password; }
-	const std::string & host() const { return _host; }
+	Protocol protocol() const { return _protocol; }
+	const std::string &protocolString() const { return _protocolString; }
+	const std::string &username() const { return _username; }
+	const std::string &password() const { return _password; }
+	const std::string &host() const { return _host; }
 	int port() const { return _port; }
-	const Pathname & path() const { return _path; }
-	const OptionMapType & options() const { return _options; }
+	const std::string &path() const { return _path; }
+	const OptionMapType &options() const { return _options; }
 
 	/** return Option
 	 *
@@ -96,11 +110,11 @@ class Url
 	 *
 	 * @return option value, emtpy string if not found
 	 * */
-	std::string option(const std::string& key) const;
+	std::string option( const std::string& key ) const;
 
-	bool isLocal()   const { return _host.empty(); }
+	bool isLocal() const;
 
-	bool isValid() const { return _valid; }
+	bool isValid() const;
 
 	/** set url
 	 *
@@ -130,6 +144,9 @@ class Url
 
 	friend std::ostream & operator<<( std::ostream & str, const Url & obj );
 
+        static Protocol stringToProtocol( const std::string &protocolString );
+        static std::string protocolToString( Protocol );
+
     private:
 
 	/** split url into tokens
@@ -139,12 +156,13 @@ class Url
 	 * @return true if valid url, false otherwise
 	 * */
 	static bool split( const std::string &url,
-		           std::string &protocol,
+		           Protocol &protocol,
+		           std::string &protocolString,
 		           std::string &username,
 		           std::string &password,
 		           std::string &hostname,
 		           int &port,
-		           Pathname &path,
+		           std::string &path,
 		           OptionMapType &options );
 };
 
