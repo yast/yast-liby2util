@@ -17,10 +17,6 @@
 
 /-*/
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <errno.h>
-
 #include <iostream>
 #include <iomanip>
 
@@ -540,3 +536,31 @@ int PathInfo::chmod( const Pathname & path, mode_t mode )
   return _Log_Result( 0 );
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::zipType
+//	METHOD TYPE : PathInfo::ZIP_TYPE
+//
+PathInfo::ZIP_TYPE PathInfo::zipType( const Pathname & file )
+{
+  ZIP_TYPE ret = ZT_NONE;
+
+  int fd = open( file.asString().c_str(), O_RDONLY );
+
+  if ( fd != -1 ) {
+    const int magicSize = 3;
+    unsigned char magic[magicSize];
+    memset( magic, 0, magicSize );
+    if ( read( fd, magic, magicSize ) == magicSize ) {
+      if ( magic[0] == 0037 && magic[1] == 0213 ) {
+	ret = ZT_GZ;
+      } else if ( magic[0] == 'B' && magic[1] == 'Z' && magic[2] == 'h' ) {
+	ret = ZT_BZ2;
+      }
+    }
+    close( fd );
+  }
+
+  return ret;
+}

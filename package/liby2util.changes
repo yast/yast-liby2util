@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun  3 18:42:46 CEST 2003 - ma@suse.de
+
+- Build fix: Don't package unmaintained validate_* programs at all.
+- Added PathInfo::zipType
+- 2.8.2
+
+-------------------------------------------------------------------
 Fri May 30 10:43:14 CEST 2003 - mvidner@suse.de
 
 - Build fix: package also validate_packages_lang, validate_selection.

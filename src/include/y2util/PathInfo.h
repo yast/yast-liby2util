@@ -23,6 +23,7 @@ extern "C"
 {
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <dirent.h>
 }
@@ -285,6 +286,19 @@ class PathInfo {
      * @return 0 on success, errno on failure
      **/
     static int chmod( const Pathname & path, mode_t mode );
+
+    ///////////////////////////////////////////////////////////////////
+    // magic
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Test whether a file is compressed (gzip/bzip2).
+     *
+     * @return ZT_GZ, ZT_BZ2 if file is compressed, otherwise ZT_NONE.
+     **/
+    enum ZIP_TYPE { ZT_NONE, ZT_GZ, ZT_BZ2 };
+
+    static ZIP_TYPE zipType( const Pathname & file );
 };
 
 ///////////////////////////////////////////////////////////////////
