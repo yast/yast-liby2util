@@ -13,6 +13,8 @@ pkginclude_HEADERS = \
 	PathInfo.h	\
 	RefObject.h	\
 	Y2SLog.h	\
+	TagParser.h	\
+	CommonPkdParser.h \
 	timeclass.h
 
 #<INSTALL-HEADER-TARGET>

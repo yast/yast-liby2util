@@ -14,10 +14,12 @@ LDFLAGS = -L$(libdir)	\
 	-Xlinker --no-whole-archive
 
 
-noinst_PROGRAMS = runy2util test_Y2SLog.exe
+noinst_PROGRAMS = runy2util test_Y2SLog.exe parser
 
 
 runy2util_SOURCES = runy2util.cc
+
+parser_SOURCES = parser.cc
 
 
 test_Y2SLog_exe_SOURCES = test_Y2SLog.cc

@@ -12,6 +12,8 @@ liby2util_la_SOURCES = \
 	hash.cc \
 	Pathname.cc \
 	PathInfo.cc \
+	TagParser.cc \
+	CommonPkdParser.cc \
 	Y2SLog.cc
 
 liby2util_la_LDFLAGS = -version-info 2:0
