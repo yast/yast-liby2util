@@ -69,8 +69,13 @@ class Url {
 	void setPath( const std::string &pathStr )
 	{ _path = pathStr; }
 
+	const std::string & getProtocol() const { return _protocol; }
+	const std::string & getUsername() const { return _username; }
+	const std::string & getPassword() const { return _password; }
 	const std::string & getHost() const { return _host; }
+	const std::string & getPort() const { return _port; }
 	const std::string & getPath() const { return _path; }
+	const OptionMapType & getOptions() const { return _options; }
 
 	bool isLocal()   const { return _host.empty(); }
 
