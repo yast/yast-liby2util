@@ -137,7 +137,7 @@
     DATAPTR operator->() const;				\
   protected:						\
     DATAPTR rep() const;				\
-    DATAPTR rep( const REPPTRCLASS & rhs ) const;	\
+    static DATAPTR rep( const REPPTRCLASS & rhs );	\
   private:
 
 
@@ -175,7 +175,7 @@ DATAPTR PTRCLASS::operator->() const 				\
   { return rep(); }						\
 DATAPTR PTRCLASS::rep() const					\
   { return dynamic_cast<DATAPTR>(baseRep()); }			\
-DATAPTR PTRCLASS::rep( const REPPTRCLASS & rhs ) const		\
+DATAPTR PTRCLASS::rep( const REPPTRCLASS & rhs ) 		\
   { return dynamic_cast<DATAPTR>(baseRep( rhs )); }
 
 

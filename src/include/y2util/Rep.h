@@ -292,7 +292,7 @@ class constRepPtr {
     /**
      * Return other pointers rep_p.
      **/
-    const Rep *const baseRep( const constRepPtr & rhs ) const { return rhs.rep_p; }
+    static const Rep *const baseRep( const constRepPtr & rhs ) { return rhs.rep_p; }
 
   public:
 
@@ -371,7 +371,7 @@ class RepPtr : virtual public constRepPtr {
     /**
      * Return other pointers rep_p.
      **/
-    Rep *const baseRep( const RepPtr & rhs ) const { return rhs.rep_p; }
+    static Rep *const baseRep( const RepPtr & rhs ) { return rhs.rep_p; }
 
 };
 
