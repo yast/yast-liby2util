@@ -41,12 +41,20 @@ using std::istream;
 //	DESCRIPTION :
 //		parses file in "tagged" format
 //		a tag starts at the beginning of a line with
-//		'=' (single line tag),
-//		'+' (start of multi-line tag), or
-//		'-' (end of multi line tag)
+//		'=' (single line tag, tag_type SINGLE),
+//		'+' (start of multi-line tag, tag_type START), or
+//		'-' (end of multi line tag, tag_type END)
 //		followed by an arbitrary string and a colon (':')
+//
 //		The tag parser 'lookupTag()' searches through an open
 //		stream for such a tag
+//
+//		It also recognizes all other "<tag>:<blank>" lines as
+//		tag_type OLDSTYLE. However, since this style requires
+//		a full-line scan (opposed to a initial char check only),
+//		the lookupTag() and lookupEndTag() have an extra oldstyle
+//		parameter for this.
+//
 //
 class TaggedParser {
   public:
@@ -54,7 +62,9 @@ class TaggedParser {
 	NONE=0,		// no tag
 	SINGLE,		// single value
 	START,		// start of multi value
-	END		// end of multi value
+	END,		// end of multi value
+	OLDSINGLE,	// tag has no prefix but a value
+	OLDMULTI	// tag has no prefix and no value
     } TagType;
 
   private:
@@ -79,22 +89,29 @@ class TaggedParser {
     std::string _currentLocale;
     std::string _currentData;		// substr of currentLine, set by data()
 
+    bool _allow_oldstyle;
+
+    // set from start of line to start of tag
+    int _offset;
+
   private:
 
     void _reset();
     void _datareset();
 
     // read line from stream
-    static streampos  readLine (istream & stream_fr, std::string & cline_tr );
+    static streampos readLine (istream & stream_fr, std::string & cline_tr );
 
     // check line for tag
-    static TagType tagOnLine (const std::string & cline_tr, std::string & tag_tr, std::string::size_type & delim_ir, std::string & lang_tr );
+    TagType tagOnLine (const std::string & cline_tr, std::string & tag_tr,
+			std::string::size_type & delim_ir, std::string & lang_tr);
 
   public:
 
     TaggedParser();
     virtual ~TaggedParser();
 
+    void allowOldstyle (bool allow_oldstyle) { _allow_oldstyle = allow_oldstyle; _offset = 0; }
     static const streampos nopos;
 
     int lineNumber () const { return _lineNumber; }
@@ -120,13 +137,13 @@ class TaggedParser {
      * posStartTag() and posEndTag() can be used
      * Usually used to lookup a single or a start tag
      */
-    TagType lookupTag( istream & stream_fr, const std::string & stag_tr = "", const std::string & slang_tr = "" );
+    TagType lookupTag( istream & stream_fr, const std::string & stag_tr = "", const std::string & slang_tr = "");
 
     /**
      * lookup end tag
      * set start and end retrieval positions
      */ 
-    TagType lookupEndTag ( istream & stream_fr, const std::string & etag_tr, const std::string & elang_tr = "" );
+    TagType lookupEndTag ( istream & stream_fr, const std::string & etag_tr, const std::string & elang_tr = "");
 
     // helper functions
     static std::string data2string( const std::list<std::string> & data_Vtr );

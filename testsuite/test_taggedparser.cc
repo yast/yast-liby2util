@@ -23,6 +23,7 @@ main (int argc, char **argv)
     }
 
     TaggedParser parser;
+    parser.allowOldstyle (true);
     TaggedParser::TagType type;
     std::string tagstr;
 
@@ -33,19 +34,29 @@ main (int argc, char **argv)
 	return 1;
     }
 
-    while (((type = parser.lookupTag (input)) != TaggedParser::NONE))
+    while (!input.eof())
     {
+	type = parser.lookupTag (input);
+
 	switch (type)
 	{
-	   case TaggedParser::NONE: cout << "None: "; break;
+	   case TaggedParser::NONE: cout << "None" << endl; break;
 	   case TaggedParser::SINGLE: cout << "Single: "; break;
 	   case TaggedParser::START: cout << "Start: "; break;
 	   case TaggedParser::END: cout << "End: "; break;
+	   case TaggedParser::OLDSINGLE: cout << "Oldsingle: "; break;
+	   case TaggedParser::OLDMULTI: cout << "Oldmulti: "; break;
 	   default: cout << "???: "; break;
 	}
-	cout << "Start <" << parser.currentTag() << ">["
-		<< parser.tagPos() << "], End <"
-		<< parser.dataStartPos() << ">[" << parser.dataEndPos() << "]" << endl;
+	if (type == TaggedParser::NONE)
+	    continue;
+
+	cout << "Start <" << parser.currentTag();
+	if (!parser.currentLocale().empty())
+	    cout << "." << parser.currentLocale();
+	cout << ">@"
+		<< parser.tagPos() << ", ["
+		<< parser.dataStartPos() << ", " << parser.dataEndPos() << "]" << endl;
     }
 
     return 0;

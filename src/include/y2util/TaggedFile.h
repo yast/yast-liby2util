@@ -50,9 +50,11 @@ namespace TaggedFile
 	 * SINGLE = single line of data, retrieve data<br>
 	 * SINGLEPOS = single line of data, just retrieve positions<br>
 	 * MULTI = multiple lines of data<br>
+	 * MULTIOLD = multiple lines of data<br>
+	 *		end tag is start tag reversed
 	 */
 	enum datatype {
-	    SINGLE, SINGLEPOS, MULTI
+	    SINGLE, SINGLEPOS, MULTI, MULTIOLD
 	};
 
 	/**
@@ -99,6 +101,9 @@ class Tag
 	/** name of the tag */
 	std::string _name;
 
+	/** name of the end tag for datatype MULTIOLD */
+	std::string _end;
+
 	/**
 	 * start and end position of data in stream
 	 * indexed by locale
@@ -112,24 +117,21 @@ class Tag
 	std::string _data;
 
 	/**
-	 * the type of tag
-	 */
-	tagtype _tagtype;
-
-	/**
 	 * the type of data for this tag
 	 */
 	datatype _datatype;
+
+	/**
+	 * the type of tag
+	 */
+	tagtype _tagtype;
 
     public:
 	/** Constructor
 	 * @param name Name of Tag
 	 * @param type how to handle multiple assignments of the same tag
 	 * */
-	Tag (const std::string& name, datatype dtype, tagtype ttype = REJECTLOCALE)
-	    : _name(name), _tagtype(ttype), _datatype(dtype)
-	{
-	}
+	Tag (const std::string& name, datatype dtype, tagtype ttype = REJECTLOCALE);
 
 	/**
 	 * assign data from stream to tag
@@ -204,6 +206,9 @@ class TagSet
 	/** allow unknown tags */
 	bool _allow_unknown_tags;
 
+	/** allow oldstyle tags */
+	bool _allow_oldstyle_tags;
+
 	/** language dependant tags, needed for setting the encoding */	
 	typedef std::map<std::string, Tag *> tagmaptype;
 
@@ -263,6 +268,11 @@ class TagSet
 	 * allow unknown tags
 	 */
 	void setAllowUnknownTags (bool flag) { _allow_unknown_tags = flag; }
+
+	/**
+	 * allow oldstyle tags
+	 */
+	void setAllowOldstyleTags (bool flag) { _allow_oldstyle_tags = flag; }
 
 	/** add Tag to TagSet
 	 *

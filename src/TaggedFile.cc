@@ -31,6 +31,45 @@ namespace TaggedFile
 // Tag
 //-------------------------------------------------------------------
 
+/******************************************************************
+**
+**
+**	FUNCTION NAME : Tag::Tag ()
+**	FUNCTION TYPE : constructor
+**
+**	DESCRIPTION set _name, _datatype, and _tagtype
+**		it datatype == MULTIOLD, also send end
+*/
+
+Tag::Tag (const std::string& name, datatype dtype, tagtype ttype)
+    : _name(name)
+    , _datatype(dtype)
+    , _tagtype(ttype)
+{
+    if (_datatype == MULTIOLD)
+    {
+	unsigned int namepos = _name.size();
+	if (namepos == 0)
+	    return;
+	_end.reserve (namepos);
+	unsigned int endpos = 0;
+	do
+	{
+	    namepos--;
+
+	    if (namepos == 0)
+		_end[endpos] = tolower (_name[namepos]);
+	    else if (endpos == 0)
+		_end[endpos] = toupper (_name[namepos]);
+	    else
+		_end[endpos] = _name[namepos];
+
+	    endpos++;
+	}
+	while (namepos > 0);
+    }
+}
+
 
 /******************************************************************
 **
@@ -76,21 +115,28 @@ Tag::assign (const std::string& locale, TaggedParser& parser, std::istream& istr
 	    return REJECTED_FULL;	// not ok for others
     }
 
-    // for multi-line data, look for the matching end tag
-
-    if (_datatype == MULTI)
+    switch (_datatype)
     {
-	if (parser.lookupEndTag (istr, _name, locale) != TaggedParser::END)
-	{
-	    D__ << "Endtag not found" << std::endl;
-	    return REJECTED_NOENDTAG;
-	}
+	case SINGLE:			// retrieve data
+	    _data = parser.data();
+	break;
+	case SINGLEPOS:			// skip data
+	break;
+	case MULTI:			// for multi-line data, look for the matching end tag
+	    if (parser.lookupEndTag (istr, _name, locale) != TaggedParser::END)
+	    {
+		D__ << "Endtag not found" << std::endl;
+		return REJECTED_NOENDTAG;
+	    }
+	break;
+	case MULTIOLD:
+	    if (parser.lookupEndTag (istr, _end, locale) != TaggedParser::END)
+	    {
+		D__ << "Endtag not found" << std::endl;
+		return REJECTED_NOENDTAG;
+	    }
+	break;
     }
-    else if (_datatype == SINGLE)		// retrieve data
-    {
-	_data = parser.data();
-    }
-
     // remember positions
     _pos[locale] = TagRetrievalPos (parser.dataStartPos (), parser.dataEndPos ());
 
@@ -138,6 +184,7 @@ std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj )
 	case TaggedFile::SINGLE: str << "SINGLE"; break;
 	case TaggedFile::SINGLEPOS: str << "SINGLEPOS"; break;
 	case TaggedFile::MULTI: str << "MULTI"; break;
+	case TaggedFile::MULTIOLD: str << "MULTIOLD"; break;
     }
     str << std::endl;
     return str;
@@ -150,6 +197,7 @@ std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj )
 TagSet::TagSet()
     : _allow_multiple_sets (false)
     , _allow_unknown_tags (true)
+    , _allow_oldstyle_tags (true)
     , _reuse_previous_tag (false)
 {
 }

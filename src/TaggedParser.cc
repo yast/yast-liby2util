@@ -22,6 +22,7 @@
 /-*/
 
 #include <iostream>
+#include <ctype.h>
 #include <y2util/Y2SLog.h>
 #include <y2util/TaggedParser.h>
 
@@ -76,8 +77,10 @@ inline void TaggedParser::_reset()
 //	DESCRIPTION :
 //
 TaggedParser::TaggedParser()
+    : _lineNumber (0)
+    , _allow_oldstyle (false)
+    , _offset (1)
 {
-    _lineNumber = 0;
     _reset();
 }
 
@@ -129,8 +132,8 @@ inline streampos TaggedParser::readLine( istream & stream_fr, string & cline_tr 
 //		      O: size_type delim_ir	position following tag
 //		      O: string lang_tr		language code found
 //
-inline TaggedParser::TagType
-TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_type & delim_ir, string & lang_tr )
+TaggedParser::TagType
+TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_type & delim_ir, string & lang_tr)
 {
     TagType type = NONE;
 
@@ -140,15 +143,30 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
     {
 	switch (cline_tr[0])
 	{
-	   case '#':
+	    case '#':
+	    case '\0':
+	    case '\n':
 		break;
-	   case '=':
+	    case '=':
 		type = SINGLE; break;
-	   case '+':
+	    case '+':
 		type = START; break;
-	   case '-':
+	    case '-':
 		type = END; break;
-	   default:
+	    default:
+		if ((_allow_oldstyle)
+		    && isupper (cline_tr[0]))				// check oldstyle
+		{
+		    string::size_type colonpos = cline_tr.find (":");	// ":" + blank
+		    if (colonpos != string::npos)
+		    {
+			colonpos++;
+			if (cline_tr[colonpos] == ' ' || cline_tr[colonpos] == '\t')
+			    type = OLDSINGLE;
+			else
+			    type = OLDMULTI;
+		    }
+		}
 		break;
 	}
     }
@@ -160,9 +178,9 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
 
     // find first separator
 
-    delim_ir = cline_tr.find_first_of (":. \t", 1);
+    delim_ir = cline_tr.find_first_of (":. \t", _offset);
 
-    int taglen = delim_ir-1;
+    int taglen = delim_ir - _offset;
 
     // no tag or empty tag or whitespace in tag ?
 
@@ -195,8 +213,7 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
 	return type;
     }
 
-    // only the tag (start at 1)
-    tag_tr = cline_tr.substr (1, taglen);
+    tag_tr = cline_tr.substr (_offset, taglen);
 
     return type;
 }
@@ -213,7 +230,7 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
 //		      the given values (used to find a matching end tag)
 //
 TaggedParser::TagType
-TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const string & slang_tr )
+TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const string & slang_tr)
 {
     _reset();
     if ( stream_fr.good() )
@@ -306,7 +323,7 @@ TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const s
 	    _lineNumber++;
 
 	    // find tag
-	    type = tagOnLine( currentLine, maybe_ti, delim_ii, lang_ti );
+	    type = tagOnLine( currentLine, maybe_ti, delim_ii, lang_ti);
 
 	    // check tag
 	    if ((type == END)			// end tag found
@@ -365,24 +382,28 @@ string TaggedParser::data2string( const list<string> & data_Vtr )
 //
 vector<string> TaggedParser::split2words( const string & line_tr, const string & sepchars_tr )
 {
-  vector<string> Ret_Vti;
+    vector<string> Ret_Vti;
 
-  string::size_type wstart_ii = 0;
-  string::size_type wend_ii   = string::npos;
-  do {
-    wstart_ii = line_tr.find_first_not_of( sepchars_tr, wstart_ii );
-    if ( wstart_ii != string::npos ) {
-      wend_ii = line_tr.find_first_of( sepchars_tr, wstart_ii );
-      if ( wend_ii != string::npos ) {
-	Ret_Vti.push_back( line_tr.substr( wstart_ii, wend_ii-wstart_ii ) );
-      } else {
-	Ret_Vti.push_back( line_tr.substr( wstart_ii ) );
-      }
-      wstart_ii = wend_ii;
-    }
-  } while ( wstart_ii != string::npos );
+    string::size_type wstart_ii = 0;
+    string::size_type wend_ii   = string::npos;
+    do {
+	wstart_ii = line_tr.find_first_not_of( sepchars_tr, wstart_ii );
+	if ( wstart_ii != string::npos )
+	{
+	    wend_ii = line_tr.find_first_of( sepchars_tr, wstart_ii );
+	    if ( wend_ii != string::npos )
+	    {
+		Ret_Vti.push_back( line_tr.substr( wstart_ii, wend_ii-wstart_ii ) );
+	    }
+	    else
+	    {
+		Ret_Vti.push_back( line_tr.substr( wstart_ii ) );
+	    }
+	    wstart_ii = wend_ii;
+	}
+    } while ( wstart_ii != string::npos );
 
-  return Ret_Vti;
+    return Ret_Vti;
 }
 
 /******************************************************************
