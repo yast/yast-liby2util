@@ -1,6 +1,11 @@
 /* $Header$
 //
 // $Log$
+// Revision 1.3  2002/05/27 10:56:41  lnussel
+// - testfunction for refobjects stored in a list
+// - removed private operator new and implemented operator& in RefObject.h
+// - added debug() macro
+//
 // Revision 1.2  2002/05/27 08:30:56  lnussel
 // - build static library
 // - fix gcc3 warnings
@@ -15,6 +20,7 @@
 
 #include <unistd.h> // size_t
 #include <iosfwd>
+#include <Y2UTIL.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -24,9 +30,7 @@
 //
 template <class ObjT> class RefObject {
 
-  void * operator new( size_t ); // no new
-  RefObject * operator&();       // no address
-
+//  void * operator new( size_t ); // no new
   protected:
 
     ///////////////////////////////////////////////////////////////////
@@ -93,20 +97,26 @@ template <class ObjT> class RefObject {
 
   public:
 
+    RefObject * operator&()
+    {
+#warning "RefObject::operator&()";
+      return this;
+    }
+
     RefObject( ObjT * obj_pr = 0 ) {
-      std::cout << __PRETTY_FUNCTION__ << std::endl;
+      debug( "default constructor" );
       body_p = 0;
       body_assign( obj_pr ? new Ref( *obj_pr ) : 0 );
     }
 
     RefObject( const RefObject & handle_v ) {
-      std::cout << __PRETTY_FUNCTION__ << std::endl;
+      debug ( "copy constructor" );
       body_p = 0;
       body_assign( handle_v.body_p );
     }
 
     RefObject & operator=( const RefObject & handle_v ) {
-      std::cout << __PRETTY_FUNCTION__ << std::endl;
+      debug ( "assignment" );
       body_assign( handle_v.body_p );
       return *this;
     }
@@ -156,3 +166,5 @@ template <class ObjT> class RefHandle : protected RefObject<ObjT> {
 ///////////////////////////////////////////////////////////////////
 
 #endif // RefObject_h
+
+// vim:sw=2
