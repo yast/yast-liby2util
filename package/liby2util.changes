@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar  3 17:13:20 CET 2003 - ma@suse.de
+
+- 2.7.13
+
+-------------------------------------------------------------------
 Thu Feb 27 11:35:26 CET 2003 - lnussel@suse.de
 
 - use std::set instead of hash in Ustring.h for speed reasons
@@ -12,7 +17,7 @@ Tue Feb 25 10:44:39 CET 2003 - cschum@suse.de
 -------------------------------------------------------------------
 Tue Feb 25 09:57:18 CET 2003 - gs@suse.de
 
-- 2.7.12   #include <assert.h> added 
+- 2.7.12   #include <assert.h> added
 
 -------------------------------------------------------------------
 Mon Feb 24 13:23:43 CET 2003 - cschum@suse.de
