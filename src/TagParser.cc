@@ -336,14 +336,15 @@ string TagParser::data2string( const list<string> & data_Vtr )
 {
     if ( !data_Vtr.size() )
 	return "";
+
     string ret_ti;
-#if 0 // triggers compiler bug
-    for (list<string>&::iterator pos = data_Vtr.begin();
-	 pos < data_Vtr.end(); pos++ )
+#if 0	// triggers compiler bug
+    list<string>&::iterator pos = data_Vtr.begin();
+    while (pos != data_Vtr.end())
     {
 	if (!ret_ti.empty())
 	    ret_ti += '\n';
-	ret_ti += *pos;
+	ret_ti += *pos++;
     }
 #endif
     return ret_ti;
