@@ -35,18 +35,11 @@ class Vendor : public Ustring {
 
     static UstringHash _nameHash;
 
-    bool _isSuSE;
-
   public:
 
-    explicit Vendor( const std::string & n = "" );
-
-  public:
-
-    /**
-     * True if vendor is SuSE
-     **/
-    bool isSuSE() const { return _isSuSE; }
+    explicit Vendor( const std::string & n = "" )
+      : Ustring( _nameHash, n )
+    {}
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec  1 13:40:36 CET 2004 - ma@suse.de
+
+- Keep vendor attributes inside the packagemanager library. (#47528)
+- 2.11.1
+
+-------------------------------------------------------------------
 Fri Oct 29 12:36:13 CEST 2004 - mvidner@suse.cz
 
 - Added pkgconfig support.
