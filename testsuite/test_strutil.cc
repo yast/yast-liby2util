@@ -21,10 +21,21 @@ void chksp( const std::string & line_r,
   SEC << endl;
 }
 
+void chktr( const std::string & line_r ) {
+  MIL << "->" << '"' << line_r << '"' << endl;
+  MIL << " l" << '"' << ltrim(line_r) << '"' << endl;
+  MIL << " r" << '"' << rtrim(line_r) << '"' << endl;
+  MIL << " t" << '"' <<  trim(line_r) << '"' << endl;
+}
 int main()
 {
   Y2SLog::setLogfileName("-");
   DBG << "START" << endl;
+
+  chktr( "" );
+  chktr( " \t \n " );
+  chktr( "a  aa" );
+  chktr( " a  aa   " );
 
   chksp( "" );
   chksp( ":" );

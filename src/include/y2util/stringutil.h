@@ -167,6 +167,12 @@ extern unsigned split( const std::string          line_r,
 extern std::string join( const std::vector<std::string> & words_r,
 			 const std::string & sep_r = " " );
 
+/**
+ * Remove leading/trailing/surrounding whitespace
+ **/
+extern std::string ltrim( const std::string & s );
+extern std::string rtrim( const std::string & s );
+inline std::string  trim( const std::string & s ) { return ltrim( rtrim( s ) ); }
 
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil

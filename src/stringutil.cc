@@ -107,7 +107,45 @@ std::string join( const std::vector<std::string> & words_r,
   return ret;
 }
 
+/******************************************************************
+**
+**
+**	FUNCTION NAME : ltrim
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+std::string ltrim( const std::string & s )
+{
+  if ( s.empty() )
+    return s;
 
+  string::size_type p = s.find_first_not_of( " \t\n" );
+  if ( p == string::npos )
+    return "";
+
+  return s.substr( p );
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : rtrim
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+std::string rtrim( const std::string & s )
+{
+  if ( s.empty() )
+    return s;
+
+  string::size_type p = s.find_last_not_of( " \t\n" );
+  if ( p == string::npos )
+    return "";
+
+  return s.substr( 0, p+1 );
+}
 
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil
