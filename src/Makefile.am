@@ -25,7 +25,8 @@ liby2util_la_SOURCES = \
 	ExternalDataSource.cc	\
 	ExternalProgram.cc	\
 	Url.cc			\
-	Date.cc
+	Date.cc			\
+	FSize.cc
 
 
 liby2util_la_LDFLAGS = -version-info 2:0

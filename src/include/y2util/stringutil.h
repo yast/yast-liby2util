@@ -55,7 +55,7 @@ inline std::string form( const char * format, ... ) {
   va_list ap;
   va_start( ap, format );
 
-#if 0
+#if 1
   vasprintf( &buf, format, ap );
   if ( buf ) {
     val = buf;

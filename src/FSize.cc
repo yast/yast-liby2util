@@ -10,97 +10,75 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:       Date.cc
+  File:       FSize.cc
 
   Author:     Michael Andres <ma@suse.de>
   Maintainer: Michael Andres <ma@suse.de>
 
-  Purpose: Store and operate on date (time_t).
+  Purpose:
 
 /-*/
-
-// for strptime
-// #define _XOPEN_SOURCE
-
 #include <iostream>
 
 #include <y2util/stringutil.h>
-#include <y2util/Date.h>
+#include <y2util/FSize.h>
 
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Date::form
+//	METHOD NAME : FSize::bestUnit
+//	METHOD TYPE : FSize::Unit
+//
+//	DESCRIPTION :
+//
+FSize::Unit FSize::bestUnit() const
+{
+  long long usize( _size < 0 ? -_size : _size );
+  if ( usize < KB )
+    return B;
+  if ( usize < MB )
+    return K;
+  if ( usize < GB )
+    return M;
+  if ( usize < TB )
+    return G;
+  return T;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : FSize::form
 //	METHOD TYPE : std::string
 //
 //	DESCRIPTION :
 //
-std::string Date::form( const std::string & format, time_t tval_r )
+std::string FSize::form( const Unit unit_r, unsigned fw, unsigned prec, const bool showunit ) const
 {
-  static char buf[1024];
-  if ( !strftime( buf, 1024, format.c_str(), localtime( &tval_r ) ) )
-    return string();
-  return buf;
+  if ( unit_r == B )
+    prec = 0; // doesn't make sense for Byte
+
+  string ret = stringutil::form( "%*.*f", fw, prec, ( double( _size ) / factor( unit_r ) ) );
+  if ( showunit ) {
+    ret = stringutil::form( "%s %s", ret.c_str(), unit( unit_r ) );
+  }
+  return ret;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Date::fromSECONDS
-//	METHOD TYPE : time_t
-//
-//	DESCRIPTION :
-//
-time_t Date::fromSECONDS( const std::string & str_r )
-{
-  return atol( str_r.c_str() );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Date::toSECONDS
+//	METHOD NAME : FSize::asString
 //	METHOD TYPE : std::string
 //
 //	DESCRIPTION :
 //
-std::string Date::toSECONDS( time_t tval_r )
+std::string FSize::asString() const
 {
-  return form( "%s", tval_r );
-}
-
-#if 0
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Date::scan
-//	METHOD TYPE : time_t
-//
-//	DESCRIPTION :
-//
-time_t Date::scan( const std::string & format, const std::string & str_r )
-{
-  struct tm tm;
-  if ( strptime( str_r.c_str(), format.c_str(), &tm ) == NULL )
-    return 0;
-  DBG << "---------->" << asctime( &tm ) << endl;
-  return mktime( &tm );
-}
-#endif
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Date::asString
-//	METHOD TYPE : std::string
-//
-//	DESCRIPTION :
-//
-std::string Date::asString() const
-{
-  return form( "%c", _date );
+  return form();
 }
 
 /******************************************************************
@@ -111,9 +89,8 @@ std::string Date::asString() const
 **
 **	DESCRIPTION :
 */
-std::ostream & operator<<( std::ostream & str, const Date & obj )
+std::ostream & operator<<( std::ostream & str, const FSize & obj )
 {
   return str << obj.asString();
 }
-
 
