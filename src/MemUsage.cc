@@ -68,9 +68,9 @@ void MemUsage::MuDump ()
 	int size = m_mu_size[i->first];
 	unsigned long mem = i->second * size;
 	sum += mem;
-	fprintf (stderr, "%9d <%5d> [%9d] %s\n", i->second, size, mem, i->first.c_str ());
+	fprintf (stderr, "%9d <%5d> [%9lu] %s\n", i->second, size, mem, i->first.c_str ());
     }
-    fprintf (stderr, "%9d Total bytes\n", sum);
+    fprintf (stderr, "%9lu Total bytes\n", sum);
 
 }
 
