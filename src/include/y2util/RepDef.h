@@ -22,107 +22,140 @@
 #include <y2util/Rep.h>
 
 ///////////////////////////////////////////////////////////////////
-// PTR_CLASS header
 ///////////////////////////////////////////////////////////////////
-//
-// #include <y2util/RepDef.h>
-//
-// class PTR_CLASS(Item) {
-//   PTR_BODY(Item)
-//
-//   public:
-//
-//     ItemPtr( int i );         // forwarded Item constructor
-//     ItemPtr( int i, int y );  // forwarded Item constructor
-// };
-//
 ///////////////////////////////////////////////////////////////////
-#define PTR_CLASS(CL) CL; class CL##Ptr : virtual public RepHandle
 
-#define PTR_BODY(CL)	\
-  public:							\
-    explicit CL##Ptr( const CL * p = 0 );			\
-    CL##Ptr( const CL##Ptr & rhs );				\
-    CL##Ptr( const RepHandle & rhs );				\
-    const CL##Ptr & operator=( const CL * p ) const;		\
-    const CL##Ptr & operator=( const CL##Ptr & rhs ) const;	\
-    const CL##Ptr & operator=( const RepHandle & rhs ) const;	\
-    const CL *      operator->() const;				\
-    CL *            operator->();				\
-  protected:							\
-    const CL *      rep() const;				\
-    const CL *      rep( const RepHandle & rhs ) const;		\
+#define REP_CLASS(NAME)        GEN_REP_CLASS( NAME )
+#define REP_BODY(NAME)         GEN_REP_BODY( NAME, #NAME )
+
+///////////////////////////////////////////////////////////////////
+
+#define GEN_REP_CLASS(CLNAME)	\
+  CLNAME : virtual public Rep
+
+///////////////////////////////////////////////////////////////////
+
+#define GEN_REP_BODY(CLNAME,STRNAME)	\
+  CLNAME( const CLNAME & );            /* no copy */	\
+  CLNAME & operator=(const CLNAME & ); /* no assign */	\
+  public:						\
+    virtual const char * rep_name() const 		\
+      { return STRNAME; }				\
   private:
 
 ///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+//
+// NOTE: Handle classes are derived virtual. This allows implicit
+// conversion from 'Ptr' to 'constPtr'. BUT they will not work together
+// with representation classes, that contain multimple independent
+// instances of the same Baseclass.
+//
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define DEFINE_BASIC_HANDLES(NAME)	\
+  class CLASS_CONST_PTR(NAME) {		\
+    BODY_CONST_PTR(NAME)		\
+  };					\
+  class CLASS_PTR(NAME) {		\
+    BODY_PTR(NAME)			\
+  };
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define DEFINE_DERIVED_HANDLES(NAME,MODE,BASE)	\
+  class CLASS_CONST_PTR(NAME), virtual MODE const##BASE##Ptr {	\
+    BODY_CONST_PTR(NAME)					\
+  };								\
+  class CLASS_PTR(NAME), virtual MODE BASE##Ptr {		\
+    BODY_PTR(NAME)						\
+  };
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define DEFINE_DOUBLE_DERIVED_HANDLES(NAME,MODE,BASE,MODE2,BASE2)	\
+  class CLASS_CONST_PTR(NAME), virtual MODE const##BASE##Ptr, virtual MODE2 const##BASE2##Ptr {	\
+    BODY_CONST_PTR(NAME)									\
+  };												\
+  class CLASS_PTR(NAME), virtual MODE BASE##Ptr, virtual MODE2 BASE2##Ptr {			\
+    BODY_PTR(NAME)										\
+  };
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define IMPL_HANDLES(NAME)	\
+  IMPL_CONST_PTR(NAME)	\
+  IMPL_PTR(NAME)
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define CLASS_CONST_PTR(NAME) GEN_CLASS( const##NAME##Ptr, NAME, const )
+#define CLASS_PTR(NAME)       GEN_CLASS( NAME##Ptr,        NAME,       ), virtual public const##NAME##Ptr
+
+#define BODY_CONST_PTR(NAME)  GEN_BODY( const##NAME##Ptr, NAME, const )
+#define BODY_PTR(NAME)        GEN_BODY( NAME##Ptr,        NAME,       )
+
+#define IMPL_CONST_PTR(NAME)  GEN_IMPL( const##NAME##Ptr, NAME, const )
+#define IMPL_PTR(NAME)        GEN_IMPL( NAME##Ptr,        NAME,       )
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+#define GEN_CLASS(CLNAME,REPNAME,MAYCONST)	\
+  REPNAME; class CLNAME : virtual public MAYCONST##RepPtr
+
+///////////////////////////////////////////////////////////////////
+
+#define GEN_BODY(CLNAME,REPNAME,MAYCONST)	\
+  public:								\
+    CLNAME( MAYCONST REPNAME * p = 0 );					\
+    CLNAME( const CLNAME & rhs );					\
+    CLNAME( const MAYCONST##RepPtr & rhs );				\
+    CLNAME & operator=( MAYCONST REPNAME * p );				\
+    CLNAME & operator=( const CLNAME & rhs );				\
+    CLNAME & operator=( const MAYCONST##RepPtr & rhs );			\
+    MAYCONST REPNAME * operator->() const;				\
+  protected:								\
+    MAYCONST REPNAME * rep() const;					\
+    MAYCONST REPNAME * rep( const MAYCONST##RepPtr & rhs ) const;	\
+  private:
 
 
 ///////////////////////////////////////////////////////////////////
-// PTR_CLASS implementation
-///////////////////////////////////////////////////////////////////
+
 //
-// #include <Item.h>
+// ! Always initialize constRepPtr, It's the bottommost class
 //
-// PTR_IMPL(Item)
-//
-// ItemPtr::ItemPtr( int i )
-//     : RepHandle( new Item(i) )
-// {}
-//
-// ItemPtr::ItemPtr( int i, int y )
-//     : RepHandle( new Item(i,j) )
-// {}
-//
-///////////////////////////////////////////////////////////////////
-#define PTR_IMPL(CL)	\
-CL##Ptr::CL##Ptr( const CL * p ) : RepHandle( p )				\
+
+#define GEN_IMPL(CLNAME,REPNAME,MAYCONST)	\
+CLNAME::CLNAME( MAYCONST REPNAME * p ) : constRepPtr( p )			\
   {}										\
-CL##Ptr::CL##Ptr( const CL##Ptr & rhs ) : RepHandle( rhs )			\
+CLNAME::CLNAME( const CLNAME & rhs ) : constRepPtr( rhs )			\
   {}										\
-CL##Ptr::CL##Ptr( const RepHandle & rhs ) : RepHandle( rep( rhs ) )		\
+CLNAME::CLNAME( const MAYCONST##RepPtr & rhs ) : constRepPtr( rep( rhs ) )	\
   {}										\
-const CL##Ptr & CL##Ptr::operator=( const CL * p ) const			\
-  { RepHandle::operator=( p ); return *this; }					\
-const CL##Ptr & CL##Ptr::operator=( const CL##Ptr & rhs ) const			\
-  { RepHandle::operator=( rhs ); return *this; }				\
-const CL##Ptr & CL##Ptr::operator=( const RepHandle & rhs ) const		\
-  { RepHandle::operator=( rep( rhs ) ); return *this; }				\
-const CL * CL##Ptr::operator->() const 						\
+CLNAME & CLNAME::operator=( MAYCONST REPNAME * p )				\
+  { MAYCONST##RepPtr::operator=( p ); return *this; }				\
+CLNAME & CLNAME::operator=( const CLNAME & rhs )				\
+  { MAYCONST##RepPtr::operator=( rhs ); return *this; }				\
+CLNAME & CLNAME::operator=( const MAYCONST##RepPtr & rhs )			\
+  { MAYCONST##RepPtr::operator=( rep( rhs ) ); return *this; }			\
+MAYCONST REPNAME * CLNAME::operator->() const 					\
   { return rep(); }								\
-CL *       CL##Ptr::operator->()						\
-  { return const_cast<CL *>(rep()); }						\
-const CL * CL##Ptr::rep() const							\
-  { return dynamic_cast<const CL *>(RepHandle::rep()); }			\
-const CL * CL##Ptr::rep( const RepHandle & rhs ) const				\
-  { return dynamic_cast<const CL *>(RepHandle::rep( rhs )); }
-
-///////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////
-// REP_CLASS
-///////////////////////////////////////////////////////////////////
-//
-// #include <ItemPtr.h>
-//
-// class REP_CLASS(Item) {
-//   REP_BODY(Item)
-//
-//   public:
-//
-//     Item( int i );
-//     Item( int i, int y );
-//
-//     virtual ~Item();
-// };
-//
-///////////////////////////////////////////////////////////////////
-#define REP_CLASS(CL) CL : virtual public Rep
-
-#define REP_BODY(CL)	\
-  public:		\
-    virtual const char * rep_name() const 	\
-      { return #CL; }	\
-  private:
+MAYCONST REPNAME * CLNAME::rep() const						\
+  { return dynamic_cast<MAYCONST REPNAME *>(baseRep()); }			\
+MAYCONST REPNAME * CLNAME::rep( const MAYCONST##RepPtr & rhs ) const		\
+  { return dynamic_cast<MAYCONST REPNAME *>(baseRep( rhs )); }
 
 ///////////////////////////////////////////////////////////////////
 

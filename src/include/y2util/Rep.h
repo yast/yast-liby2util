@@ -26,18 +26,18 @@
 //	CLASS NAME : Rep
 /**
  * Base class for representations carrying a reference count. Actual
- * reference counting is done by class RepHandle.
+ * reference counting is done by class constRepPtr.
  *
  * The initial reference count is zero. This way you're able to create and
- * destroy objects, which were not referenced by any RepHandle. But as soon as
- * a RepHandle references the object, any attempt to delete it will leed to an
+ * destroy objects, which were not referenced by any constRepPtr. But as soon as
+ * a constRepPtr references the object, any attempt to delete it will leed to an
  * exeption.
  *
  * Rep must be virtual base class in case of multiple derivation, as it's not
  * advisable to have multiple reference counters for a single object.
  *
  * @short Base class for representations carrying a reference count.
- * @see   RepHandle
+ * @see   constRepPtr
  **/
 class Rep {
 
@@ -49,14 +49,14 @@ class Rep {
     mutable unsigned rep_cnt_i;
 
     /**
-     * Actual reference counting is done by class RepHandle.
-     * @see RepHandle
+     * Actual reference counting is done by class constRepPtr.
+     * @see constRepPtr
      **/
-    friend class RepHandle;
+    friend class constRepPtr;
 
     /**
      * Increment reference counter.
-     * @see RepHandle
+     * @see constRepPtr
      **/
     void rep_ref() const {
       ++rep_cnt_i;
@@ -67,7 +67,7 @@ class Rep {
      * Decrement reference counter and delete the object if reference
      * count gets zero. Throws exception if reference count already is
      * zero.
-     * @see RepHandle
+     * @see constRepPtr
      **/
     void rep_unref() const {
       if ( !rep_cnt_i )
@@ -83,16 +83,15 @@ class Rep {
     /**
      * Constructor. Initial reference count is zero.
      **/
-    Rep() : rep_id( ++rep_IDs ) {
-      rep_cnt_i = 0;
+    Rep() : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
       _dbg( 'c' );
     }
 
     /**
      * CopyConstructor. Initial reference count is zero.
      **/
-    Rep( const Rep & rhs ) : rep_id( ++rep_IDs ) {
-      rep_cnt_i = 0; // do not copy refcount
+    Rep( const Rep & rhs ) : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
+      // do not copy refcount
       _dbg( 'C' );
     }
 
@@ -134,6 +133,11 @@ class Rep {
   public:
 
     /**
+     * The reference counter. Might be interesting for copy on write.
+     **/
+    unsigned rep_cnt() const { return  rep_cnt_i; }
+
+    /**
      * Objects name used in dumpOn()
      **/
     virtual const char * rep_name() const { return "Rep"; }
@@ -144,7 +148,7 @@ class Rep {
      *
      * Derived classes may overload this to realize std::ostream & operator<< for
      * representation and handle classes.
-     * @see RepHandle
+     * @see constRepPtr
      **/
     virtual std::ostream & dumpOn( std::ostream & str ) const;
 
@@ -158,37 +162,44 @@ class Rep {
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : RepHandle
+//	CLASS NAME : constRepPtr
 /**
- * RepHandle realizes a pointer to an allocated object derived from class Rep.
- * On construction, deletion and assignment, RepHandle adjusts the reference
- * count of the Rep object it is pointing to. Once referenced by a RepHandle,
- * the Rep object will delete itself, after the last RepHandle drops its reference
+ * constRepPtr realizes a 'const Rep *' to an allocated object derived from Rep.
+ * Thus a 'const constRepPtr' is a 'const Rep *const'.
+ *
+ * On construction, deletion and assignment, constRepPtr adjusts the reference
+ * count of the Rep object it is pointing to. Once referenced by a constRepPtr,
+ * the Rep object will delete itself, after the last constRepPtr drops its reference
  * to it.
  *
  * Derived classes should provide an appropriate operator->() to access the
  * representation class.
  *
- *
  * @short Base class for reference counted class Rep pointer.
  * @see   Rep
  **/
-class RepHandle {
+class constRepPtr {
 
   private:
+
+    /**
+     * Let class RepPtr access rep_p
+     * @see RepPtr
+     **/
+    friend class RepPtr;
 
     /**
      * Pointer to the referenced Rep object, or 0.
      * @see Rep
      **/
-    mutable const Rep * rep_p;
+    const Rep * rep_p;
 
     /**
      * Assign a new Rep object. Prevent self assignment and handle
      * reference counting.
      * @see Rep
      **/
-    void _assign( const Rep * new_p ) const {
+    void _assign( const Rep * new_p ) {
       if ( new_p != rep_p ) {
 	if ( rep_p )
 	  rep_p->rep_unref();
@@ -201,7 +212,7 @@ class RepHandle {
     /**
      * Initial assignment. Called from constructor.
      **/
-    void _init( const Rep * new_p ) const {
+    void _init( const Rep * new_p ) {
       rep_p = 0;
       _assign( new_p );
     }
@@ -211,21 +222,21 @@ class RepHandle {
     /**
      * Constructor.
      **/
-    RepHandle( const Rep * new_p = 0 ) {
+    constRepPtr( const Rep * new_p ) {
       _init( new_p );
     }
 
     /**
      * CopyConstructor.
      **/
-    RepHandle( const RepHandle & rhs ) {
+    constRepPtr( const constRepPtr & rhs ) {
       _init( rhs.rep_p );
     }
 
     /**
      * Assignment.
      **/
-    const RepHandle & operator=( const Rep * rhs ) const {
+    constRepPtr & operator=( const Rep * rhs ) {
       _assign( rhs );
       return *this;
     }
@@ -233,7 +244,7 @@ class RepHandle {
     /**
      * Assignment.
      **/
-    const RepHandle & operator=( const RepHandle & rhs ) const {
+    constRepPtr & operator=( const constRepPtr & rhs ) {
       _assign( rhs.rep_p );
       return *this;
     }
@@ -241,7 +252,7 @@ class RepHandle {
     /**
      * Destructor.
      **/
-    virtual ~RepHandle() {
+    virtual ~constRepPtr() {
       if ( rep_p )
 	rep_p->rep_unref();
     }
@@ -249,12 +260,12 @@ class RepHandle {
     /**
      * Return rep_p.
      **/
-    const Rep * rep() const { return rep_p; }
+    const Rep *const baseRep() const { return rep_p; }
 
     /**
      * Return other handles rep_p.
      **/
-    const Rep * rep( const RepHandle & rhs ) const { return rhs.rep_p; }
+    const Rep *const baseRep( const constRepPtr & rhs ) const { return rhs.rep_p; }
 
   public:
 
@@ -267,7 +278,71 @@ class RepHandle {
      * Default output operator for handle classes realized via 'virtual Rep::dumpOn()'.
      * @see Rep
      **/
-    friend std::ostream & operator<<( std::ostream & str, const RepHandle & obj );
+    friend std::ostream & operator<<( std::ostream & str, const constRepPtr & obj );
+};
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : RepPtr
+/**
+ * RepPtr realizes a 'Rep *' to an allocated object derived from Rep.
+ * Thus a 'const RepPtr' is a 'Rep *const'.
+ *
+ * @short Base class for reference counted class Rep pointer.
+ * @see   Rep
+ * @see   constRepPtr
+ **/
+class RepPtr : virtual public constRepPtr {
+
+  private:
+
+    Rep *& rep_p;
+
+  protected:
+
+    /**
+     * Constructor.
+     **/
+    RepPtr( Rep * new_p = 0 ) : constRepPtr( new_p ), rep_p( const_cast<Rep *&>(constRepPtr::rep_p) ) {}
+
+    /**
+     * CopyConstructor.
+     **/
+    RepPtr( const RepPtr & rhs ) : constRepPtr( rhs ), rep_p( const_cast<Rep *&>(constRepPtr::rep_p) ) {}
+
+    /**
+     * Assignment.
+     **/
+    RepPtr & operator=( Rep * rhs ) {
+      constRepPtr::operator=( rhs );
+      return *this;
+    }
+
+    /**
+     * Assignment.
+     **/
+    RepPtr & operator=( const RepPtr & rhs ) {
+      constRepPtr::operator=( rhs );
+      return *this;
+    }
+
+    /**
+     * Destructor.
+     **/
+    virtual ~RepPtr() {}
+
+    /**
+     * Return rep_p.
+     **/
+    Rep *const baseRep() const { return rep_p; }
+
+    /**
+     * Return other handles rep_p.
+     **/
+    Rep *const baseRep( const RepPtr & rhs ) const { return rhs.rep_p; }
+
 };
 
 ///////////////////////////////////////////////////////////////////

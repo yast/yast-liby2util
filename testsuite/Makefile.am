@@ -16,7 +16,8 @@ LDFLAGS = -L$(libdir)	\
 
 noinst_PROGRAMS = runy2util parser \
 	test_Y2SLog.prg \
-	test_Rep.prg
+	test_Rep.prg	\
+	test_BitField.prg
 
 
 runy2util_SOURCES = runy2util.cc
@@ -29,6 +30,9 @@ test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
 
 test_Rep_prg_SOURCES = test_Rep.cc
 #test_Rep_prg_LDFLAGS = -static
+
+test_BitField_prg_SOURCES = test_BitField.cc
+#test_BitField_prg_LDFLAGS = -static
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \

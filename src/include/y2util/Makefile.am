@@ -13,6 +13,7 @@ pkginclude_HEADERS = \
 	PathInfo.h	\
 	Rep.h	\
 	RepDef.h	\
+	BitField.h	\
 	RefObject.h	\
 	Y2SLog.h	\
 	TagParser.h	\

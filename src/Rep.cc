@@ -132,9 +132,9 @@ std::ostream & operator<<( std::ostream & str, const Rep & obj )
 **
 **	DESCRIPTION :
 */
-std::ostream & operator<<( std::ostream & str, const RepHandle & obj )
+std::ostream & operator<<( std::ostream & str, const constRepPtr & obj )
 {
-  if ( !obj.rep() )
+  if ( !obj.baseRep() )
     return str << "Rep(nil)";
-  return obj.rep()->dumpOn( str );
+  return obj.baseRep()->dumpOn( str );
 }
