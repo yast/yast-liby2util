@@ -84,7 +84,7 @@ class Tag
 	encodingtype _encodingtype;
 
 	static char* const global_defaultlocale;
-	
+
 	/** compare tagname with str2 ignoring locale */
 	bool comparebeforedot(const std::string& str2);
     public:
@@ -146,7 +146,7 @@ class Tag
 	    _defaultlocale = defaultlocale;
 	}
 	/** set the preferred tag locale e.g de_DE.
-	 * 
+	 *
 	 * @param preflocale locale to use
 	 * */
 	void setPreferredLocale(const std::string& preflocale);
@@ -179,7 +179,8 @@ class Tag
 	void print(std::ostream& os)
 	{
 	    os << "Tag: " << _name;
-	    os << " ( " << _startpos << "," << _endpos << " ): " << _data << std::endl;
+	    os << " ( " << std::streamoff( _startpos ) << "," << std::streamoff( _endpos ) << " ): "
+	       << _data << std::endl;
 	    if(_datatype == MULTI )
 		os << "EndTag: " << _endtag << std::endl;
 	}
@@ -192,7 +193,7 @@ class TagSet
 {
     public:
 	typedef std::vector<CommonPkdParser::Tag*> tagvectortype;
-	
+
     protected:
 	/** insert tag into tagmap
 	 *
@@ -203,8 +204,8 @@ class TagSet
 	{
 	    _tags[key]=tag;
 	}
-	
-	/** language dependant tags, needed for setting the encoding */	
+
+	/** language dependant tags, needed for setting the encoding */
 	std::vector<Tag*> _localetags;
 	typedef std::map<std::string, Tag*> tagmaptype;
 	/** map of tags managed by this tagset */
@@ -285,7 +286,7 @@ class TagSet
 	 * */
 	void addTagByIndex(unsigned int idx, CommonPkdParser::Tag* t)
 	{
-	    if(_tagv.size()<=idx) { _tagv.resize(idx+2),NULL; }
+	    if(_tagv.size()<=idx) { _tagv.resize(idx+2,NULL); }
 	    _tagv[idx]=t;
 	}
 };

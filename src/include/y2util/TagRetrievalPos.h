@@ -61,7 +61,12 @@ class TagRetrievalPos {
 	/**
 	 * set position
 	 */
-	void set (std::streampos begin, std::streampos end) { if (begin < end) {_begin = begin; _end = end;} }
+	void set (std::streampos begin, std::streampos end) {
+	  if ( std::streamoff( begin ) < std::streamoff( end ) ) {
+	    _begin = begin;
+	    _end = end;
+	  }
+	}
 
 	/**
 	 * retrieve single-line data
