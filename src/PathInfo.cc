@@ -372,8 +372,16 @@ int PathInfo::recursive_rmdir( const Pathname & path )
     return _Log_Result( ENOTDIR );
   }
 
-  string cmd( stringutil::form( "rm -rf '%s'", path.asString().c_str() ) );
-  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  const char *const argv[] = {
+    "/bin/rm",
+    "-rf",
+    "--preserve-root",
+    "--",
+    path.asString().c_str(),
+    NULL
+  };
+
+  ExternalProgram prog( argv, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
   }
@@ -402,7 +410,7 @@ int PathInfo::clean_dir( const Pathname & path )
     return _Log_Result( ENOTDIR );
   }
 
-  string cmd( stringutil::form( "cd '%s' && rm -rf *", path.asString().c_str() ) );
+  string cmd( stringutil::form( "cd '%s' && rm -rf --preserve-root -- *", path.asString().c_str() ) );
   ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
