@@ -36,7 +36,7 @@ unsigned Diff::differ(const std::string file1, const std::string file2, std::str
 	file2.c_str(),
 	NULL
     };
-    ExternalProgram* prog = new ExternalProgram(argv);
+    ExternalProgram* prog = new ExternalProgram(argv,ExternalProgram::Discard_Stderr, false, -1, true);
 
     if(!prog)
 	return 2;
