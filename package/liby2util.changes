@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 22 14:35:45 CEST 2003 - cschum@suse.de
+
+- Also use separate GPG home dir when running as non-root (#26360). 
+
+-------------------------------------------------------------------
 Fri Mar 14 16:27:10 CET 2003 - ma@suse.de
 
 - In vendor check isSuSE() return true for "UnitedLinux" too.

@@ -14,12 +14,18 @@ GPGCheck::GPGCheck ()
     : _keyring ("/usr/lib/rpm/gnupg/pubring.gpg")
 {
   if ( getuid() == 0 ) {
-    _gnupghome = "/var/lib/YaST2/.gnupg";
+    _gnupghome = "/var/lib/YaST2/gnupg";
+  } else {
+    string home = getenv( "HOME" );
+    _gnupghome = home + "/.yast2/gnupg";
   }
 
-  PathInfo p( _gnupghome + "/options" );
-  if ( !p.isExist() ) {
-    system( assembleCommand( "dummy" ).c_str() );
+  int error = PathInfo::assert_dir( _gnupghome );
+  if ( error ) {
+    ERR << "Error creating directory '" << _gnupghome << "': " << error
+        << endl;
+  } else {
+    DBG << "Directory '" << _gnupghome << "' exists." << endl;
   }
 }
 
