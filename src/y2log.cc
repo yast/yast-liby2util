@@ -189,8 +189,8 @@ void y2_vlogger_function(loglevel_t level, const char *component, const char *fi
     if (*logname != '-') {
 	logfile = fopen (logname, "a");
 	if (!logfile) {
-	    fprintf (Y2LOG_STDERR, "y2log: Error opening logfile '%s': %s.\n",
-		     logname, strerror (errno));
+	    fprintf (Y2LOG_STDERR, "y2log: Error opening logfile '%s': %s (%s:%d).\n",
+		     logname, strerror (errno), file, line);
 	    return;
 	}
     }
