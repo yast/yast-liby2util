@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <malloc.h>
 #include <pwd.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -345,11 +346,36 @@ static void shift_log_files(string filename)
 
 
 /**
+ * Signal handler: re-read log configuration
+ * The variable is checked in the main logger function
+ */
+static void signal_handler (int signum)
+{
+    did_read_logconf = false;
+}
+
+static void set_signal_handler ()
+{
+    struct sigaction a;
+    a.sa_handler = signal_handler;
+    a.sa_flags = 0;
+    sigemptyset (&a.sa_mask);
+
+    int ret = sigaction (SIGUSR1, &a, NULL);
+    if (ret != 0)
+    {
+	fprintf (stderr, "Could not set signal handler for y2log: %d\n", ret);
+    }
+}
+
+/**
  * Parse the log.conf
  */
 void set_log_conf(string confname) {
 
     did_read_logconf = true;
+
+    set_signal_handler ();
 
     string logconfname = confname;
     if(logconfname == "") {

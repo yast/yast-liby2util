@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 23 17:12:43 CET 2004 - mvidner@suse.cz
+
+- Reread log.conf on SIGUSR1
+- 2.9.11
+
+-------------------------------------------------------------------
 Sat Feb 21 02:34:14 CET 2004 - ma@suse.de
 
 - Reimplemented counted pointer classes
