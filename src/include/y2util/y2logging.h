@@ -31,18 +31,6 @@ namespace Y2Logging {
 //
 ///////////////////////////////////////////////////////////////////
 
-class DbgEnableBm {
-    private:
-	bool _dbg_enabled_bm;
-    public:
-
-	DbgEnableBm (bool dbg_enabled_bm) : _dbg_enabled_bm (dbg_enabled_bm) {}
-	bool isEnabled () { return _dbg_enabled_bm; }
-	void setEnabled (bool dbg_enabled_bm) { _dbg_enabled_bm = dbg_enabled_bm; }
-};
-
-extern DbgEnableBm dbg_enabled_bm;
-
 /* Logging levels */
 
 /* Logging functions */

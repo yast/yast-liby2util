@@ -28,7 +28,8 @@ namespace Y2SLog {
 //
 ///////////////////////////////////////////////////////////////////
 
-extern Y2Logging::DbgEnableBm dbg_enabled_bm;
+extern bool dbg_enabled_bm;
+
 extern std::ostream & get( const char * which, const unsigned level,
 			   const char * fil, const char * fnc, const int lne );
 

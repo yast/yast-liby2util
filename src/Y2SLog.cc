@@ -39,7 +39,7 @@ static QAsciiDict<Y2Loglinestreamset> streamset_VpCm( 17, true, false );
 
 static bool init();
 
-Y2Logging::DbgEnableBm dbg_enabled_bm (init());
+bool dbg_enabled_bm( init() );
 
 /******************************************************************
 **
@@ -230,7 +230,7 @@ ostream & get( const char * which, const unsigned level,
 ostream & getdbg( const char * which, const unsigned level,
 		  const char * fil, const char * fnc, const int lne )
 {
-  if ( dbg_enabled_bm.isEnabled() ) {
+  if ( dbg_enabled_bm ) {
     return get( which, level, fil, fnc, lne );
   }
   return no_stream_Fm;
