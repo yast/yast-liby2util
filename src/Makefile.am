@@ -49,5 +49,4 @@ liby2util_la_LDFLAGS = -version-info 3:0:0
 #liby2util_la_LDFLAGS = -version-info 2:0 \
 # 	-L$(QTLIBDIR)
 
-liby2util_la_LIBADD = \
-	-lutil
+liby2util_la_LIBADD = -lutil $(OPENSSL_LIBS)
