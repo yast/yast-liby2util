@@ -20,6 +20,14 @@
 #define Y2SLog_h
 
 #include <iostream>
+
+// Don't know why y2log.h insists on having a component name
+// defined and throws an error if it's missing.
+// However, I want Y2SLog to work out of the box.
+#ifndef Y2LOG
+#define Y2LOG "DEFINE_Y2LOG"
+#endif
+
 #include <y2util/y2log.h>
 
 ///////////////////////////////////////////////////////////////////

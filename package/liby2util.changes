@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec 18 19:20:43 CET 2003 - ma@suse.de
+
+- Restored Y2SLog providing a default log component name.
+- 2.9.4
+
+-------------------------------------------------------------------
 Fri Dec 12 20:46:22 CET 2003 - msvec@suse.cz
 
 - merge again the logging functionality from core
