@@ -6,6 +6,7 @@ Tue Jul  8 16:45:55 CEST 2003 - cschum@suse.de
 - Removed "get" suffix from Url accessor functions.
 - Added Protocol enum to Url class.
 - Changed Url::setPort/port() to use int value.
+- 2.8.5
 
 -------------------------------------------------------------------
 Tue Jun 24 11:18:01 CEST 2003 - cschum@suse.de
