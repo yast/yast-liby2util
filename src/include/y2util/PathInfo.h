@@ -189,6 +189,14 @@ class PathInfo {
     static int recursive_rmdir( const Pathname & path );
 
     /**
+     * Like 'rm -r DIR/ *'. Delete directory contents, but keep the directory itself.
+     *
+     * @return 0 on success, ENOTDIR if path is not a directory, otherwise the
+     * commands return value.
+     **/
+    static int clean_dir( const Pathname & path );
+
+    /**
      * Return content of directory via retlist. If dots is false
      * entries starting with '.' are not reported. "." and ".."
      * are never reported.

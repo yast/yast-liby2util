@@ -295,7 +295,37 @@ int PathInfo::recursive_rmdir( const Pathname & path )
     return _Log_Result( ENOTDIR );
   }
 
-  string cmd( stringutil::form( "rm -r '%s'", path.asString().c_str() ) );
+  string cmd( stringutil::form( "rm -rf '%s'", path.asString().c_str() ) );
+  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
+    DBG << "  " << output;
+  }
+  int ret = prog.close();
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::clean_dir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::clean_dir( const Pathname & path )
+{
+  DBG << "clean_dir " << path << ' ';
+  PathInfo p( path );
+
+  if ( !p.isExist() ) {
+    return _Log_Result( 0 );
+  }
+
+  if ( !p.isDir() ) {
+    return _Log_Result( ENOTDIR );
+  }
+
+  string cmd( stringutil::form( "cd '%s' && rm -rf *", path.asString().c_str() ) );
   ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
