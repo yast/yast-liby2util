@@ -59,6 +59,7 @@ class TagCacheRetrieval {
 	 * access to values
 	 */
 	bool retrieveData (const retrieval_t& pos, std::list<std::string> &data_r);
+	bool retrieveData (const retrieval_t& pos, std::string &data_r);
 };
 
 ///////////////////////////////////////////////////////////////////

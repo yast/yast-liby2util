@@ -67,3 +67,17 @@ TagCacheRetrieval::retrieveData(const retrieval_t& pos, std::list<std::string> &
 {
     return (_parser.retrieveData (_packages, pos.begin, pos.end, data_r));
 }
+
+bool
+TagCacheRetrieval::retrieveData(const retrieval_t& pos, std::string &data_r)
+{
+    std::list<std::string> listdata;
+    if (_parser.retrieveData (_packages, pos.begin, pos.end, listdata)
+	&& !listdata.empty())
+    {
+	data_r = listdata.front();
+	return true;
+    }
+    return false;
+}
+
