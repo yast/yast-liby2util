@@ -9,7 +9,6 @@ Summary:	-
 
 @HEADER-DEVEL@
 Summary:	-
-Provides:	liby2:/usr/lib/YaST2/include/Y2.h
 
 %description devel
 -
@@ -24,16 +23,12 @@ Provides:	liby2:/usr/lib/YaST2/include/Y2.h
 
 %files
 %defattr(-,root,root)
-%{_libdir}/liby2.so.*
-@plugindir@/lib*.so.*
+%{_libdir}/lib*.so.*
 
 %files devel
 %defattr(-,root,root)
-%{_libdir}/liby2.so
-%{_libdir}/liby2.la
-@plugindir@/lib*.so
-@plugindir@/lib*.la
-@includedir@/Y2.h
-%dir @includedir@/y2
-@includedir@/y2/*.h
+%{_libdir}/lib*.so
+%{_libdir}/lib*.la
+@includedir@/Y2UTIL.h
+@includedir@/y2util/*.h
 %doc @docdir@

@@ -6,13 +6,6 @@ tmp.err*
 tmp.log*
 .deps
 .libs
-rungeneric
-runprogram
-runstdio
-runremote
-runscript
-runplugin
-runserial
-runy2
+runy2util
 *.log
 *.sum

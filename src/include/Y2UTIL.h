@@ -10,22 +10,17 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       runy2util.cc
+   File:       Y2UTIL.h
 
-   Author:     Klaus Kaempf (kkaempf@suse.de)
-   Maintainer: Klaus Kaempf (kkaempf@suse.de)
+   Author:     Michael Andres <ma@suse.de>
+   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
+#ifndef Y2UTIL_h
+#define Y2UTIL_h
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : main
-**	FUNCTION TYPE : int
-**
-**	DESCRIPTION :
-*/
-int main()
-{
-  return 0;
-}
+#include <iosfwd>
+
+// include all basic types
+
+#endif // Y2UTIL_h

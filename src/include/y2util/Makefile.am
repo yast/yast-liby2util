@@ -1,14 +1,12 @@
 #
-# Makefile.am for liby2util/src/include
+# Makefile.am for liby2util/src/include/y2util
 #
 
-SUBDIRS = y2util
-
-pkgincludedir = $(includedir)
+pkgincludedir = $(includedir)/y2util
 
 # these go to $(pkgincludedir)
 
-pkginclude_HEADERS = Y2UTIL.h
+pkginclude_HEADERS =
 
 #<INSTALL-HEADER-TARGET>
 
