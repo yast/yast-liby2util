@@ -18,12 +18,20 @@
   Purpose:
 
 /-*/
+
+#include <stdlib.h>
+
 #include <iostream>
 
 #include <y2util/stringutil.h>
 #include <y2util/FSize.h>
 
 using namespace std;
+
+FSize::FSize( const string &sizeStr, const Unit unit_r )
+  : _size( atoll( sizeStr.c_str() ) * factor( unit_r ) )
+{
+}
 
 ///////////////////////////////////////////////////////////////////
 //

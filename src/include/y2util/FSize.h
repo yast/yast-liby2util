@@ -100,6 +100,11 @@ class FSize {
     {}
 
     /**
+      Construct from string containing a number in given unit.
+    */
+    FSize( const std::string &sizeStr, const Unit unit_r = B );
+
+    /**
      * Conversion to long long
      **/
     operator long long() const { return _size; }

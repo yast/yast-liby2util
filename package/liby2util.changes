@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 17 16:13:47 CEST 2003 - cschum@suse.de
+
+- Added FSize constructor with string argument.
+
+-------------------------------------------------------------------
 Wed Jun 11 11:45:44 CEST 2003 - arvin@suse.de
 
 - add /usr/include/YaST2 to file list of devel subpackage
