@@ -1,10 +1,11 @@
-EXTRA_DIST = dstrukt-entwurf.tex libPkgDb.tex libPkgDep.tex macros.tex \
-		header.fig relationmatch.fig phi-update.txt \
-		gen-pathmacros.pl run-tex.pl
+#
+# Makefile.am for packagemanager/doc/PHI
 
-all-local: ps-local
+all-local:
+	echo "Either run 'make dvi-local' or 'make ps-local'"
 dvi-local: dstrukt-entwurf.dvi libPkgDb.dvi libPkgDep.dvi
 ps-local: dstrukt-entwurf.ps libPkgDb.ps libPkgDep.ps
+
 clean-local:
 	rm -f *.ps *.dvi *.aux *.log *.eps
 
@@ -22,3 +23,24 @@ clean-local:
 pathmacros.tex:
 
 libPkgDb.tex: relationmatch.eps pathmacros.tex header.eps
+
+# also pack generated *.ps and *.eps to dist
+# so we dont need TeX for building
+EXTRA_DIST = \
+	dstrukt-entwurf.tex	\
+	libPkgDb.tex		\
+	libPkgDep.tex		\
+	macros.tex		\
+	header.fig		\
+	relationmatch.fig	\
+	phi-update.txt		\
+	gen-pathmacros.pl	\
+	run-tex.pl		\
+	dstrukt-entwurf.ps	\
+	header.eps		\
+	libPkgDb.ps		\
+	libPkgDep.ps		\
+	relationmatch.eps
+
+
+
