@@ -48,12 +48,16 @@ GPGCheck::check_file ( const Pathname& filename, bool strip )
 bool GPGCheck::check_file( const Pathname &sourceFile,
                            const Pathname &destFile )
 {
-  PathInfo::unlink( destFile );
+  int ret = PathInfo::unlink( destFile );
+
+  if ( ret != 0 && ret != ENOENT ) {
+    return false;
+  }
 
   string cmd = assembleCommand( "-o " + destFile.asString() + " " +
                                 sourceFile.asString() );
 
-  int ret = system( cmd.c_str() );
+  ret = system( cmd.c_str() );
 
   return ret == 0;
 }
