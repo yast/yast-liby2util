@@ -127,3 +127,21 @@ std::ostream & operator<<( std::ostream & str, const constRepPtr & obj )
     return str << "Rep(nil)";
   return obj.baseRep()->dumpOn( str );
 }
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Rep::dumpRepStats
+//	METHOD TYPE : std::ostream &
+//
+//	DESCRIPTION :
+//
+std::ostream & Rep::dumpRepStats( std::ostream & str )
+{
+  str << "RepStats(";
+
+  str << "rep_Total = " << rep_Total;
+
+  return str << ")";
+}
+

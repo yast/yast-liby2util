@@ -171,6 +171,13 @@ class Rep {
      * Default output operator for data classes realized via 'virtual Rep::dumpOn()'.
      **/
     friend std::ostream & operator<<( std::ostream & str, const Rep & obj );
+
+  public:
+
+    /**
+     * Merely a hook for debug purpose. Content and format are alternating,
+     **/
+    static std::ostream & dumpRepStats( std::ostream & str );
 };
 
 ///////////////////////////////////////////////////////////////////
