@@ -19,10 +19,14 @@
 
 #include <y2util/YRpmGroupsTree.h>
 
+#define TEXTDOMAIN "rpm-groups"
+
 
 YRpmGroupsTree::YRpmGroupsTree()
-    : YStringTree( "rpm-groups" )
+    : YStringTree( TEXTDOMAIN )
 {
+    bindtextdomain( TEXTDOMAIN, LOCALEDIR );
+    bind_textdomain_codeset( TEXTDOMAIN, "utf8" );
 }
 
 
