@@ -51,7 +51,7 @@ bool Url::set( const string url )
     return _valid;
 }
 
-string Url::asString( bool path, bool options )   const
+string Url::asString( bool path, bool options, bool plainpassword )   const
 {
     string url(_protocol+"://");
     if(!_username.empty())
@@ -60,7 +60,10 @@ string Url::asString( bool path, bool options )   const
 	if(!_password.empty())
 	{
 	    url+=':';
-	    url+=_password;
+	    if(plainpassword)
+		url+=_password;
+	    else
+		url+="PASSWORD";
 	}
 	url+='@';
     }

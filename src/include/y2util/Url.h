@@ -30,6 +30,7 @@
  * protocol://[[username[:password]]@hostname[:port]]/path[;options]
  * <p>
  * TODO: (un)escaping special characters like space -> %20
+ * TODO: check if url is still valid when using set* functions
  * */
 class Url {
     public:
@@ -107,10 +108,19 @@ class Url {
 	 *
 	 * @param path whether to append the path
 	 * @param options whether to append options
+	 * @param plainpassword whether to include the password in plaintext
+	 * (otherwise PASSWORD is printed)
+	 *
+	 * @see saveAsString
 	 *
 	 * @return the url
 	 * */
-	std::string asString( bool path = true, bool options = true) const;
+	std::string asString( bool path = true, bool options = true, bool plainpassword = false) const;
+
+	/**
+	 * use this function to get full Url for storing it in a file
+	 * */
+	std::string saveAsString() { return asString(true,true,true); }
 
 
 	/** split url into tokens
