@@ -144,8 +144,8 @@ inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*l
 inline std::string octstring( long long n,     int w = 0 ) { return form( "%#0*llo",  w, n ); }
 inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "%#0*llo",  w, n ); }
 
-/**
- * Return one line read from istream. Aftrwards the streampos is behind the delimiting '\n'
+/** \brief read one line from a stream
+ * Return one line read from istream. Afterwards the streampos is behind the delimiting '\n'
  * (or at EOF). The delimiting '\n' is <b>not</b> returned.
  *
  * If trim is true, the string returned is trimmed (surrounding whitespaces removed).
@@ -168,7 +168,13 @@ inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "
  * }
  * </PRE>
  **/
-extern std::string getline( std::istream & str, const Trim trim_r = NO_TRIM );
+extern std::string getline( std::istream & str, bool trim = false );
+
+/** \brief read one line from a stream
+ *
+ * like above but with allows to specify trimming direction
+ * */
+extern std::string getline( std::istream & str, const Trim trim_r );
 
 /**
  * Split line into words
