@@ -28,3 +28,16 @@ using namespace std;
 UstringHash Vendor::_nameHash;
 
 ///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Vendor::isSuSE
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+bool Vendor::isSuSE() const
+{
+  return( strval().substr( 0, 4 ) == "SuSE" );
+}

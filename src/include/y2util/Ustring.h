@@ -151,6 +151,13 @@ class Ustring {
      **/
     std::string _name;
 
+  protected:
+
+    /**
+     * const std::string & _name access for derived classes
+     **/
+    const std::string & strval() const { return _name; }
+
   public:
 
     /**
