@@ -41,6 +41,3 @@ EXTRA_DIST = \
 	libPkgDb.ps		\
 	libPkgDep.ps		\
 	relationmatch.eps
-
-
-

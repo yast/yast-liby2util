@@ -3,6 +3,5 @@ Makefile.in
 *.dvi
 *.aux
 *.ps
-*.eps
 *.log
 *.toc
