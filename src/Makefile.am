@@ -19,8 +19,11 @@ liby2util_la_SOURCES = \
 	Pathname.cc		\
 	PathInfo.cc		\
 	TagParser.cc		\
+	TaggedParser.cc		\
+	TagRetrievalPos.cc	\
 	TagCacheRetrieval.cc	\
 	CommonPkdParser.cc	\
+	TaggedFile.cc		\
 	Y2SLog.cc		\
 	ExternalDataSource.cc	\
 	ExternalProgram.cc	\

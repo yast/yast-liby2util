@@ -30,6 +30,8 @@ Summary:	-
 %defattr(-,root,root)
 %{_libdir}/lib*.so
 %{_libdir}/lib*.la
+%{_bindir}/validate_tagged
+%{_bindir}/validate_packages
 @includedir@/Y2UTIL.h
 @includedir@/y2util
 %doc @docdir@

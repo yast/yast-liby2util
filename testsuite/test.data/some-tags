@@ -1,0 +1,34 @@
+#
+# comment
+#
+
+# single line, no language
+=Loc: blah
+=Loc: blah.blubb
+# single line, with language
+=Loc.de: deutsch
+
+# multi line, no language
++Fil:
+fil1
+fil2
+-Fil:
+
+# multi line, with language
++Fil.cz:
+fil1
+fil2
+-Fil.cz:
+
+# errors
+
+=Col foo:
+=Col.: foo
+=Col: foo
+=Col foo
+
+-Fil:
+blubb
+blubb1
+blubb2
++Lif:

@@ -68,12 +68,13 @@ TagCacheRetrieval::~TagCacheRetrieval()
 //	METHOD NAME : TagCacheRetrieval::retrieveData
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION : retrieves data at TagCacheRetrievalPos pos and fills
+//	DESCRIPTION : retrieves data at TagRetrievalPos pos and fills
 //			data_r appropriately
 //
 bool
-TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::string> &data_r)
+TagCacheRetrieval::retrieveData(const TagRetrievalPos& pos, std::list<std::string> &data_r)
 {
+//MIL << "TagCacheRetrieval::retrieveData(multi)" << endl;
     if (!_stream.is_open())
     {
 	_stream.open (_name.c_str());
@@ -83,7 +84,7 @@ TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::
 	    return false;
 	}
     }
-    bool ret = _parser.retrieveData (_stream, pos.begin(), pos.end(), data_r);
+    bool ret = pos.retrieveData (_stream, data_r);
     if (!_keep_open)
     {
 	_stream.close ();
@@ -92,8 +93,14 @@ TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::
 }
 
 bool
-TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::string &data_r)
+TagCacheRetrieval::retrieveData(const TagRetrievalPos& pos, std::string &data_r)
 {
+//MIL << "TagCacheRetrieval::retrieveData(single)" << endl;
+    if (pos.empty())
+    {
+	data_r.erase();
+	return true;
+    }
     if (!_stream.is_open())
     {
 	_stream.open (_name.c_str());
@@ -105,7 +112,7 @@ TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::string &da
     }
     std::list<std::string> listdata;
     bool ret = false;
-    if (_parser.retrieveData (_stream, pos.begin(), pos.end(), listdata)
+    if (pos.retrieveData (_stream, listdata)
 	&& !listdata.empty())
     {
 	data_r = listdata.front();
