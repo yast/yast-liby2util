@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
-Fri Jul  9 10:24:13 CEST 2004 - lnussel@suse.de
+Tue Jul 13 18:21:42 CEST 2004 - lnussel@suse.de
 
 - don't use system() for calling gpg (#42776)
 - always log executed external programs and their status if they fail
+- 2.10.2
 
 -------------------------------------------------------------------
 Thu Jul  1 18:39:01 CEST 2004 - ma@suse.de
