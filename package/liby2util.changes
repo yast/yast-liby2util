@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 23 13:57:08 CET 2004 - visnov@suse.cz
+
+- use GNU-like output for log_simple mode
+- 2.9.19 
+
+-------------------------------------------------------------------
 Mon Mar 22 12:53:09 CET 2004 - ma@suse.de
 
 - TagCacheRetrieval::retrieveData must clear any old data in case

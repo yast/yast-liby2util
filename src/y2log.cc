@@ -35,7 +35,7 @@
 
 #define Y2LOG_DATE	"%Y-%m-%d %H:%M:%S"	/* The date format */
 #define Y2LOG_FORMAT	"%s <%d> %s(%d)%s %s%s:%d %s%s"
-#define Y2LOG_SIMPLE	"%s %s%s:%d %s: %s%s"
+#define Y2LOG_SIMPLE	"%2$s%3$s:%4$d %1$s %6$s%7$s"	/* this is GNU gettext parameter reordering */
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
 #define Y2LOG_MAXSIZE	1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
