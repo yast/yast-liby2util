@@ -30,6 +30,8 @@ extern "C"
 #include <cerrno>
 #include <iosfwd>
 #include <list>
+#include <set>
+#include <map>
 
 #include <y2util/Pathname.h>
 
@@ -41,11 +43,21 @@ extern "C"
  **/
 class PathInfo {
 
+  friend std::ostream & operator<<( std::ostream & str, const PathInfo & obj );
+
   public:
 
     enum Mode { STAT, LSTAT };
 
+    /**
+     * Wrapper class for mode_t values as derived from ::stat
+     **/
     class stat_mode;
+
+    /**
+     * Simple cache remembering device/inode to detect hardlinks.
+     **/
+    class devino_cache;
 
   private:
 
@@ -125,6 +137,8 @@ class PathInfo {
 
     bool   isPerm ( mode_t m ) const { return (m == perm()); }
     bool   hasPerm( mode_t m ) const { return (m == (m & perm())); }
+
+    mode_t st_mode() const { return isExist() ? statbuf_C.st_mode : 0; }
 
     // device
     dev_t  dev()     const { return isExist() ? statbuf_C.st_dev  : 0; }
@@ -253,15 +267,16 @@ class PathInfo {
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : PathInfo
+//	CLASS NAME : PathInfo::stat_mode
 /**
  * @short Wrapper class for mode_t values as derived from ::stat
  **/
 class PathInfo::stat_mode {
+  friend std::ostream & operator<<( std::ostream & str, const stat_mode & obj );
   private:
     mode_t _mode;
   public:
-    stat_mode( const mode_t & mode_r = 0 ) : _mode( _mode ) {}
+    stat_mode( const mode_t & mode_r = 0 ) : _mode( mode_r ) {}
   public:
     // file type
     bool   isFile()  const { return S_ISREG( _mode ); }
@@ -300,11 +315,56 @@ class PathInfo::stat_mode {
 
     bool   isPerm ( mode_t m ) const { return (m == perm()); }
     bool   hasPerm( mode_t m ) const { return (m == (m & perm())); }
+
+    mode_t st_mode() const { return _mode; }
 };
 
 ///////////////////////////////////////////////////////////////////
 
-extern std::ostream & operator<<( std::ostream & str, const PathInfo & obj );
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : PathInfo::devino_cache
+/**
+ * @short Simple cache remembering device/inode to detect hardlinks.
+ * <pre>
+ *     PathInfo::devino_cache trace;
+ *     for ( all files ) {
+ *       if ( trace.insert( file.device, file.inode ) ) {
+ *         // 1st occurance of file
+ *       }
+ *         // else: hardlink; already counted this device/inode
+ *       }
+ *     }
+ * </pre>
+ **/
+class PathInfo::devino_cache {
+
+  private:
+
+    std::map<dev_t,std::set<ino_t> > _devino;
+
+  public:
+    /**
+     * Constructor
+     **/
+    devino_cache() {}
+
+    /**
+     * Clear cache
+     **/
+    void clear() { _devino.clear(); }
+
+    /**
+     * Remember dev/ino. Return <code>true</code> if it's inserted the first
+     * time, <code>false</code> if alredy present in cache (a hardlink to a
+     * previously remembered file.
+     **/
+    bool insert( const dev_t & dev_r, const ino_t & ino_r ) {
+      return _devino[dev_r].insert( ino_r ).second;
+    }
+};
+
+///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 

@@ -135,24 +135,7 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
   if ( !obj.isExist() ) {
     str << "does not exist}";
   } else {
-    char t = '?';
-    if ( obj.isFile() )
-      t = '-';
-    else if ( obj.isDir() )
-      t = 'd';
-    else if ( obj.isLink() )
-      t = 'l';
-    else if ( obj.isChr() )
-      t = 'c';
-    else if ( obj.isBlk() )
-      t = 'b';
-    else if ( obj.isFifo() )
-      t = 'p';
-    else if ( obj.isSock() )
-      t = 's';
-    str << t
-      << " " << setfill( '0' ) << setw( 4 ) << oct << obj.perm()
-      << " " << dec << obj.owner() << "/" << obj.group();
+    str << PathInfo::stat_mode( obj.st_mode() ) << " " << dec << obj.owner() << "/" << obj.group();
 
     if ( obj.isFile() )
       str << " size " << obj.size();
@@ -163,6 +146,34 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
   return str;
 }
 
+/******************************************************************
+**
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : std::ostream &
+**
+**	DESCRIPTION :
+*/
+std::ostream & operator<<( std::ostream & str, const PathInfo::stat_mode & obj )
+{
+  char t = '?';
+  if ( obj.isFile() )
+    t = '-';
+  else if ( obj.isDir() )
+    t = 'd';
+  else if ( obj.isLink() )
+    t = 'l';
+  else if ( obj.isChr() )
+    t = 'c';
+  else if ( obj.isBlk() )
+    t = 'b';
+  else if ( obj.isFifo() )
+    t = 'p';
+  else if ( obj.isSock() )
+    t = 's';
+
+  return str << t << " " << setfill( '0' ) << setw( 4 ) << oct << obj.perm();
+}
 
 /******************************************************************
 **
