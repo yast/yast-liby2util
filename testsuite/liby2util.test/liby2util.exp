@@ -1,12 +1,12 @@
 #
-# ycp.exp
-# 'main' file for all ycp tests
+# liby2util.exp
+# 'main' file for all liby2util tests
 #
 
-# get all files matching tests/*.ycp
+# get all files matching *.prg
 
-set filenames [glob $srcdir/tests/*.ycp]
+set filenames [glob $srcdir/*.prg]
 
-# foreach file, call ycp-run (from testsuite/lib)
+# foreach file, call prg-run (from testsuite/lib)
 
-foreach file $filenames { ycp-run $file }
+foreach file $filenames { prg-run $file }

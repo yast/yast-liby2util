@@ -1,28 +1,26 @@
 #
 # Makefile.am for liby2util/testsuite
 #
-
+SUBDIRS = lib
 AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)
 
 CPPFLAGS = -DY2LOG=__FILE__
 
-LDFLAGS = -L$(libdir)	\
+LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
-	../src/liby2util.la	\
+	../src/liby2util.la		\
 	-Xlinker --no-whole-archive
 
 
-noinst_PROGRAMS = runy2util parser \
-	test_Y2SLog.prg \
-	test_Rep.prg	\
+noinst_PROGRAMS = parser.prg	\
+	test_Y2SLog.prg		\
+	test_Rep.prg		\
 	test_BitField.prg
 
 
-runy2util_SOURCES = runy2util.cc
-
-parser_SOURCES = parser.cc
+parser_prg_SOURCES = parser.cc
 
 
 test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
