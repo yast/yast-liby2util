@@ -17,6 +17,8 @@
 
 /-*/
 
+#ifndef CommonPkdParser_h
+#define CommonPkdParser_h
 #include <iostream>
 #include <string>
 #include <map>
@@ -63,8 +65,10 @@ class Tag
 	std::streampos _startpos;
 	/** end position of data in stream */
 	std::streampos _endpos;
-	/** the actual data */
+	/** the actual data for a SINGLE type */
 	std::string _data;
+	/** the actual data for a MULTI type */
+	std::vector<std::string> _multidata;
 	/** which locale is to be preferred, e.g. DE */
 	std::string _prefmainlocale;
 	/** which locale is to be preferred, e.g. de */
@@ -103,6 +107,10 @@ class Tag
 	const std::string& Data() const
 	{
 	    return _data;
+	}
+	const std::vector<std::string>& MultiData() const
+	{
+	    return _multidata;
 	}
 	bool operator==(const Tag& t2 )
 	{
@@ -156,6 +164,7 @@ class Tag
 	    _startpos = 0;
 	    _endpos = 0;
 	    _lastmainlocale = _lastsublocale = _data.erase();
+	    _multidata.clear ();
 	}
 	/** if REJECTED_NOENDTAG is returned, stream and parser are in an
 	 * undefined state
@@ -286,5 +295,6 @@ class TagSet
 
 }
 
+#endif // CommonPkdParser_h
 
 // vim:sw=4

@@ -7,15 +7,17 @@
 |                        |_|\__,_|____/ |_| |_____|                    |
 |                                                                      |
 |                               core system                            |
-|                                                     (C) 2002 SuSE AG |
+|                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       CommonPkdParser.cc
-   Purpose:    Implements Tag and TagSet as interface to the TagParser
-   Author:     Ludwig Nussel <lnussel@suse.de>
-   Maintainer: Ludwig Nussel <lnussel@suse.de>
+   File:	CommonPkdParser.cc
+
+   Author:     Michael Andres <ma@suse.de>
+   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
+
+#define Y2LOG __FILE__
 
 #include <ctype.h> // for toupper
 
@@ -28,7 +30,6 @@ namespace CommonPkdParser
 
 char* const Tag::global_defaultlocale = "default";
 
-// compare the tag wit another, without looking at the locale
 bool Tag::comparebeforedot(const std::string& str2)
 {
     std::string::size_type dotpos1 = _name.find('.');
@@ -39,7 +40,7 @@ bool Tag::comparebeforedot(const std::string& str2)
     else if ( _type == ACCEPTLOCALEONLY )
     {
 	// both tags need to have a locale
-	if( dotpos1 != std::string::npos && dotpos2 != std::string::npos )
+	if ( dotpos1 != std::string::npos && dotpos2 != std::string::npos )
 	    ret = (( _name.substr(0,dotpos1) == str2.substr(0,dotpos2)));
 	else
 	    ret = false;
@@ -52,22 +53,20 @@ bool Tag::comparebeforedot(const std::string& str2)
     return ret;
 }
 
-// set or reset locale
 void Tag::setPreferredLocale(const std::string& preflocale)
 {
     std::string::size_type underpos = preflocale.find('_');
     _prefmainlocale = preflocale.substr(0,underpos);
-    if(underpos>0)
+    if (underpos>0)
 	_prefsublocale = preflocale.substr(underpos+1);
     else
 	_prefsublocale.erase();
 }
 
-// set or unset endtag, switches type of tag
 void Tag::setEndTag(const std::string& endtag, endtagtype etype )
 {
     _endtagtype = etype;
-    if(endtag.empty())
+    if (endtag.empty())
     {
 	_datatype = SINGLE;
 	_endtag.erase();
@@ -79,43 +78,40 @@ void Tag::setEndTag(const std::string& endtag, endtagtype etype )
     }
 }
 
-// make tag to parse data
+
 Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
     D__ << "assign(" << starttag << ")" << std::endl;
-
-    // first, see if this tag is really responsible for the starttag
-    if(!comparebeforedot(starttag))
+    if (!comparebeforedot(starttag))
 	return REJECTED_NOMATCH;
 
     bool throwawaydata = false;
-    
-    // reject if data is already assigned
-    if( _type == ACCEPTONCE && !_data.empty())
+
+    if ( _type == ACCEPTONCE && !_data.empty())
     {
-//		std::cerr << "rejecting " << starttag << ", i'm full"  << std::endl;
+//	std::cerr << "rejecting " << starttag << ", i'm full"  << std::endl;
 	return REJECTED_FULL;
     }
     else if ( _type == ACCEPTPREFERREDLOCALE || _type == ACCEPTLOCALEONLY )
     {
-	if( _prefmainlocale.empty() )
+	if ( _prefmainlocale.empty() )
 	    return REJECTED_NOMATCH;
 
-	if( _type == ACCEPTLOCALEONLY && _defaultlocale.empty() )
+	if ( _type == ACCEPTLOCALEONLY && _defaultlocale.empty() )
 	    return REJECTED_NOMATCH;
 	
 	// +1 to skip dot
 	std::string locale;
 	std::string::size_type dotpos = starttag.find('.');
-	if(dotpos>0) // assume dot is not the first character
+	if (dotpos>0) // assume dot is not the first character
 	    locale = starttag.substr(dotpos+1);
-	if( !locale.empty() )
+	if ( !locale.empty() )
 	{
 	    std::string mainlocale;
 	    std::string sublocale;
 	    std::string::size_type underpos = locale.find('_');
 	    mainlocale = locale.substr(0,underpos);
-	    if(underpos>0)
+	    if (underpos>0)
 		sublocale = locale.substr(underpos+1);
 
 	    //std::cout << "mainlocale " << mainlocale << " sublocale " << sublocale << std::endl;
@@ -126,7 +122,7 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 		_lastmainlocale = _prefmainlocale;
 		_lastsublocale.erase();
 	    }
-	    else if( mainlocale == _lastmainlocale
+	    else if ( mainlocale == _lastmainlocale
 		&& _lastsublocale.empty()
 		&& sublocale == _prefsublocale )
 	    {
@@ -145,16 +141,15 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 	    D__ << "localized version already stored" << std::endl;
 	}
     }
-    // tag with endtag, proper endtag needs to be computed
-    if(_datatype == MULTI)
+    if (_datatype == MULTI)
     {
 	std::string real_endtag;
 	std::string::size_type pos = starttag.find('.');
 	// if starttag contains a dot, we need to add the locale to the
 	// endtag too
-	if(pos!=std::string::npos)
+	if (pos!=std::string::npos)
 	{
-	    if( _endtagtype == ENDTAG_COMPLETELYREVERSED)
+	    if ( _endtagtype == ENDTAG_COMPLETELYREVERSED)
 	    {
 		std::string locale = starttag.substr( pos + 1 );
 		int len = locale.length();
@@ -182,7 +177,7 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 		real_endtag = _endtag;
 	}
 	D__ << "parse to endtag >" << real_endtag << "<" << std::endl;
-	if(!parser.parseData(istr,real_endtag))
+	if (!parser.parseData (istr, real_endtag))
 	{
 	    D__ << "Endtag not found" << std::endl;
 	    return REJECTED_NOENDTAG;
@@ -192,13 +187,36 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
     std::streampos startpos = parser.posDataStart();
     std::streampos endpos = parser.posDataEnd();
     // QString <-> std::string conversion
-    std::string tmp;
-    parser.retrieveData(istr,startpos,endpos, tmp);
-    if(!throwawaydata)
+    if (_datatype == MULTI)
+    {
+	std::vector<std::string> tmp;
+	parser.retrieveData (istr, startpos, endpos, tmp);
+	if (!throwawaydata)
+	{
+	    _multidata = tmp;
+	    if (_multidata.size () > 0)
+	    {
+		_data = _multidata[0];
+	    }
+	    else
+	    {
+		_data = "";
+	    }
+	}
+    }
+    else	// (_datatype == SINGLE)
+    {
+	std::string tmp;
+	parser.retrieveData (istr, startpos, endpos, tmp);
+	if (!throwawaydata)
+	{
+	    _data = tmp.c_str();
+	}
+    }
+    if (!throwawaydata)
     {
 	_startpos = startpos;
 	_endpos = endpos;
-	_data = tmp.c_str();
     }
     else
 	D__ << "data thrown away" << std::endl;
@@ -209,30 +227,30 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 ///////////////////////////////////////////////////////////////////////
 // TagSet 
 
-// find tag responsible for starttag
 Tag::assignstatus TagSet::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
-    // literal match
     tagmaptype::iterator t = _tags.find(starttag);
-    if(t==_tags.end())
+    if (t==_tags.end())
     {
 	std::string::size_type dotpos = starttag.find('.');
-	if( dotpos != std::string::npos )
+	if ( dotpos != std::string::npos )
 	{
-	    // retry without locale but with dot
 	    std::string again(starttag.substr(0,dotpos+1));
+//		    std::cerr << starttag << " not found, search for " << again  << std::endl;
 	    t = _tags.find(again);
-	    if(t==_tags.end())
+	    if (t==_tags.end())
 	    {
-		// retry without locale
+//			std::cerr << again << " also not found, search for ";
 		again = starttag.substr(0,dotpos);
+//		std::cerr << again  << std::endl;
 		t = _tags.find(again);
 	    }
 	}
     }
 
-    if(t==_tags.end())
+    if (t==_tags.end())
     {
+//		std::cerr << starttag << " not found" << std::endl;
 	return Tag::REJECTED_NOMATCH;
     }
 
