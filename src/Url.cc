@@ -44,7 +44,7 @@ bool Url::set( const string url )
     return _valid;
 }
 
-string Url::asString()   const
+string Url::asString( bool path, bool options )   const
 {
     string url(_protocol+"://");
     if(!_username.empty())
@@ -63,13 +63,22 @@ string Url::asString()   const
 	url+=':';
 	url+=_port;
     }
-    url+=_path;
-    for(OptionMapType::const_iterator i = _options.begin(); i != _options.end(); ++i)
+
+    if(path)
     {
-	url+=';';
-	url+=i->first;
-	url+='=';
-	url+=i->second;
+	url+=_path;
+	if(options)
+	{
+	    for(OptionMapType::const_iterator i = _options.begin();
+		i != _options.end();
+		++i)
+	    {
+		url+=';';
+		url+=i->first;
+		url+='=';
+		url+=i->second;
+	    }
+	}
     }
     
     return url;

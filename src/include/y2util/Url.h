@@ -91,9 +91,12 @@ class Url {
 
 	/** join tokens to a valid url
 	 *
+	 * @param path whether to append the path
+	 * @param options whether to append options
+	 *
 	 * @return the url
 	 * */
-	std::string asString() const;
+	std::string asString( bool path = true, bool options = true) const;
 
 	
 	/** split url into tokens
