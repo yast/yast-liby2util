@@ -4,7 +4,7 @@
 #define CREATETAG(tagname,num) \
     t = new CommonPkdParser::Tag(tagname,CommonPkdParser::Tag::ACCEPTONCE); \
     this->addTag(t); \
-    idict.insert(num,t);
+    addTagByIndex(num,t);
 
 class CommonPkdTagSet : public CommonPkdParser::TagSet
 {
@@ -28,8 +28,6 @@ class CommonPkdTagSet : public CommonPkdParser::TagSet
 	    CONFLICTS,
 	    NUM_TAGS
 	};
-    private:
-	QIntDict<CommonPkdParser::Tag> idict;
     public:
 	CommonPkdTagSet() : TagSet()
 	{
@@ -51,7 +49,6 @@ class CommonPkdTagSet : public CommonPkdParser::TagSet
 	    CREATETAG("Provides",PROVIDES)
 	    CREATETAG("Conflicts",CONFLICTS)
 	}
-	CommonPkdParser::Tag* getTagByIndex(int idx) { return idict.find(idx); }
 };
 
 class SelectionTagSet : public CommonPkdParser::TagSet
@@ -71,7 +68,6 @@ class SelectionTagSet : public CommonPkdParser::TagSet
 	};
     private:
 	std::string _locale;
-	QIntDict<CommonPkdParser::Tag> idict;
     public:
 	SelectionTagSet(const std::string& locale) : TagSet(), _locale(locale) 
 	{
@@ -94,7 +90,6 @@ class SelectionTagSet : public CommonPkdParser::TagSet
 	    t->setEndTag("Llatsniot");
 	    _localetags.push_back(t);
 	}
-	CommonPkdParser::Tag* getTagByIndex(int idx) { return idict.find(idx); }
 };
 
 class YOUPatchTagSet : public CommonPkdParser::TagSet
@@ -114,7 +109,6 @@ class YOUPatchTagSet : public CommonPkdParser::TagSet
 	};
     private:
 	std::string _locale;
-	QIntDict<CommonPkdParser::Tag> idict;
     public:
 	YOUPatchTagSet(const std::string& locale) : TagSet(), _locale(locale) 
 	{
@@ -137,18 +131,19 @@ class YOUPatchTagSet : public CommonPkdParser::TagSet
 	    CREATETAG("MinYaST2Version",MINYAST1VERSION)
 	    CREATETAG("UpdateOnlyInstalled",UPDATEONLYINSTALLED)
 	    CREATETAG("Packages",PACKAGES)
+	    t->setEndTag("Segakcap");
 	}
-	CommonPkdParser::Tag* getTagByIndex(int idx) { return idict.find(idx); }
 };
 #undef CREATETAG
 
-#define SELECTION
+//#define SELECTION
 //#define YOUPATCH
 
 int main(void)
 {
 //    std::string commonpkd("/var/adm/current_package_descr/suse/setup/descr/default.sel");
 //    std::string commonpkd("/var/adm/current_package_descr/suse/setup/descr/common.pkd");
+    std::cerr << "starting parser" << std::endl;
 #ifdef SELECTION
     std::string commonpkd("default.sel");
 #elif defined YOUPATCH
@@ -189,8 +184,6 @@ int main(void)
 	    {
 		case CommonPkdParser::Tag::ACCEPTED:
 		    repeatassign = false;
-		    if(tagstr == "Packages")
-			parse = false;
 		    break;
 		case CommonPkdParser::Tag::REJECTED_NOMATCH:
 //		    std::cerr << "unknown tag " << tagstr << std::endl;
@@ -226,6 +219,7 @@ int main(void)
     tagset->print(std::cout);
     std::cout << "***" << std::endl;
 #ifdef SELECTION
+    std::cout << tagset->getTagByIndex(SelectionTagSet::VERSION) << std::endl;
     tagset->getTagByIndex(SelectionTagSet::VERSION)->print(std::cout);
 #elif defined YOUPATCH
     tagset->getTagByIndex(YOUPatchTagSet::SHORTDESCRIPTION)->print(std::cout);

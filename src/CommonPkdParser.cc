@@ -1,3 +1,5 @@
+#include <ctype.h> // for toupper
+
 #include <y2util/CommonPkdParser.h>
 #include <y2util/Y2SLog.h>
 #include <iostream>
@@ -58,7 +60,7 @@ void Tag::setEndTag(const std::string& endtag, endtagtype etype )
 
 Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
-//	    std::cerr << "assign(" << starttag << ")" << std::endl;
+    D__ << "assign(" << starttag << ")" << std::endl;
     if(!comparebeforedot(starttag))
 	return REJECTED_NOMATCH;
 
@@ -130,16 +132,17 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 	    {
 		std::string locale = starttag.substr( pos + 1 );
 		int len = locale.length();
-		real_endtag.reserve(len+1);
+		D__ << locale << len << std::endl;
+//		real_endtag.reserve(len+2);
 		for (int i=0;i<len;i++)
 		{
-		    real_endtag[i]=locale[len-1-i];
+		    real_endtag+=locale[len-1-i];
+		    D__ << locale[len-1-i] << std::endl;
 		}
-		real_endtag[len]='.';
-		//FIXME
-		//real_endtag[0]=real_endtag[0].upper();
-#warning "broken"
+		real_endtag+='.';
+		D__ << real_endtag << std::endl;
 		real_endtag+=_endtag;
+		real_endtag[0]=toupper(real_endtag[0]);
 		D__ << real_endtag << std::endl;
 	    }
 	    else
@@ -152,9 +155,10 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 	{
 		real_endtag = _endtag;
 	}
-	D__ << "parse to endtag " << real_endtag << std::endl;
+	D__ << "parse to endtag >" << real_endtag << "<" << std::endl;
 	if(!parser.parseData(istr,real_endtag))
 	{
+	    D__ << "Endtag not found" << std::endl;
 	    return REJECTED_NOENDTAG;
 	}
     }
@@ -181,32 +185,32 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 
 Tag::assignstatus TagSet::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
-    Tag* t = find(starttag.c_str());
-    if(!t)
+    tagmaptype::iterator t = _tags.find(starttag);
+    if(t==_tags.end())
     {
 	std::string::size_type dotpos = starttag.find('.');
 	if( dotpos != std::string::npos )
 	{
 	    std::string again(starttag.substr(0,dotpos+1));
 //		    std::cerr << starttag << " not found, search for " << again  << std::endl;
-	    t = find(again.c_str());
-	    if(!t)
+	    t = _tags.find(again);
+	    if(t==_tags.end())
 	    {
 //			std::cerr << again << " also not found, search for ";
 		again = starttag.substr(0,dotpos);
 //		std::cerr << again  << std::endl;
-		t = find(again.c_str());
+		t = _tags.find(again);
 	    }
 	}
     }
 
-    if(!t)
+    if(t==_tags.end())
     {
 //		std::cerr << starttag << " not found" << std::endl;
 	return Tag::REJECTED_NOMATCH;
     }
 
-    return t->assign(starttag,parser,istr);
+    return t->second->assign(starttag,parser,istr);
 }
 
 

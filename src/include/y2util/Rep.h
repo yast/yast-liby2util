@@ -30,7 +30,7 @@
  *
  * The initial reference count is zero. This way you're able to create and
  * destroy objects, which were not referenced by any constRepPtr. But as soon as
- * a constRepPtr references the object, any attempt to delete it will leed to an
+ * a constRepPtr references the object, any attempt to delete it will lead to an
  * exeption.
  *
  * Rep must be virtual base class in case of multiple derivation, as it's not

@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
-#include <qintdict.h>
-#include <qasciidict.h>
-#include <qvaluevector.h>
+#include <map>
+#include <vector>
 #include <y2util/TagParser.h>
 
 namespace CommonPkdParser
@@ -133,28 +132,37 @@ class Tag
 };
 
 /** redirects assignments to the proper Tag */
-class TagSet : protected QAsciiDict<Tag>
+class TagSet
 {
+    public:
+	typedef vector<CommonPkdParser::Tag*> tagvectortype;
+	
     protected:
-	void insert(const char* key, const Tag* tag)
+	void insert(const std::string key, Tag* tag)
 	{
-	    if(!find(key))
+//doenst matter, map allown only one anyways	    if(_tags.find(key) == _tags.end())
 	    {
-		QAsciiDict<Tag>::insert(key,tag);
+		_tags[key]=tag;
 	    }
 	}
 	
-	QValueVector<Tag*> _localetags;
+	std::vector<Tag*> _localetags;
+	typedef std::map<std::string, Tag*> tagmaptype;
+	tagmaptype _tags;
+	tagvectortype _tagv;
 
     public:
-    	TagSet() : QAsciiDict<Tag>()
+    	TagSet()
 	{
-	    setAutoDelete(true);
+	}
+	virtual ~TagSet()
+	{
+	    //TODO: delete all tags in map
 	}
 	// insert tag into the dictionary
 	void addTag(Tag* tag)
 	{
-	    insert(tag->Name().c_str(),tag);
+	    _tags[tag->Name()]=tag;
 	}
 
 	// redirect assignment to starttag
@@ -163,11 +171,10 @@ class TagSet : protected QAsciiDict<Tag>
 	// print every contained tag
 	void print(std::ostream& os)
 	{
-	    QAsciiDictIterator<Tag> it( *this );
-	    while(it.current())
+	    tagmaptype::iterator it;
+	    for(it=_tags.begin();it!=_tags.end();++it)
 	    {
-		it.current()->print(os);
-		++it;
+		it->second->print(os);
 	    }
 	}
 	/**
@@ -175,23 +182,40 @@ class TagSet : protected QAsciiDict<Tag>
 	 */
 	void clear()
 	{
-	    QAsciiDictIterator<Tag> it( *this );
-	    while(it.current())
+	    tagmaptype::iterator it;
+	    for(it=_tags.begin();it!=_tags.end();++it)
 	    {
-		it.current()->clear();
-		++it;
+		it->second->clear();
 	    }
 	}
-	virtual Tag* getTagByIndex(int idx) { return NULL; }
 	/** set encoding on all tags with locale, call this *before* assigning
 	 * data to it
 	 * @param etype Encoding to use
 	 */
 	virtual void setEncoding(Tag::encodingtype etype)
 	{
-	    QValueVector<Tag*>::iterator it;
+	    std::vector<Tag*>::iterator it;
 	    for(it=_localetags.begin();it!=_localetags.end();++it)
 		(*it)->setEncoding(etype);
+	}
+
+	CommonPkdParser::Tag* getTagByIndex(unsigned int idx)
+	{
+	    try
+	    {
+		// may throw out of range
+		return _tagv.at(idx);
+	    }
+	    catch(...)
+	    {
+		return NULL;
+	    }
+	}
+
+	void addTagByIndex(unsigned int idx, CommonPkdParser::Tag* t)
+	{
+	    if(_tagv.size()<=idx) { _tagv.resize(idx+2),NULL; }
+	    _tagv.at(idx)=t;
 	}
 };
 
