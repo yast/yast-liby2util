@@ -1,5 +1,6 @@
 Makefile
 Makefile.in
+digest_bin
 *.o
 *.lo
 *.la
