@@ -50,9 +50,9 @@ class FSize {
   public:
 
     static const long long KB = 1024;
-    static const long long MB = 1000 * KB;
-    static const long long GB = 1000 * MB;
-    static const long long TB = 1000 * GB;
+    static const long long MB = 1024 * KB;
+    static const long long GB = 1024 * MB;
+    static const long long TB = 1024 * GB;
 
     /**
      * Return ammount of Byte in Unit.
