@@ -58,14 +58,15 @@ using std::istream;
 //
 class TaggedParser {
   public:
-    typedef enum tag_type {
+    enum tag_type {
 	NONE=0,		// no tag
 	SINGLE,		// single value
 	START,		// start of multi value
 	END,		// end of multi value
 	OLDSINGLE,	// tag has no prefix but a value
 	OLDMULTI	// tag has no prefix and no value
-    } TagType;
+    };
+    typedef tag_type TagType;
 
   private:
 

@@ -19,7 +19,7 @@ class GPGCheck
       @param filename Name of file to be checked.
       @param strip    If true, signature is stripped from file
       
-      @result True, if the signature is valid, false if not.
+      @return True, if the signature is valid, false if not.
     */
     bool check_file ( const std::string& filename, bool strip = false );
 
