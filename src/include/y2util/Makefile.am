@@ -7,6 +7,7 @@ pkgincludedir = $(includedir)/y2util
 # these go to $(pkgincludedir)
 
 pkginclude_HEADERS = \
+	stringutil.h	\
 	hash.h		\
 	Ustring.h	\
 	Pathname.h	\
