@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(top_srcdir)/src/include
 
-AM_CPPFLAGS = -DY2LOG=\"liby2util-testsuite\" 
+AM_CPPFLAGS = -DY2LOG=\"liby2util-testsuite\"
 
 AM_LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
@@ -21,7 +21,6 @@ parseurl_SOURCES = parseurl.cc
 noinst_PROGRAMS = parser.prg	\
 	test_taggedparser.prg	\
 	test_Y2SLog.prg		\
-	test_Rep.prg		\
         test_CallBack.prg	\
 	test_strutil.prg	\
 	test_mkdir.prg		\
@@ -49,9 +48,6 @@ test_taggedparser_prg_SOURCES = test_taggedparser.cc
 
 test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
 #test_Y2SLog_prg_LDFLAGS = -static
-
-test_Rep_prg_SOURCES = test_Rep.cc
-#test_Rep_prg_LDFLAGS = -static
 
 test_CallBack_prg_SOURCES = test_CallBack.cc
 
