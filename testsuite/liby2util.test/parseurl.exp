@@ -1,5 +1,7 @@
 # Test suite for Url class parsing
 
+exec mkdir -p $srcdir/tests/out
+
 set in [ open $srcdir/tests/urls ]
 
 set line [ gets $in ]

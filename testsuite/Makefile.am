@@ -1,7 +1,7 @@
 #
 # Makefile.am for liby2util/testsuite
 #
-SUBDIRS = lib test_rep
+SUBDIRS = lib test_rep config liby2util.test tests
 PACKAGE = liby2util
 AUTOMAKE_OPTIONS = dejagnu
 
