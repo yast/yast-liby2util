@@ -1,0 +1,12 @@
+ftp://localhost/pfad/1/2
+ftp://localhost/pfad/1/2/
+ftp://localhost:/
+ftp://localhost:21/
+ftp:///
+ftp://user@host:21/
+ftp://user:pw@host/
+ftp:
+://localhost/
+ftp://localhost
+ftp://:pw@host/
+ftp://:21/

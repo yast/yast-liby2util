@@ -20,7 +20,8 @@ pkginclude_HEADERS = \
 	CommonPkdParser.h \
 	timeclass.h \
 	ExternalDataSource.h \
-		ExternalProgram.h
+		ExternalProgram.h \
+	Url.h
 
 
 #<INSTALL-HEADER-TARGET>
