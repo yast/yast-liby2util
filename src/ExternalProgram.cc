@@ -124,6 +124,8 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	}
     }
 
+    DBG << "Going to execute " << argv[0] << endl;
+
     // Create module process
     if ((pid = fork()) == 0)
     {
@@ -171,8 +173,6 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    // Our caller is responsible for that.
 	    dup2 (stderr_fd, 2);
 	}
-
-	DBG << "Going to execute" << argv[0] << endl;
 
 	if(default_locale)
 		setenv("LC_ALL","C",1);
