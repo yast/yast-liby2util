@@ -39,7 +39,9 @@ pkginclude_HEADERS = \
 	YTransText.h            \
 	DiskSpace.h             \
         GPGCheck.h              \
-        SysConfig.h
+        SysConfig.h		\
+        CallBack.h		\
+	ProgressCounter.h	
 
 
 #<INSTALL-HEADER-TARGET>

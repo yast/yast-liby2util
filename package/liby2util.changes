@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul 15 17:53:20 CEST 2003 - ma@suse.de
+
+- Added CallBack template classes.
+- Added ProgressCounter incl. callback support.
+- 2.8.6
+
+-------------------------------------------------------------------
 Tue Jul  8 16:45:55 CEST 2003 - cschum@suse.de
 
 - Added support for "file:" URLs.
