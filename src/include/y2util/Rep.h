@@ -19,19 +19,7 @@
 #ifndef Rep_h
 #define Rep_h
 
-#include <iostream>
-
-#ifdef REP_DEBUG_REF
-#  ifndef REP_DEBUG
-#  define REP_DEBUG
-#  endif
-#endif
-
-#ifdef REP_DEBUG
-#  ifndef REP_DEBUG_STREAM
-#  define REP_DEBUG_STREAM std::cerr
-#  endif
-#endif
+#include <iosfwd>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -47,13 +35,6 @@
  *
  * Rep must be virtual base class in case of multiple derivation, as it's not
  * advisable to have multiple reference counters for a single object.
- *
- * #define REP_DEBUG to log constructor/destructor calls.
- *
- * #define REP_DEBUG_REF to additionally log calls to rep_ref()/rep_unref().
- *
- * #define REP_DEBUG_STREAM to the std::ostream that should be used for logging.
- * Default is std::cerr. It might be helpfull, if derived classes overload rep_name().
  *
  * @short Base class for representations carrying a reference count.
  * @see   RepHandle
@@ -79,9 +60,7 @@ class Rep {
      **/
     void rep_ref() const {
       ++rep_cnt_i;
-#ifdef REP_DEBUG_REF
-      REP_DEBUG_STREAM << "  + " << this << std::endl;
-#endif
+      _dbg( 'r' );
     }
 
     /**
@@ -94,9 +73,7 @@ class Rep {
       if ( !rep_cnt_i )
 	throw( this );
       --rep_cnt_i;
-#ifdef REP_DEBUG_REF
-      REP_DEBUG_STREAM << "  - " << this << std::endl;
-#endif
+      _dbg( 'u' );
       if ( !rep_cnt_i )
 	delete this;
     }
@@ -106,25 +83,17 @@ class Rep {
     /**
      * Constructor. Initial reference count is zero.
      **/
-    Rep() {
+    Rep() : rep_id( ++rep_IDs ) {
       rep_cnt_i = 0;
-#ifdef REP_DEBUG
-      ++rep_Total;
-      rep_id = ++rep_IDs;
-      REP_DEBUG_STREAM << "+++ " << this << std::endl;
-#endif
+      _dbg( 'c' );
     }
 
     /**
      * CopyConstructor. Initial reference count is zero.
      **/
-    Rep( const Rep & rhs ) {
+    Rep( const Rep & rhs ) : rep_id( ++rep_IDs ) {
       rep_cnt_i = 0; // do not copy refcount
-#ifdef REP_DEBUG
-      ++rep_Total;
-      rep_id = ++rep_IDs;
-      REP_DEBUG_STREAM << "+c+ " << this << std::endl;
-#endif
+      _dbg( 'C' );
     }
 
     /**
@@ -140,53 +109,49 @@ class Rep {
     virtual ~Rep() {
       if ( rep_cnt_i )
 	throw( this );
-#ifdef REP_DEBUG
-      --rep_Total;
-      REP_DEBUG_STREAM << "--- " << this << std::endl;
-#endif
+      _dbg( 'd' );
     }
 
   private:
 
     /**
-     * REP_DEBUG: Provides numerical ids..
+     * REP_DEBUG: Provides numerical ids.
      **/
     static unsigned rep_IDs;
     /**
      * REP_DEBUG: Counts total ammount of objects in memeory.
      **/
     static unsigned rep_Total;
-#ifdef REP_DEBUG
     /**
      * REP_DEBUG: This objects numerical id.
      **/
-    unsigned rep_id;
-#endif
+    const unsigned rep_id;
+    /**
+     * REP_DEBUG: Write debug line
+     **/
+    void _dbg( const char f ) const;
+
+  public:
 
     /**
-     * Objects name used in std::ostream::operator<<()
+     * Objects name used in dumpOn()
      **/
-    virtual const char * rep_name()  const { return "Rep"; }
+    virtual const char * rep_name() const { return "Rep"; }
 
     /**
      * Writes objects name, address and reference count. If REP_DEBUG, additionally
      * numerical id and total ammount of objects.
+     *
+     * Derived classes may overload this to realize std::ostream & operator<< for
+     * representation and handle classes.
+     * @see RepHandle
      **/
-    friend std::ostream & operator<<( std::ostream & str, const Rep *const obj ) {
-      if ( !obj )
-	return str << "Rep(nil)";
+    virtual std::ostream & dumpOn( std::ostream & str ) const;
 
-      str << obj->rep_name()
-#ifdef REP_DEBUG
-	<< "_" << obj->rep_id
-#endif
-	<< "(" << (void*)obj << " * " << obj->rep_cnt_i
-#ifdef REP_DEBUG
-	<< " [" << obj->rep_Total << "]"
-#endif
-	<< ")";
-      return str;
-    }
+    /**
+     * Default output operator for representation classes realized via 'virtual Rep::dumpOn()'.
+     **/
+    friend std::ostream & operator<<( std::ostream & str, const Rep & obj );
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -282,16 +247,27 @@ class RepHandle {
     }
 
     /**
-     * Return reference to rep_p. May or may not be usefull in derived classes.
+     * Return rep_p.
      **/
-    const Rep *const& rep() const { return rep_p; }
+    const Rep * rep() const { return rep_p; }
+
+    /**
+     * Return other handles rep_p.
+     **/
+    const Rep * rep( const RepHandle & rhs ) const { return rhs.rep_p; }
 
   public:
 
     /**
-     * Converstion to const Rep *const.
+     * Allow test for NULL.
      **/
-    operator const Rep *const() const { return rep_p; }
+    operator const void *() const { return rep_p; }
+
+    /**
+     * Default output operator for handle classes realized via 'virtual Rep::dumpOn()'.
+     * @see Rep
+     **/
+    friend std::ostream & operator<<( std::ostream & str, const RepHandle & obj );
 };
 
 ///////////////////////////////////////////////////////////////////
