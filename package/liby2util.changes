@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 22 15:54:00 CET 2005 - mvidner@suse.cz
+
+- When renumbering file descriptors, check whether we already have
+  the desired number (#64797).
+- 2.11.5
+
+-------------------------------------------------------------------
 Fri Feb 18 19:51:07 CET 2005 - ma@suse.de
 
 - Enabled translation of language and country names.
