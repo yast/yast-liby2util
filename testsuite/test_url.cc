@@ -16,4 +16,7 @@ int main(int argc, char* argv[])
     Url u1(s1);
     cout << s1 << " is " << (u1.isValid()?"valid ":"invalid ")
 	<< " -> " << u1.asString() << endl;
+
+    // reverse shell logic
+    return !u1.isValid();
 }
