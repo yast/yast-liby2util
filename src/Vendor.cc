@@ -39,5 +39,6 @@ Vendor::Vendor( const std::string & n )
     : Ustring( _nameHash, n )
 {
   _isSuSE = (    asString().substr( 0, 4 )  == "SuSE"
-	      || asString().substr( 0, 11 ) == "UnitedLinux" );
+	      || asString().substr( 0, 11 ) == "UnitedLinux"
+	      || asString().substr( 0, 6 )  == "Novell" );
 }
