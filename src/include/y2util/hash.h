@@ -25,6 +25,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <assert.h>
 
 const size_t primes[] = { 31, 101, 503, 1009, 2003, 5003 };
 
