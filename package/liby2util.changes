@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep 10 00:57:33 CEST 2002 - ma@suse.de
+
+- add PathInfo::rename()
+
+-------------------------------------------------------------------
 Mon Sep  9 13:36:41 CEST 2002 - lnussel@suse.de
 
 - do not output password by default, use saveAsString if you need it

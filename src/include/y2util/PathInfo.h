@@ -224,6 +224,13 @@ class PathInfo {
     static int unlink( const Pathname & path );
 
     /**
+     * Like '::rename'. Renames a file, moving it between directories if required.
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int rename( const Pathname & oldpath, const Pathname & newpath  );
+
+    /**
      * Like 'cp file dest'. Copy file to dest dir.
      *
      * @return 0 on success, EINVAL if file is not a file, ENOTDIR if dest

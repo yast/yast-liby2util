@@ -414,6 +414,23 @@ int PathInfo::unlink( const Pathname & path )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::rename
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::rename( const Pathname & oldpath, const Pathname & newpath )
+{
+  DBG << "rename " << oldpath << " -> " << newpath;
+  if ( ::rename( oldpath.asString().c_str(), newpath.asString().c_str() ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::copy_file2dir
 //	METHOD TYPE : int
 //
