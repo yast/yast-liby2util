@@ -14,6 +14,7 @@
 #define _y2logging_h
 
 #include <string>
+#include <stdio.h>
 
 enum loglevel_t
 {
