@@ -10,7 +10,6 @@ html_DATA = index.html heir.html \
 	Pathname.html \
 	RefObject.html \
 	Rep.html \
-	RepHandle.html \
 	T.html \
 	Tag.html \
 	TagParser.html \

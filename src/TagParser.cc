@@ -21,7 +21,7 @@
 #include <y2util/Y2SLog.h>
 #include <y2util/TagParser.h>
 
-#define y2internal(...)
+#define y2internal(x)
 
 using namespace std;
 
@@ -252,7 +252,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 {
   data_tr.erase();
   if ( startData_ir == nopos || endData_ir == nopos || endData_ir < startData_ir ) {
-    y2internal( "positions make no sense %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) );
+    y2internal(( "positions make no sense %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) ));
     return false; // positions make no sense
   }
 
@@ -260,7 +260,7 @@ bool TagParser::retrieveData( istream & stream_fr,
   stream_fr.seekg( startData_ir );
 
   if ( !stream_fr.good() ) {
-    y2internal( "illegal startData position %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) );
+    y2internal(( "illegal startData position %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) ));
     return false; // illegal startData position
   }
 
@@ -276,7 +276,7 @@ bool TagParser::retrieveData( istream & stream_fr,
     stream_fr.read( buffer_ac, toread_ii );
     if ( stream_fr.gcount() != toread_ii ) {
       data_tr.erase();
-      y2internal( "not as many data available as expected %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) );
+      y2internal(( "not as many data available as expected %d(%lld/%lld)", stream_fr.rdstate(), (long long)streamoff(startData_ir), (long long)streamoff(endData_ir) ));
       return false; // not as many data available as expected
     }
     data_tr += string( buffer_ac, toread_ii );
@@ -415,7 +415,7 @@ void TagSet::addTag( const string & start_tr, const string & end_tr )
   map<string,unsigned>::value_type val_Ci( start_tr, lookupEnd_V.size() );
 
   if ( !lookupStart_V.insert( val_Ci ).second ) {
-    y2internal( "Duplicate definition for Tag(%s,%s)", start_tr.c_str(), end_tr.c_str() );
+    y2internal(( "Duplicate definition for Tag(%s,%s)", start_tr.c_str(), end_tr.c_str() ));
   }
 
   lookupEnd_V.push_back( end_tr );

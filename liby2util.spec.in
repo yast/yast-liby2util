@@ -1,5 +1,5 @@
 @HEADER-COMMENT@
-# neededforbuild  autoconf automake gpp libgpp libycp libycp-devel yast2-devtools ydoc
+# neededforbuild  yast2-devel-packages gpp libgpp qt3-devel-packages
 
 @HEADER@
 Summary:	-
@@ -15,9 +15,9 @@ Summary:	-
 
 @PREP@
 
-@BUILD-LIB@
+@BUILD-PROGRAM@
 
-@INSTALL-LIB@
+@INSTALL-PROGRAM@
 
 @CLEAN@
 
