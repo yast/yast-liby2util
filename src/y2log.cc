@@ -455,5 +455,14 @@ void set_log_simple_mode(bool simple) {
     log_simple = simple;
 }
 
+void set_log_debug(bool on)
+{
+	log_debug = on;
+}
+
+bool get_log_debug()
+{
+	return log_debug;
+}
 
 /* EOF */

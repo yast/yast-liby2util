@@ -126,4 +126,15 @@ void set_log_conf(string confname);
  */
 void set_log_simple_mode(bool simple);
 
+/**
+ * enable or disable debug logging
+ * @param on true for on
+ */
+void set_log_debug(bool on = true);
+
+/**
+ * whether debug logging is enabled
+ */
+bool get_log_debug();
+
 #endif /* _y2log_h */

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar  2 10:11:29 CET 2004 - lnussel@suse.de
+
+- add access functions to internal debug variable 
+
+-------------------------------------------------------------------
 Mon Mar  1 22:53:30 CET 2004 - ma@suse.de
 
 - Added common set operations (setutil.h)
