@@ -115,10 +115,6 @@ class FSize {
     FSize operator++(int/*postfix*/) { return _size++; }
     FSize operator--(int/*postfix*/) { return _size--; }
 
-    bool operator< ( FSize & other ) const { return _size <  (long long) other; }
-    bool operator> ( FSize & other ) const { return _size >  (long long) other; }
-    bool operator==( FSize & other ) const { return _size == (long long) other; }
-
     /**
      * Return size in Unit ( not rounded )
      **/
