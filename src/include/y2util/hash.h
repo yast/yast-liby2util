@@ -1,4 +1,24 @@
-// from PHI
+/*---------------------------------------------------------------------\
+|                                                                      |
+|                      __   __    ____ _____ ____                      |
+|                      \ \ / /_ _/ ___|_   _|___ \                     |
+|                       \ V / _` \___ \ | |   __) |                    |
+|                        | | (_| |___) || |  / __/                     |
+|                        |_|\__,_|____/ |_| |_____|                    |
+|                                                                      |
+|                               core system                            |
+|                                                     (C) 2002 SuSE AG |
+\----------------------------------------------------------------------/
+
+   File:       hash.h
+   Purpose:    declare hash functions, see PHI docu
+   Author:     Roman Hodek <roman.hodek@informatik.uni-erlangen.de>
+   Maintainer: Ludwig Nussel <lnussel@suse.de>
+
+   this file is taken from PHI
+
+/-*/
+
 #ifndef _PkgDb_hash_h                                        /* -*- C++ -*- */
 #define _PkgDb_hash_h
 

@@ -1,3 +1,22 @@
+/*---------------------------------------------------------------------\
+|                                                                      |
+|                      __   __    ____ _____ ____                      |
+|                      \ \ / /_ _/ ___|_   _|___ \                     |
+|                       \ V / _` \___ \ | |   __) |                    |
+|                        | | (_| |___) || |  / __/                     |
+|                        |_|\__,_|____/ |_| |_____|                    |
+|                                                                      |
+|                               core system                            |
+|                                                     (C) 2002 SuSE AG |
+\----------------------------------------------------------------------/
+
+   File:       CommonPkdParser.h
+   Purpose:    Declare Tag and TagSet as interface to the TagParser
+   Author:     Ludwig Nussel <lnussel@suse.de>
+   Maintainer: Ludwig Nussel <lnussel@suse.de>
+
+/-*/
+
 #include <iostream>
 #include <string>
 #include <map>
@@ -36,28 +55,39 @@ class Tag
 	enum endtagtype { ENDTAG_NORMAL, ENDTAG_COMPLETELYREVERSED };
 	enum encodingtype { LATIN1, LATIN2, UTF8 };
     private:
+	/** name of the tag */
 	std::string _name;
+	/** name of the endtag */
 	std::string _endtag;
+	/** starting position of data in stream */
 	std::streampos _startpos;
+	/** end position of data in stream */
 	std::streampos _endpos;
+	/** the actual data */
 	std::string _data;
-	// which locale is to be preferred
+	/** which locale is to be preferred, e.g. DE */
 	std::string _prefmainlocale;
+	/** which locale is to be preferred, e.g. de */
 	std::string _prefsublocale;
-	// which locale is currently stored
+	/** which locale is currently stored */
 	std::string _lastmainlocale;
 	std::string _lastsublocale;
 	assigntype _type;
-	// normally "default", see setDefaultLocale
+	/** normally "default", see setDefaultLocale */
 	std::string _defaultlocale;
 	datatype _datatype;
 	endtagtype _endtagtype;
 	encodingtype _encodingtype;
 
 	static char* const global_defaultlocale;
-
+	
+	/** compare tagname with str2 ignoring locale */
 	bool comparebeforedot(const std::string& str2);
     public:
+	/** Constructor
+	 * @param name Name of Tag
+	 * @param type how to handle multiple assignments of the same tag
+	 * */
 	Tag(const std::string& name, assigntype type = ACCEPTONCE )
 	    : _name(name), _type(type), _endtagtype(ENDTAG_NORMAL), _encodingtype(LATIN1)
 	{
@@ -88,42 +118,54 @@ class Tag
 		_defaultlocale = global_defaultlocale;
 	    }
 	}
+	/** set Encoding, currently unused
+	 * @param etype encoding to use
+	 * */
+	// TODO make use of encoding
 	void setEncoding(encodingtype etype)
 	{
 	    _encodingtype = etype;
 	}
-	/** _ is not considered here so use two letter locales or "default"/"C"
-	 * only
+	/** set which locale to use if tag is available in multiple languages
+	 * but no tag without locale is available (this is the case e.g in
+	 * selections and YOU Patches). _ (like in de_DE) is not considered
+	 * here so use two letter locales or "default"/"C" only
+	 *
+	 * @param defaultlocale locale to use
 	 */
 	void setDefaultLocale(const std::string& defaultlocale)
 	{
 	    _defaultlocale = defaultlocale;
 	}
-	/** set the preferred tag locale e.g de_DE */
+	/** set the preferred tag locale e.g de_DE.
+	 * 
+	 * @param preflocale locale to use
+	 * */
 	void setPreferredLocale(const std::string& preflocale);
 	/** define an end tag
+	 *
 	 * @param endtag which end tag to set or an empty string to undefine it
-	 * @param etype type of endtag, default is normal which means reversed plus probably added locale
-	 */
+	 * @param etype type of endtag, default is normal which means reversed
+	 * plus probably added locale
+	 * */
 	void setEndTag(const std::string& endtag, endtagtype etype = ENDTAG_NORMAL );
-	/**
-	 * clears only data, not behavior nor tag names
-	 */
+	/** clears only data, not behavior nor tag names
+	 * */
 	void clear()
 	{
 	    _startpos = 0;
 	    _endpos = 0;
 	    _lastmainlocale = _lastsublocale = _data.erase();
 	}
-	/** if REJECTED_NOENDTAG is returned, stream and parser are in an undefined state */
+	/** if REJECTED_NOENDTAG is returned, stream and parser are in an
+	 * undefined state
+	 * */
 	assignstatus assign(const std::string& starttag, TagParser& parser, std::istream& istr);
-	/**
-	 * return start position of data in stream
-	 */
+	/** return start position of data in stream
+	 * */
 	std::streampos posDataStart() { return _startpos; }
-	/**
-	 * return end position of data in stream
-	 */
+	/** return end position of data in stream
+	 * */
 	std::streampos posDataEnd() { return _endpos; }
 	void print(std::ostream& os)
 	{
@@ -134,24 +176,31 @@ class Tag
 	}
 };
 
-/** redirects assignments to the proper Tag */
+/** TagSet manages all Tags contained in a file. It redirects
+ * assignments to the proper Tag
+ * */
 class TagSet
 {
     public:
 	typedef vector<CommonPkdParser::Tag*> tagvectortype;
 	
     protected:
+	/** insert tag into tagmap
+	 *
+	 * @param key Name of Tag (usually tag->Name())
+	 * @param tag Tag to instert
+	 * */
 	void insert(const std::string key, Tag* tag)
 	{
-//doenst matter, map allown only one anyways	    if(_tags.find(key) == _tags.end())
-	    {
-		_tags[key]=tag;
-	    }
+	    _tags[key]=tag;
 	}
 	
+	/** language dependant tags, needed for setting the encoding */	
 	std::vector<Tag*> _localetags;
 	typedef std::map<std::string, Tag*> tagmaptype;
+	/** map of tags managed by this tagset */
 	tagmaptype _tags;
+	/** vector of tags, used to retreive tags by index */
 	tagvectortype _tagv;
 
     public:
@@ -162,16 +211,24 @@ class TagSet
 	{
 	    //TODO: delete all tags in map
 	}
-	// insert tag into the dictionary
+	/** add Tag to TagSet
+	 *
+	 * @param tag Tag to manage
+	 * */
 	void addTag(Tag* tag)
 	{
 	    _tags[tag->Name()]=tag;
 	}
 
-	// redirect assignment to starttag
+	/** lookup Tag responsible for parsing starttag in map and
+	 * call its assign function
+	 *
+	 * @param starttag Tag to assign
+	 * @param istr stream to parse
+	 * */
 	Tag::assignstatus assign(const std::string& starttag, TagParser& parser, std::istream& istr);
 
-	// print every contained tag
+	/** print every contained tag */
 	void print(std::ostream& os)
 	{
 	    tagmaptype::iterator it;
@@ -202,6 +259,11 @@ class TagSet
 		(*it)->setEncoding(etype);
 	}
 
+	/** get Tag by number instead of string
+	 *
+	 * @param idx Tag number
+	 * @return pointer to tag or NULL if idx doesn't exist
+	 * */
 	CommonPkdParser::Tag* getTagByIndex(unsigned int idx)
 	{
 	    try
@@ -215,6 +277,11 @@ class TagSet
 	    }
 	}
 
+	/** assign number to Tag
+	 *
+	 * @param idx number
+	 * @param t Tag*
+	 * */
 	void addTagByIndex(unsigned int idx, CommonPkdParser::Tag* t)
 	{
 	    if(_tagv.size()<=idx) { _tagv.resize(idx+2),NULL; }

@@ -1,3 +1,23 @@
+/*---------------------------------------------------------------------\
+|                                                                      |
+|                      __   __    ____ _____ ____                      |
+|                      \ \ / /_ _/ ___|_   _|___ \                     |
+|                       \ V / _` \___ \ | |   __) |                    |
+|                        | | (_| |___) || |  / __/                     |
+|                        |_|\__,_|____/ |_| |_____|                    |
+|                                                                      |
+|                               core system                            |
+|                                                     (C) 2002 SuSE AG |
+\----------------------------------------------------------------------/
+
+   File:       UniqStr.h
+   Purpose:    definition of a class for storing unique strings
+   Author:     Roman Hodek <roman.hodek@informatik.uni-erlangen.de>
+   Maintainer: Ludwig Nussel <lnussel@suse.de>
+
+   this file is taken from PHI
+/-*/
+
 // from PHI
 #ifndef _PkgDb_UniqStr_h
 #define _PkgDb_UniqStr_h
@@ -5,9 +25,10 @@
 #include <cstring>
 #include <y2util/hash.h>
 
-// UniqStrInternal is used as content type of the UniqStr hash; the comparison
-// function is strcmp() so that existing strings can be found by hash
-// functions.
+/** UniqStrInternal is used as content type of the UniqStr hash; the comparison
+ * function is strcmp() so that existing strings can be found by hash
+ * functions.
+ * */
 class UniqStrInternal {
 	friend class UniqStr;
 	const char *str;
@@ -25,7 +46,10 @@ inline size_t hashfun( const UniqStrInternal& str ) {
 	return hashfun( (const char *)str );
 }
 
-// This hash is used for keeping the UniqStrs unique.
+/** This hash is used for keeping the UniqStrs unique.
+ *
+ * see PkgName for coding example
+ * */
 class UniqStr {
   public:
 	typedef noval_hash<UniqStrInternal> UniqStrHash_type;
