@@ -39,5 +39,5 @@ UstringHash Vendor::_nameHash;
 //
 bool Vendor::isSuSE() const
 {
-  return( strval().substr( 0, 4 ) == "SuSE" );
+  return( asString().substr( 0, 4 ) == "SuSE" );
 }

@@ -151,13 +151,6 @@ class Ustring {
      **/
     std::string _name;
 
-  protected:
-
-    /**
-     * const std::string & _name access for derived classes
-     **/
-    const std::string & strval() const { return _name; }
-
   public:
 
     /**
@@ -174,6 +167,11 @@ class Ustring {
      * Conversion to const std::string &
      **/
     operator const std::string & () const { return _name; }
+
+    /**
+     * Conversion to const std::string &
+     **/
+    const std::string & asString() const { return _name; }
 
     /**
      * ustr->size(); // short for ((const std::string &)ustr).size();
