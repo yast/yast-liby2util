@@ -15,134 +15,55 @@
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
+   Purpose: Base class for reference counted objects and counted pointer templates.
+
 /-*/
 
 #include <iostream>
 
 #include <y2util/Rep.h>
 
-///////////////////////////////////////////////////////////////////
-
-unsigned Rep::rep_IDs   = 0;
-unsigned Rep::rep_Total = 0;
-
-///////////////////////////////////////////////////////////////////
-/**
- * #define REP_DEBUG to log constructor/destructor calls.
- *
- * #define REP_DEBUG_REF to additionally log calls to rep_ref()/rep_unref().
- *
- * #define REP_DEBUG_STREAM to the std::ostream that should be used for logging.
- * Default is to log via Y2SLog (class "Rep", level "Debug")
- *
- **/
-#ifdef REP_DEBUG_REF
-#  ifndef REP_DEBUG
-#  define REP_DEBUG
-#  endif
-#endif
-
-#ifdef REP_DEBUG
-#  ifndef REP_DEBUG_STREAM
-#    undef  Y2LOG
-#    define Y2LOG "Rep"
-#    include <y2util/Y2SLog.h>
-#    define REP_DEBUG_STREAM DBG
-#  endif
-#endif
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
+//	CLASS NAME : Rep
 //
-//	METHOD NAME : Rep::_dbg
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void Rep::_dbg( const char f ) const
-{
-#ifdef REP_DEBUG
-  switch ( f ) {
-  case 'c':
-    Rep::dumpOn( REP_DEBUG_STREAM << "+++ " ) << std::endl;
-    break;
-  case 'C':
-    Rep::dumpOn( REP_DEBUG_STREAM << "+c+ " ) << std::endl;
-    break;
-  case 'd':
-    Rep::dumpOn( REP_DEBUG_STREAM << "--- " ) << std::endl;
-    break;
+///////////////////////////////////////////////////////////////////
 
-#ifdef REP_DEBUG_REF
-  case 'r':
-    Rep::dumpOn( REP_DEBUG_STREAM << "  + " ) << std::endl;
-    break;
-  case 'u':
-    Rep::dumpOn( REP_DEBUG_STREAM << "  - " ) << std::endl;
-    break;
-#endif
-
-  }
-#endif
+ostream & Rep::dumpOn( ostream & str ) const {
+  return str << repName() << "(<-" << refCount() << ')';
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Rep::dumpOn
-//	METHOD TYPE : std::ostream &
-//
-//	DESCRIPTION :
-//
-std::ostream & Rep::dumpOn( std::ostream & str ) const
-{
-  str << rep_name() << "[" << rep_id_i << "(" << rep_cnt_i << ")]";
-  return str;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Rep::dumpRepStats
-//	METHOD TYPE : std::ostream &
-//
-//	DESCRIPTION :
-//
-std::ostream & Rep::dumpRepStats( std::ostream & str )
-{
-  str << "RepStats{";
-
-  str << "rep_Total = " << rep_Total;
-
-  return str << "}";
-}
-
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : std::ostream &
-**
-**	DESCRIPTION :
-*/
-std::ostream & operator<<( std::ostream & str, const Rep & obj )
-{
+ostream & operator<<( ostream & str, const Rep & obj ) {
   return obj.dumpOn( str );
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : std::ostream &
-**
-**	DESCRIPTION :
-*/
-std::ostream & operator<<( std::ostream & str, const constRepPtr & obj )
-{
-  if ( !obj.baseRep() )
-    return str << "Rep(nil)";
-  return obj.baseRep()->dumpOn( str );
+ostream & operator<<( ostream & str, const Rep * obj ) {
+  if ( ! obj )
+    return str << "(NULL)";
+  return str << *obj;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : CountedRep
+//
+///////////////////////////////////////////////////////////////////
 
+unsigned CountedRep::_objectCount = 0;
+unsigned CountedRep::_objectIds = 0;
+
+ostream & CountedRep::dumpOn( ostream & str ) const {
+  return str << repName() << "[" << objectId() << "(<-" << refCount() << ")]";
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : RepPtrBase
+//
+///////////////////////////////////////////////////////////////////
+
+ostream & operator<<( ostream & str, const RepPtrBase & obj ) {
+  return str << obj.refbase();
+}

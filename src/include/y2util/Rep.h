@@ -15,6 +15,8 @@
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
+   Purpose: Base class for reference counted objects and counted pointer templates.
+
 /-*/
 #ifndef Rep_h
 #define Rep_h
@@ -25,437 +27,612 @@
 //
 //	CLASS NAME : Rep
 /**
- * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
+ * @short Base class for reference counted objects.
  *
- * <CODE>Rep</CODE> provides the reference counter that tracks the number
- * of outstanding refrences to an object.
+ * The initial reference count is zero. Calling @ref ref(),
+ * the reference counter is increased. Calling @ref unref(),
+ * the reference counter is decreased. If the reference count
+ * becomes zero, the object is deleted.
  *
- * <B>Data classes should be virtual derived from <CODE>Rep</CODE></B>, because in
- * case of multiple inheritance it's not advisable to have multiple reference
- * counters within a single object.
+ * Any attempt to delete an object with a non zero reference
+ * count will throw an exeption.
  *
- * The initial reference count is zero. In this state it's ok to manualy delete
- * the object again. But as soon as there are outstanding references, any attempt
- * to manualy delete it will lead to an exeption. The object will be automaticaly
- * deleted after the last reference left.
+ * Any attempt to @ref unref() an object with a zero reference
+ * count will throw an exeption.
  *
- * Derived Classes may want to overload <CODE>rep_name()</CODE> and <CODE>dumpOn()</CODE>.
- * Besides this, they don't need to care about <CODE>Rep</CODE>.
- *
- * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>data</CODE> classes. Provides the reference counter.
+ * Stream output operator are provided for Rep and Rep*. Both use
+ * @ref dumpOn(), which might be overloaded by derived classes.
  **/
 class Rep {
-
   private:
 
     /**
      * The reference counter.
      **/
-    mutable unsigned rep_cnt_i;
-
-    /**
-     * Actual reference counting is done by class constRepPtr.
-     * @see constRepPtr
-     **/
-    friend class constRepPtr;
-
-    /**
-     * Class basicPtr provides a minimal interface to handle reference counting.
-     * @see basicPtr
-     **/
-    friend class basicPtr;
-
-    /**
-     * Increment reference counter.
-     * @see constRepPtr
-     **/
-    void rep_ref() const {
-      ++rep_cnt_i;
-      _dbg( 'r' );
-      ref_to( rep_cnt_i ); // trigger derived classes
-    }
-
-    /**
-     * Decrement reference counter and delete the object if reference
-     * count gets zero. Throws exception if reference count already is
-     * zero.
-     * @see constRepPtr
-     **/
-    void rep_unref() const {
-      if ( !rep_cnt_i )
-	throw( this );
-      --rep_cnt_i;
-      _dbg( 'u' );
-      if ( rep_cnt_i )
-	unref_to( rep_cnt_i ); // trigger derived classes
-      else
-	delete this;
-    }
+    mutable unsigned _counter;
 
   protected:
 
     /**
-     * Trigger derived classes after rep_cnt was increased.
+     * Trigger derived classes after refCount was increased.
      **/
     virtual void ref_to( unsigned rep_cnt_r ) const {}
-
     /**
-     * Trigger derived classes after rep_cnt was decreased.
-     * No trigger is sent, if rep_cnt got zero
+     * Trigger derived classes after refCount was decreased.
+     * No trigger is sent, if refCount got zero (i.e. the
+     * object is deleted).
      **/
     virtual void unref_to( unsigned rep_cnt_r ) const {}
 
-  protected:
+  public:
 
     /**
      * Constructor. Initial reference count is zero.
      **/
-    Rep() : rep_cnt_i( 0 ), rep_id_i( ++rep_IDs ) {
-      ++rep_Total;
-      _dbg( 'c' );
-    }
-
+    Rep() : _counter( 0 ) {}
     /**
      * CopyConstructor. Initial reference count is zero.
      **/
-    Rep( const Rep & rhs ) : rep_cnt_i( 0 ), rep_id_i( ++rep_IDs ) {
-      // do not copy refcount
-      ++rep_Total;
-      _dbg( 'C' );
-    }
-
+    Rep( const Rep & rhs ) : _counter( 0 ) {}
     /**
      * Assignment. Reference count remains untouched.
      **/
-    void operator=( const Rep & rhs ) const {
-      // do not assign refcount
-    }
-
+    Rep & operator=( const Rep & rhs ) { return *this; }
     /**
      * Destructor. Throws exception if reference count is not zero.
      **/
-    virtual ~Rep() {
-      if ( rep_cnt_i )
-	throw( this );
-      --rep_Total;
-      _dbg( 'd' );
-    }
-
-  private:
-
-    /**
-     * Provides numerical ids.
-     **/
-    static unsigned rep_IDs;
-    /**
-     * Counts total ammount of objects in memeory.
-     **/
-    static unsigned rep_Total;
-    /**
-     * This objects numerical id.
-     **/
-    const unsigned rep_id_i;
-    /**
-     * Write debug lines if liby2util was compiled with REP_DEBUG
-     * or REP_DEBUG_REF. See Rep.cc for details.
-     **/
-    void _dbg( const char f ) const;
+    virtual ~Rep() { if ( _counter ) throw( this ); }
 
   public:
 
     /**
-     * This objects numerical id. Might be interesting for debug.
+     * Increment reference counter.
      **/
-    unsigned rep_id() const { return  rep_id_i; }
+    void ref() const {
+      ref_to( ++_counter ); // trigger derived classes
+    }
+    /**
+     * Decrement reference counter and delete the object if reference
+     * count got zero. Throws exception if reference count already is
+     * zero.
+     **/
+    void unref() const {
+      if ( ! _counter )
+	throw( this );
+      if ( --_counter )
+	unref_to( _counter ); // trigger derived classes
+      else
+	delete this;
+    }
 
     /**
-     * The reference counter. Might be interesting for copy on write.
+     * Safe increment reference counter. Ignore NULL object pointer
+     * passed as argument.
      **/
-    unsigned rep_cnt() const { return  rep_cnt_i; }
+    static void ref( const Rep * obj_r ) {
+      if ( obj_r )
+	obj_r->ref();
+    }
+    /**
+     * Safe decrement reference counter. Ignore NULL object pointer
+     * passed as argument..
+     **/
+    static void unref( const Rep * obj_r ) {
+      if ( obj_r )
+	obj_r->unref();
+    }
+
+  public:
+
+    /**
+     * Current reference counter value.
+     **/
+    unsigned refCount() const { return _counter; }
+
+  public:
 
     /**
      * Objects name used in dumpOn().
      **/
-    virtual const char * rep_name() const { return "Rep"; }
-
+    virtual const char * repName() const { return "Rep"; }
     /**
-     * Writes objects name, address and reference count. If REP_DEBUG, additionally
-     * numerical id and total ammount of objects.
-     *
-     * Derived classes may overload this to realize std::ostream & operator<< for
-     * data and pointer classes.
-     * @see constRepPtr
+     * Derived classes may overload this to realize
+     * std::ostream & operator<< for object and pointer
+     * classes.
      **/
     virtual std::ostream & dumpOn( std::ostream & str ) const;
-
-    /**
-     * Default output operator for data classes realized via 'virtual Rep::dumpOn()'.
-     **/
-    friend std::ostream & operator<<( std::ostream & str, const Rep & obj );
-
-  public:
-
-    /**
-     * Merely a hook for debug purpose. Content and format are alternating,
-     **/
-    static std::ostream & dumpRepStats( std::ostream & str );
 };
 
-///////////////////////////////////////////////////////////////////
+/**
+ * Stream output operator for reference counted objects.
+ **/
+std::ostream & operator<<( std::ostream & str, const Rep & obj );
+/**
+ * Stream output operator for reference counted object pointer.
+ **/
+std::ostream & operator<<( std::ostream & str, const Rep * obj );
+
+////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : constRepPtr
+//	CLASS NAME : CountedRep
 /**
- * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
+ * @short Base class for reference counted objects. Provides numerical object ids.
  *
- * <CODE>constRepPtr</CODE> realizes a '<CODE>const Rep *</CODE>' to an allocated object derived from <CODE>Rep</CODE>.
- * Thus a '<CODE>const constRepPtr</CODE>' is a '<CODE>const Rep *const</CODE>'.
+ * Derived from @ref Rep, CountedRep provides a numerical object id and
  *
- * On construction, deletion and assignment, <CODE>constRepPtr</CODE> adjusts the reference
- * count of the <CODE>Rep</CODE> object it is pointing to. Once referenced by a <CODE>constRepPtr</CODE>,
- * the <CODE>Rep</CODE> object will delete itself, after the reference is dropped.
- *
- * <B>Derived classes should provide an appropriate operator->()</B> to access the
- * data class.
- *
- * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>const pointer</CODE> classes. Manages reference counting.
+ * See class @ref Rep.
  **/
-class constRepPtr {
+class CountedRep : public Rep {
 
   private:
 
     /**
-     * Let class RepPtr access rep_p
-     * @see RepPtr
+     * Counts total ammount of CountedRep instances in memeory.
      **/
-    friend class RepPtr;
+    static unsigned _objectCount;
+    /**
+     * Provides numerical ids.
+     **/
+    static unsigned _objectIds;
 
     /**
-     * Pointer to the referenced Rep object, or 0.
-     * @see Rep
+     * This objects numerical id.
      **/
-    const Rep * rep_p;
-
-    /**
-     * Assign a new Rep object. Prevent self assignment and handle
-     * reference counting.
-     * @see Rep
-     **/
-    void _assign( const Rep * new_p ) {
-      if ( new_p != rep_p ) {
-	if ( rep_p )
-	  rep_p->rep_unref();
-	rep_p = new_p;
-	if ( rep_p )
-	  rep_p->rep_ref();
-      }
-    }
-
-    /**
-     * Initial assignment. Called from constructor.
-     **/
-    void _init( const Rep * new_p ) {
-      rep_p = 0;
-      _assign( new_p );
-    }
-
-  protected:
-
-    /**
-     * Constructor.
-     **/
-    constRepPtr( const Rep * new_p ) {
-      _init( new_p );
-    }
-
-    /**
-     * CopyConstructor.
-     **/
-    constRepPtr( const constRepPtr & rhs ) {
-      _init( rhs.rep_p );
-    }
-
-    /**
-     * Assignment.
-     **/
-    constRepPtr & operator=( const Rep * rhs ) {
-      _assign( rhs );
-      return *this;
-    }
-
-    /**
-     * Assignment.
-     **/
-    constRepPtr & operator=( const constRepPtr & rhs ) {
-      _assign( rhs.rep_p );
-      return *this;
-    }
-
-    /**
-     * Destructor.
-     **/
-    virtual ~constRepPtr() {
-      if ( rep_p )
-	rep_p->rep_unref();
-    }
-
-    /**
-     * Return rep_p.
-     **/
-    const Rep *const baseRep() const { return rep_p; }
-
-    /**
-     * Return other pointers rep_p.
-     **/
-    static const Rep *const baseRep( const constRepPtr & rhs ) { return rhs.rep_p; }
+    const unsigned _objectId;
 
   public:
 
     /**
-     * Allow test '== NULL'
-     **/
-    operator const void *() const { return rep_p; }
-
-    /**
-     * Default output operator for pointer classes realized via 'virtual Rep::dumpOn()'.
-     * @see Rep
-     **/
-    friend std::ostream & operator<<( std::ostream & str, const constRepPtr & obj );
-};
-
-///////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : RepPtr
-/**
- * See <A HREF="../CountedPtr.html">Counted Pointers</A>.
- *
- * <CODE>RepPtr</CODE> realizes a '<CODE>Rep *</CODE>' to an allocated object derived from <CODE>Rep</CODE>.
- * Thus a '<CODE>const RepPtr</CODE>' is a '<CODE>Rep *const</CODE>'.
- *
- * <B>Derived classes should provide an appropriate operator->()</B> to access the
- * data class.
- *
- * @short <A HREF="../CountedPtr.html">Counted Pointers</A>: Base for <CODE>pointer</CODE> classes. Manages reference counting.
- **/
-class RepPtr : virtual public constRepPtr {
-
-  private:
-
-    Rep *& rep_p;
-
-  protected:
-
-    /**
      * Constructor.
      **/
-    RepPtr( Rep * new_p = 0 ) : constRepPtr( new_p ), rep_p( const_cast<Rep *&>(constRepPtr::rep_p) ) {}
-
+    CountedRep() : _objectId( ++_objectIds ) { ++_objectCount; }
     /**
      * CopyConstructor.
      **/
-    RepPtr( const RepPtr & rhs ) : constRepPtr( rhs ), rep_p( const_cast<Rep *&>(constRepPtr::rep_p) ) {}
-
+    CountedRep( const CountedRep & rhs ) : _objectId( ++_objectIds ) { ++_objectCount; }
     /**
-     * Assignment.
+     * Assignment. objectId remains untouched.
      **/
-    RepPtr & operator=( Rep * rhs ) {
-      constRepPtr::operator=( rhs );
+    CountedRep & operator=( const CountedRep & rhs ) {
+      Rep::operator=( rhs );
       return *this;
     }
-
-    /**
-     * Assignment.
-     **/
-    RepPtr & operator=( const RepPtr & rhs ) {
-      constRepPtr::operator=( rhs );
-      return *this;
-    }
-
     /**
      * Destructor.
      **/
-    virtual ~RepPtr() {}
+    virtual ~CountedRep() { --_objectCount; }
+
+  public:
 
     /**
-     * Return rep_p.
+     * This objects numerical id.
      **/
-    Rep *const baseRep() const { return rep_p; }
+    unsigned objectId() const { return _objectId; }
 
     /**
-     * Return other pointers rep_p.
+     * The total ammount of CountedRep instances in memeory.
      **/
-    static Rep *const baseRep( const RepPtr & rhs ) { return rhs.rep_p; }
+    static unsigned objectCount() { return _objectCount; }
 
+  public:
+
+    /**
+     * Stream output
+     **/
+    virtual std::ostream & dumpOn( std::ostream & str ) const;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Counted pointer
+//
+////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : RepPtrStore<typename _Tp, typename _Bt>
+/**
+ * @short A '_Tp*' with reference counting on construction and assign.
+ *
+ * Class _Tp must inherit class @ref Rep. @ref tryAssign() supports assignment from
+ * '_Bt *' via dynamic_cast. Thus _Bt must either be _Tp, or a baseclass of _Tp.
+ *
+ * The counted pointer template classes @ref Ptr and @ref constPtr use RepPtrStore
+ * to store the 'object *'. Intentionally all methods which require more than a
+ * forward declaration of classes _Tp and _Bt are defined within RepPtrStore and
+ * not inlined.
+ *
+ * To use an ordinary <code>_Tp*</code>, a forward declaration <code>class _Tp;</code>
+ * is sufficient, unless you actually access the '_Tp' object. Using a counted pointer,
+ * you'll have to pervent the implicit generation of RepPtrStore<_Tp> instances too.
+ * Otherwise the definition of class _Tp had to be provided.
+ *
+ * <PRE>
+ *  #include <y2util/Rep.h>                 // template definition
+ *  class Foo;                              // forward declare class Foo
+ *  extern template class RepPtrStore<Foo>; // pervent implicit instanciation of RepPtrStore<Foo>
+ * </PRE>
+ *
+ * Then within some translation unit you'll have to explicitly instantiate RepPtrStore<Foo>.
+ *
+ * <PRE>
+ *  #include <y2util/Rep.h>                 // template definition
+ *  #include "Foo.h"                        // definition of class Foo
+ *  template class RepPtrStore<Foo>;        // explicit instantiation of RepPtrStore<Foo>
+ * </PRE>
+ *
+ **/
+template<typename _Tp, typename _Bt = _Tp>
+class RepPtrStore {
+
+  private:
+
+    /**
+     * The pointer.
+     **/
+    _Tp * _obj;
+
+  private:
+
+    /**
+     * Assign a new value to @ref _obj. Adjusts the objects reference counter
+     * according to the old and new pointer value.
+     **/
+    void _assign( _Tp * new_r );
+
+  public:
+
+    /**
+     * DefaultConstructor. NULL
+     **/
+    RepPtrStore() : _obj( 0 ) {}
+    /**
+     * Constructor. Uses @ref _assign.
+     **/
+    RepPtrStore( _Tp * ptr ) : _obj( 0 ) { _assign( ptr ); }
+    /**
+     * CopyConstructor. Uses @ref _assign.
+     **/
+    RepPtrStore( const RepPtrStore & rhs ) : _obj( 0 ) { _assign( rhs._obj ); }
+
+    /**
+     * Assign. Uses @ref _assign.
+     **/
+    RepPtrStore & operator=( _Tp * ptr ) { _assign( ptr ); return *this; }
+    /**
+     * Assign. Uses @ref _assign.
+     **/
+    RepPtrStore & operator=( const RepPtrStore & rhs ) { _assign( rhs._obj ); return *this; }
+
+    /**
+     * Destructor. Uses @ref _assign.
+     **/
+    ~RepPtrStore() { _assign( 0 ); }
+
+    /**
+     * Conversion to '_Tp *'
+     **/
+    operator _Tp *() const { return _obj; }
+
+  public:
+
+    /**
+     * Assign the result of dynamic_cast '_Bt *' to '_Tp *'. Uses @ref _assign.
+     **/
+    void tryAssign( _Bt * ptr );
+
+  public:
+
+    /**
+     * Explicit conversion to '_Bt *'
+     **/
+    _Bt * base() const;
+    /**
+     * Explicit conversion to 'const @ref Rep *'
+     **/
+    const Rep * refbase() const;
+};
+
+template<typename _Tp,typename _Bt>
+void RepPtrStore<_Tp,_Bt>::_assign( _Tp * new_r ) {
+  if ( new_r != _obj ) {
+    Rep::unref( _obj );
+    _obj = new_r;
+    Rep::ref( _obj );
+  }
+}
+
+template<typename _Tp,typename _Bt>
+void RepPtrStore<_Tp,_Bt>::tryAssign( _Bt * ptr ) {
+  _assign( dynamic_cast<_Tp*>(ptr) );
+  if ( !_obj && ptr && ! ptr->refCount() ) {
+    Rep::ref( ptr );
+    Rep::unref( ptr );
+  }
+}
+
+template<typename _Tp,typename _Bt>
+_Bt * RepPtrStore<_Tp,_Bt>::base() const { return _obj; }
+
+template<typename _Tp,typename _Bt>
+const Rep * RepPtrStore<_Tp,_Bt>::refbase() const { return _obj; }
+
+////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : RepPtrBase
+/**
+ * @short Common base class for all counted pointer classes
+ *
+ * Provides stream output operator and conversion to 'const void *'
+ * to allow pointer comparison and test for NULL.
+ *
+ * See @ref PtrBase and @ref constPtrBase
+ **/
+class RepPtrBase {
+  /**
+   * Stream output operator for all counted pointer classes.
+   **/
+  friend std::ostream & operator<<( std::ostream & str, const RepPtrBase & obj );
+
+  protected:
+
+    /**
+     * virtual destructor;
+     **/
+    virtual ~RepPtrBase() {}
+    /**
+     * Derived class must provide the objects '@ref Rep *'
+     **/
+    virtual const Rep * refbase() const = 0;
+
+  public:
+
+    /**
+     * Conversion to 'const void *' to allow pointer comparison
+     * and test for NULL.
+     **/
+    operator const void *() const  { return refbase(); }
 };
 
 ///////////////////////////////////////////////////////////////////
 
-/**
- * Comparison of constRepPtr and Rep*. Provided because all pointer
- * classes provide an <CODE>operator const void *()</CODE> that returns
- * the internal Rep*'s value. But a data classes this pointer needs
- * not to have the same value as the inherited class Rep's one.
- **/
-inline bool operator==( const constRepPtr & lhs, const Rep * rhs )
-{
-  return ( (const void *)lhs == (const void *)rhs );
-}
+template<typename _Bt> class constPtrBase;
 
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : PtrBase<typename _Bt>
 /**
- * Comparison of constRepPtr and Rep*. Provided because all pointer
- * classes provide an <CODE>operator const void *()</CODE> that returns
- * the internal Rep*'s value. But a data classes this pointer needs
- * not to have the same value as the inherited class Rep's one.
+ * @short Common base class for counted '_Bt *' (@ref Ptr)
+ *
+ * See also @ref constPtrBase and @ref RepPtrStore.
  **/
-inline bool operator==( const Rep * lhs, const constRepPtr & rhs )
-{
-  return ( (const void *)lhs == (const void *)rhs );
-}
+template<typename _Bt>
+class PtrBase : public RepPtrBase {
 
-/**
- * Comparison of constRepPtr and Rep*. Provided because all pointer
- * classes provide an <CODE>operator const void *()</CODE> that returns
- * the internal Rep*'s value. But a data classes this pointer needs
- * not to have the same value as the inherited class Rep's one.
- **/
-inline bool operator!=( const constRepPtr & lhs, const Rep * rhs )
-{
-  return ( ! operator==( lhs, rhs ) );
-}
+  protected:
 
-/**
- * Comparison of constRepPtr and Rep*. Provided because all pointer
- * classes provide an <CODE>operator const void *()</CODE> that returns
- * the internal Rep*'s value. But a data classes this pointer needs
- * not to have the same value as the inherited class Rep's one.
- **/
-inline bool operator!=( const Rep * lhs, const constRepPtr & rhs )
-{
-  return ( ! operator==( lhs, rhs ) );
-}
+    friend class constPtrBase<_Bt>;
+
+    /**
+     * Derived class must provide the objects '_Bt *'. See @ref RepPtrStore.
+     **/
+    virtual _Bt * base() const = 0;
+
+    /**
+     * Retrieve base() from another PtrBase<_Bt> object.
+     **/
+    _Bt * getBase( const PtrBase & rhs ) const {
+      return rhs.base();
+    }
+};
 
 ///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : basicPtr
+//	CLASS NAME : constPtrBase<typename _Bt>
 /**
- * @short Minimal interface to handle reference counter Rep
- * @see rep
+ * @short Common base class for counted 'const _Bt *' (@ref constPtr)
+ *
+ * See also @ref PtrBase and @ref RepPtrStore.
  **/
-class basicPtr {
+template<typename _Bt>
+class constPtrBase : public RepPtrBase {
+
   protected:
-    void _rep_change( const Rep * from_r, const Rep * to_r ) {
-      if ( from_r != to_r ) {
-	if ( from_r )
-	  from_r->rep_unref();
-	if ( to_r )
-	  to_r->rep_ref();
-      }
+
+    /**
+     * Derived class must provide the objects 'const _Bt *'. See @ref RepPtrStore.
+     **/
+    virtual const _Bt * base() const = 0;
+
+    /**
+     * Retrieve base() from another constPtrBase<_Bt> object.
+     **/
+    const _Bt * getBase( const constPtrBase & rhs ) const {
+      return rhs.base();
     }
+
+    /**
+     * Retrieve base() from a nonconst PtrBase<_Bt> object. Needed
+     * as it's ok to create a constPtr from a Ptr, but not vice versa.
+     **/
+    const _Bt * getBase( const PtrBase<_Bt> & rhs ) const {
+      return rhs.base();
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+template<typename _Tp,typename _Bt> class constPtr;
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : Ptr<typename _Tp, typename _Bt>
+/**
+ * @short Counted '_Tp *'. Support construction/assignment via dynamic_cast from @ref PtrBase<_Bt>
+ **/
+template<typename _Tp, typename _Bt = _Tp>
+class Ptr : public PtrBase<_Bt> {
+
+  private:
+
+    /**
+     * The '_Tp*'.
+     **/
+    RepPtrStore<_Tp,_Bt> _ptr;
+
+  protected:
+
+    /**
+     * Required by inherited @ref RepPtrBase.
+     **/
+    virtual const Rep * refbase() const { return _ptr.refbase(); }
+    /**
+     * Required by inherited @ref PtrBase.
+     **/
+    virtual _Bt * base() const { return _ptr.base(); }
+
+  public:
+
+    /**
+     * Constructor. From '_Tp *'. Defaults to NULL.
+     **/
+    Ptr( _Tp * ptr = 0 ) : _ptr( ptr ) {}
+    /**
+     * CopyConstructor. From Ptr<_Tp,_Bt>.
+     **/
+    Ptr( const Ptr & rhs ) : _ptr( rhs._ptr ) {}
+    /**
+     * Constructor. From Ptr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    Ptr( const PtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); }
+
+  public:
+
+    /**
+     * Assign from '_Tp *'.
+     **/
+    Ptr & operator=( _Tp * ptr ) { _ptr = ptr; return *this; }
+    /**
+     *  Assign from Ptr<_Tp,_Bt>.
+     **/
+    Ptr & operator=( const Ptr & rhs ) { _ptr = rhs._ptr; return *this; }
+    /**
+     * Assign from Ptr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    Ptr & operator=( const PtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); return *this; }
+
+  public:
+
+    /**
+     * Access forwarded to the _Tp object (or SEGV if _ptr is NULL)
+     **/
+    _Tp * operator->() const { return _ptr; }
+
+  public:
+
+    /**
+     * ConstCast. Create a Ptr from constPtr ('_Tp*' from 'const _Tp*').
+     **/
+    static Ptr cast_away_const( constPtr<_Tp,_Bt> rhs ) {
+      return const_cast<_Tp*>(rhs.operator->());
+    }
+};
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : constPtr<typename _Tp, typename _Bt>
+/**
+ * @short Counted 'const _Tp *'. Support construction/assignment via dynamic_cast from @ref  constPtrBase<_Bt>
+ **/
+template<typename _Tp, typename _Bt = _Tp>
+class constPtr : public constPtrBase<_Bt> {
+
+  private:
+
+    /**
+     * The 'const _Tp*'.
+     **/
+    RepPtrStore<const _Tp,const _Bt> _ptr;
+
+  protected:
+
+    /**
+     * Required by inherited @ref RepPtrBase.
+     **/
+    virtual const Rep * refbase() const { return _ptr.refbase(); }
+    /**
+     * Required by inherited @ref PtrBase.
+     **/
+    virtual const _Bt * base() const { return _ptr.base(); }
+
+  public:
+
+    /**
+     * Constructor. From 'const _Tp *'. Defaults to NULL.
+     **/
+    constPtr( const _Tp * ptr = 0 ) : _ptr( ptr ) {}
+    /**
+     * CopyConstructor. From constPtr<_Tp,_Bt>.
+     **/
+    constPtr( const constPtr & rhs ) : _ptr( rhs._ptr ) {}
+    /**
+     * Constructor. From constPtr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    constPtr( const constPtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); }
+
+  public:
+
+    /**
+     * Assign from 'const _Tp *'.
+     **/
+    constPtr & operator=( const _Tp * ptr ) { _ptr = ptr; return *this; }
+    /**
+     *  Assign from constPtr<_Tp,_Bt>.
+     **/
+    constPtr & operator=( const constPtr & rhs ) { _ptr = rhs._ptr; return *this; }
+    /**
+     * Assign from constPtr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    constPtr & operator=( const constPtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); return *this; }
+
+  public:
+
+    /**
+     * Constructor. From nonconst Ptr<_Tp,_Bt>.
+     **/
+    constPtr( const Ptr<_Tp,_Bt> & rhs ) : _ptr( rhs.operator->() ) {}
+    /**
+     * Constructor. From nonconst Ptr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    constPtr( const PtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); }
+
+  public:
+
+    /**
+     *  Assign from nonconst Ptr<_Tp,_Bt>.
+     **/
+    constPtr & operator=( const Ptr<_Tp,_Bt> & rhs ) { _ptr = rhs.operator->(); return *this; }
+    /**
+     * Assign from nonconst Ptr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
+     **/
+    constPtr & operator=( const PtrBase<_Bt> & rhs ) { _ptr.tryAssign( getBase( rhs ) ); return *this; }
+
+  public:
+
+    /**
+     * Access forwarded to the _Tp object (or SEGV if _ptr is NULL)
+     **/
+    const _Tp * operator->() const { return _ptr; }
 };
 
 ///////////////////////////////////////////////////////////////////

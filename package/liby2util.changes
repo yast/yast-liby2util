@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Feb 21 02:34:14 CET 2004 - ma@suse.de
+
+- Reimplemented counted pointer classes
+- 2.9.10
+
+-------------------------------------------------------------------
 Thu Feb 19 18:02:18 CET 2004 - visnov@suse.cz
 
 - ensure initialization of memusage counter

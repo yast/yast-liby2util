@@ -36,7 +36,7 @@
 //
 //	CLASS NAME : TagCacheRetrieval
 //
-class TagCacheRetrieval : virtual public Rep {
+class TagCacheRetrieval : public CountedRep {
     REP_BODY(TagCacheRetrieval);
     private:
 	// the name of the file
