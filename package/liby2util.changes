@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Sep 18 02:51:20 CEST 2004 - schwab@suse.de
+
+- Fix C++ syntax.
+
+-------------------------------------------------------------------
 Mon Aug 30 11:47:59 CEST 2004 - lnussel@suse.de
 
 - use pkgconfig macro to check for OpenSSL
