@@ -84,6 +84,17 @@ class Date {
      **/
     operator time_t() const { return _date; }
 
+    Date & operator+=( const time_t rhs ) { _date += rhs; return *this; }
+    Date & operator-=( const time_t rhs ) { _date -= rhs; return *this; }
+    Date & operator*=( const time_t rhs ) { _date *= rhs; return *this; }
+    Date & operator/=( const time_t rhs ) { _date /= rhs; return *this; }
+
+    Date & operator++(/*prefix*/) { _date += 1; return *this; }
+    Date & operator--(/*prefix*/) { _date -= 1; return *this; }
+
+    Date operator++(int/*postfix*/) { return _date++; }
+    Date operator--(int/*postfix*/) { return _date--; }
+
     /**
      * Member version of 'static form'.
      **/

@@ -15,7 +15,7 @@
   Author:     Michael Andres <ma@suse.de>
   Maintainer: Michael Andres <ma@suse.de>
 
-  Purpose: Store and operate on (file/package/partition) sizes.
+  Purpose: Store and operate on (file/package/partition) sizes (long long).
 
 /-*/
 #ifndef _FSize_h_
@@ -29,7 +29,7 @@
 //	CLASS NAME : FSize
 //
 /**
- * @short Store and operate on (file/package/partition) sizes.
+ * @short Store and operate on (file/package/partition) sizes (long long).
  **/
 class FSize {
 
