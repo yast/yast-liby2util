@@ -258,6 +258,12 @@ ExternalProgram::close()
 		{
 		    DBG << "pid " << pid << " exited with status " << status << endl;
 		}
+		else
+		{
+		    // if 'launch' is logged, completion should be logged,
+		    // even if successfull.
+		    DBG << "pid " << pid << " successfully completed" << endl;
+		}
 	    }
 	    else if (WIFSIGNALED (status))
 	    {
