@@ -2,7 +2,7 @@
 # Makefile.am for liby2util/testsuite
 #
 SUBDIRS = lib test_rep
-
+PACKAGE = liby2util
 AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(QTDIR)/include -I$(top_srcdir)/src/include -I$(includedir)
@@ -42,7 +42,6 @@ test_mkdir_prg_SOURCES = test_mkdir.cc
 test_url_prg_SOURCES = test_url.cc
 
 clean-local:
-	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \
-	libycp.sum site.bak
+	rm -f tmp.err.* tmp.out.* y2util.log y2util.sum site.exp site.bak
 
 EXTRA_DIST =
