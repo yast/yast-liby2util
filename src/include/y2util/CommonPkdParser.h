@@ -266,15 +266,10 @@ class TagSet
 	 * */
 	CommonPkdParser::Tag* getTagByIndex(unsigned int idx)
 	{
-	    try
-	    {
-		// may throw out of range
-		return _tagv.at(idx);
-	    }
-	    catch(...)
-	    {
+	    if(idx<_tagv.size())
+		return _tagv[idx];
+	    else
 		return NULL;
-	    }
 	}
 
 	/** assign number to Tag
@@ -285,7 +280,7 @@ class TagSet
 	void addTagByIndex(unsigned int idx, CommonPkdParser::Tag* t)
 	{
 	    if(_tagv.size()<=idx) { _tagv.resize(idx+2),NULL; }
-	    _tagv.at(idx)=t;
+	    _tagv[idx]=t;
 	}
 };
 
