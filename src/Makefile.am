@@ -50,3 +50,17 @@ liby2util_la_LDFLAGS = -version-info 3:0:0
 # 	-L$(QTLIBDIR)
 
 liby2util_la_LIBADD = -lutil $(OPENSSL_LIBS)
+
+noinst_PROGRAMS = digest_bin
+
+digest_bin_SOURCES = Digest.cc
+digest_bin_CPPFLAGS = -DDIGEST_TESTSUITE
+digest_bin_LDADD = $(liby2util_la_LIBADD)
+
+test_digest: digest_bin
+	@echo "output of 2 and 1 is success"
+	@for algo in MD5 SHA1; do \
+		./digest_bin --openssl $$algo digest_bin; \
+		openssl dgst -$$algo digest_bin; \
+	done | sort -u | wc -l
+	@(./digest_bin MD5 digest_bin; md5sum digest_bin) | sort -u | wc -l
