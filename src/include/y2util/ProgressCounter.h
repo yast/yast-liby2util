@@ -232,7 +232,7 @@ class ProgressCounter : public ProgressData {
 
     /**
      * Test for changed @ref percent value.
-     * @ref Whether VC_PERCENT bit is now set.
+     * @return Whether VC_PERCENT bit is now set.
      **/
     bool checkPercent() const {
       if ( _changed & VC_PERCENT )
@@ -426,15 +426,24 @@ class ProgressCounter : public ProgressData {
     }
 
     /**
-     * Call @ref update, if @ref newPercent. If a nonzero limit_r is provided,
-     * a call to @ref update is omitted, if old and new percentage differ less
-     * than limit_r. Thus <CODE>updateIfNewPercent( 5 )</CODE> will perform at
-     * most every 5%. However, if the old percentage is at min or max, or if
-     * the new percentage hits min or max, @ref update is called regardless
-     * to the limit_r (if the percentage actually changed).
+     * Call @ref update, if @ref newPercent or if all flags are set dirty
+     * (e.g. after @ref reset).
+     *
+     * If a nonzero limit_r is provided, and old and new percentage differ less
+     * than limit_r, a call to @ref update is omitted.
+     * Thus <CODE>updateIfNewPercent( 5 )</CODE> will perform at most every 5%.
+     *
+     * However, if the old percentage was at min or max, or if the new percentage
+     * hits min or max, @ref update is called regardless to the limit_r.
+     *
      * @return Whether update was called.
      **/
     bool updateIfNewPercent( unsigned limit_r = 0 ) {
+      if ( _changed == VC_ALL ) {
+	// always update after reset
+	update();
+	return true;
+      }
       if ( checkPercent() ) {
 	if ( limit_r ) {
 	  int newpc = percent();

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Nov 13 22:07:39 CET 2003 - ma@suse.de
+
+- Fixed ProgressCounter::updateIfNewPercent. After reset, update
+  should be triggered anyway. Otherwise an initial 0% report may
+  get lost. (#30382)
+- 2.9.2
+
+-------------------------------------------------------------------
 Thu Nov  6 17:00:51 CET 2003 - mvidner@suse.cz
 
 - Switched autodocs from kdoc to doxygen
