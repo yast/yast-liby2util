@@ -55,7 +55,7 @@ class TagCacheRetrievalPos {
 	const std::streampos begin() const { return _begin; }
 	const std::streampos end() const { return _end; }
 
-	void set (std::streampos begin, std::streampos end) { _begin = begin; _end = end; }
+	void set (std::streampos begin, std::streampos end) { if (begin < end) {_begin = begin; _end = end;} }
 };
 
 ///////////////////////////////////////////////////////////////////
