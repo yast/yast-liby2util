@@ -38,15 +38,15 @@
  **/
 struct ReportCallback {
   /**
-   * virtual destructor
+   * Virtual destructor
    **/
   virtual ~ReportCallback()  {}
   /**
-   * See @ref Report::Send
+   * Triggered on creation of @ref Report::Send.
    **/
   virtual void reportbegin() {}
   /**
-   * See @ref Report::Send
+   * Triggered on destruction of @ref Report::Send
    **/
   virtual void reportend()   {}
 };
@@ -168,8 +168,8 @@ template <class CB> class RedirectCallback : public ReportCallback {
  * outside Report (and deived classes are encourgaged tokeep it that way). But it
  * may be redirected to any real recipient using @ref redirectTo.
  *
- * A sender may invoke the callbacks by creating an instance of @ref Report::Send.
- * Report::Send provides the callback inteface via operator->. Additionally it
+ * A sender may invoke the callbacks by creating an instance of @ref Send.
+ * @ref Send provides the callback inteface via operator->. Additionally it
  * triggers reportbegin and reportend (see @ref ReportCallback).
  *
  * What's to be done is, define the abstract callback interface and provide
@@ -266,6 +266,11 @@ template <class CB> class Report : protected CB {
     //	CLASS NAME : Report<CB>::Send
     /**
      * @short Interface to send reports.
+     *
+     * Send provides the Reports callback inteface via operator->. Additionally it
+     * triggers @ref ReportCallback::reportbegin and @ref ReportCallback::reportend.
+     * Thus any callback recipient listening, may count on receiving a trigger before
+     * the 1st actual callback function is invoked, and after the last one.
      *
      * See @ref Report
      **/
