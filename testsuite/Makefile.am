@@ -26,6 +26,7 @@ noinst_PROGRAMS = parser.prg	\
 	test_chroot.prg		\
 	test_url.prg            \
         test_gpgcheck.prg	\
+        test_df.prg		\
 	test_oldsel
 
 test_oldsel_SOURCES = test_oldsel.cc
@@ -50,6 +51,7 @@ test_strutil_prg_SOURCES = test_strutil.cc
 test_mkdir_prg_SOURCES = test_mkdir.cc
 
 test_url_prg_SOURCES = test_url.cc
+test_df_prg_SOURCES = test_df.cc
 
 test_chroot_prg_SOURCES = test_chroot.cc
 test_chroot_prg_LDFLAGS = -static

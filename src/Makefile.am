@@ -34,6 +34,7 @@ liby2util_la_SOURCES = \
 	YStringTree.cc		\
 	YRpmGroupsTree.cc	\
 	diff.cc			\
+	DiskSpace.cc		\
         GPGCheck.cc
 
 

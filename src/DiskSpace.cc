@@ -1,0 +1,66 @@
+/*---------------------------------------------------------------------\
+|                                                                      |
+|                      __   __    ____ _____ ____                      |
+|                      \ \ / /_ _/ ___|_   _|___ \                     |
+|                       \ V / _` \___ \ | |   __) |                    |
+|                        | | (_| |___) || |  / __/                     |
+|                        |_|\__,_|____/ |_| |_____|                    |
+|                                                                      |
+|                               core system                            |
+|                                                     (C) 2002 SuSE AG |
+\----------------------------------------------------------------------/
+
+   File:       DiskSpace.cc
+   Purpose:    Interface to 'df'
+   Author:     Ludwig Nussel <lnussel@suse.de>
+   Maintainer: Ludwig Nussel <lnussel@suse.de>
+
+/-*/
+
+
+#include <y2util/DiskSpace.h>
+#include <y2util/ExternalProgram.h>
+#include <y2util/stringutil.h>
+#include <y2util/Y2SLog.h>
+
+using namespace std;
+
+DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal)
+{
+    DfVec infovec;
+    const char* argv[] =
+    {
+	"/bin/df",
+	"-TP",
+	NULL
+    };
+    ExternalProgram prog( argv, ExternalProgram::Discard_Stderr, false, -1, true);
+
+    bool firstline = true;
+    for (string output = prog.receiveLine(); output.length() ;output = prog.receiveLine())
+    {
+	if(firstline) { firstline=false; continue;}
+	vector<string> vec;
+	unsigned count = stringutil::split(output,vec," \t",false);
+	if(count != 7)
+	    { ERR << "invalid df output: " << output; continue; }
+	DfInfo info;
+
+	info.device     = vec[0];
+	info.fstype     = vec[1];
+	info.total      = atoi(vec[2].c_str());
+	info.used       = atoi(vec[3].c_str());
+	info.available  = atoi(vec[4].c_str());
+	info.percent    = atoi(vec[5].c_str());
+	info.mountpoint = vec[6];
+
+	if(filter_nonlocal && info.device.substr(0,1) == "/")
+	    continue;
+
+	infovec.push_back(info);
+    }
+    
+    prog.close();
+
+    return infovec;
+}

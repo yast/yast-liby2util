@@ -37,6 +37,7 @@ pkginclude_HEADERS = \
 	diff.h			\
 	YStringTree.h		\
 	YTransText.h            \
+	DiskSpace.h             \
         GPGCheck.h
 
 
