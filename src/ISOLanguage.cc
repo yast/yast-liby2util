@@ -245,11 +245,11 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
   cm["fa"] = _( "Persian" );
   cm["fi"] = _( "Finnish" );
   cm["fj"] = _( "Fijian" );
-  cm["fo"] = _( "Faeroese" );
+  cm["fo"] = _( "Faroese" );
   cm["fr"] = _( "French" );
   cm["fy"] = _( "Frisian" );
   cm["ga"] = _( "Irish" );
-  cm["gd"] = _( "Gaelic (Scots)" );
+  cm["gd"] = _( "Gaelic; Scottish" );
   cm["gl"] = _( "Gallegan" );
   cm["gn"] = _( "Guarani" );
   cm["gu"] = _( "Gujarati" );
@@ -257,7 +257,7 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
   cm["ha"] = _( "Hausa" );
   cm["he"] = _( "Hebrew" );
   cm["hi"] = _( "Hindi" );
-  cm["ho"] = _( "Hiri Motu" );
+  cm["ho"] = _( "Hiri" );
   cm["hr"] = _( "Croatian" );
   cm["hu"] = _( "Hungarian" );
   cm["hy"] = _( "Armenian" );
@@ -303,13 +303,13 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
   cm["my"] = _( "Burmese" );
   cm["na"] = _( "Nauru" );
   cm["nb"] = _( "Norwegian Bokmal" );
-  cm["nd"] = _( "North Ndebele" );
+  cm["nd"] = _( "Ndebele, North" );
   cm["ne"] = _( "Nepali" );
   cm["ng"] = _( "Ndonga" );
   cm["nl"] = _( "Dutch" );
   cm["nn"] = _( "Norwegian Nynorsk" );
   cm["no"] = _( "Norwegian" );
-  cm["nr"] = _( "South Ndebele" );
+  cm["nr"] = _( "Ndebele, South" );
   cm["nv"] = _( "Navajo" );
   cm["ny"] = _( "Nyanja" );
   cm["oc"] = _( "Occitan (post 1500)" );
@@ -322,7 +322,7 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
   cm["ps"] = _( "Pushto" );
   cm["pt"] = _( "Portuguese" );
   cm["qu"] = _( "Quechua" );
-  cm["rm"] = _( "Rhaeto-Romance" );
+  cm["rm"] = _( "Raeto-Romance" );
   cm["rn"] = _( "Rundi" );
   cm["ro"] = _( "Romanian" );
   cm["ru"] = _( "Russian" );
@@ -332,7 +332,7 @@ ISOLanguage::_D::CodeMap ISOLanguage:: _D::defaultCodeMap()
   cm["sd"] = _( "Sindhi" );
   cm["se"] = _( "Sami" );
   cm["sg"] = _( "Sango" );
-  cm["si"] = _( "Sinhalese" );
+  cm["si"] = _( "Sinhala; Sinhalese" );
   cm["sk"] = _( "Slovak" );
   cm["sl"] = _( "Slovenian" );
   cm["sm"] = _( "Samoan" );
