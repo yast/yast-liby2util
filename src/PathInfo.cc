@@ -525,3 +525,18 @@ int PathInfo::copy_file2dir( const Pathname & file, const Pathname & dest )
   return _Log_Result( ret, "returned" );
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::chmod
+//	METHOD TYPE : int
+//
+int PathInfo::chmod( const Pathname & path, mode_t mode )
+{
+  DBG << "chmod " << path << ' ' << stringutil::octstring( mode );
+  if ( ::chmod( path.asString().c_str(), mode ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+

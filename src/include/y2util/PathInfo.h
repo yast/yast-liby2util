@@ -274,6 +274,17 @@ class PathInfo {
      * is no directory, otherwise the commands return value.
      **/
     static int copy_file2dir( const Pathname & file, const Pathname & dest );
+
+    ///////////////////////////////////////////////////////////////////
+    // permissions
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Like '::chmod'. The mode of the file given by path is changed.
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int chmod( const Pathname & path, mode_t mode );
 };
 
 ///////////////////////////////////////////////////////////////////
