@@ -9,7 +9,7 @@ int main()
   D__ << "test" << endl;
   DBG << "test" << endl;
 #define Y2SLOG "real"
-  Y2SLog::dbg_enabled_bm = true;
+//  Y2SLog::dbg_enabled_bm.setEnabled (true);
   D__ << "test";
   DBG << "test";
   return 0;
