@@ -2,11 +2,13 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <vector>
 
 #include <y2util/PathInfo.h>
 #include <y2util/Y2SLog.h>
 
 #include <y2util/GPGCheck.h>
+#include <y2util/ExternalProgram.h>
 
 using namespace std;
 
@@ -36,6 +38,30 @@ GPGCheck::set_keyring ( const Pathname& keyring )
     _keyring = keyring.asString();
 }
 
+static int run_gpg(std::vector<const char*> more_args, const std::string& gnupghome, const std::string& keyring)
+{
+  std::vector<const char*> args;
+
+  args.push_back("/usr/bin/gpg");
+  if ( !gnupghome.empty() )
+  {
+    args.push_back("--homedir");
+    args.push_back(gnupghome.c_str());
+  }
+  args.push_back("--no-default-keyring");
+  args.push_back("--keyring");
+  args.push_back(keyring.c_str());
+  copy(more_args.begin(), more_args.end(), back_inserter(args));
+
+  const char * argv[args.size() + 1];
+  const char ** p = argv;
+  p = copy( args.begin(), args.end(), p );
+  *p = 0;
+
+  ExternalProgram::ExternalProgram gpg( argv, ExternalProgram::Discard_Stderr );
+  return gpg.close();
+}
+
 
 bool
 GPGCheck::check_file ( const Pathname& filename, bool strip )
@@ -46,9 +72,11 @@ GPGCheck::check_file ( const Pathname& filename, bool strip )
     return check_file( filename, filename + ".strip" );
   } else {
     // only verify
+    vector<const char*> args;
+    args.push_back( "--verify");
+    args.push_back(filename.asString().c_str());
 
-    string cmd = assembleCommand( "--verify " + filename.asString() );
-    ret = system( cmd.c_str () );
+    ret = run_gpg(args, _gnupghome, _keyring);
   }
 
   return ret == 0;
@@ -63,24 +91,12 @@ bool GPGCheck::check_file( const Pathname &sourceFile,
     return false;
   }
 
-  string cmd = assembleCommand( "-o " + destFile.asString() + " " +
-                                sourceFile.asString() );
+  vector<const char*> args;
+  args.push_back("-o");
+  args.push_back(destFile.asString().c_str());
+  args.push_back(sourceFile.asString().c_str());
 
-  ret = system( cmd.c_str() );
+  ret = run_gpg(args, _gnupghome, _keyring);
 
   return ret == 0;
-}
-
-string GPGCheck::assembleCommand( const string &args )
-{
-  string cmd = "/usr/bin/gpg";
-  cmd += " 2>/dev/null >/dev/null";
-  if ( !_gnupghome.empty() ) cmd += " --homedir " + _gnupghome;
-  cmd += " --no-default-keyring";
-  cmd += " --keyring " + _keyring;
-  cmd += " " + args;
-
-  D__ << cmd << endl;
-
-  return cmd;
 }

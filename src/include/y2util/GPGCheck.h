@@ -38,9 +38,6 @@ class GPGCheck
     bool check_file ( const Pathname &sourceFile,
                       const Pathname &destFile );
 
-  protected:
-    std::string assembleCommand( const std::string &args );
-
   private:
     std::string _keyring;
     std::string _gnupghome;
