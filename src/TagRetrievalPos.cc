@@ -75,7 +75,7 @@ TagRetrievalPos::positionStream (istream & stream_fr) const
 //			into a single string
 //
 bool
-TagRetrievalPos::retrieveData (ifstream & stream_fr, string & data_tr ) const
+TagRetrievalPos::retrieveData (istream & stream_fr, string & data_tr ) const
 {
     data_tr.erase();
 
@@ -119,7 +119,7 @@ TagRetrievalPos::retrieveData (ifstream & stream_fr, string & data_tr ) const
 //			into a list of strings
 //
 bool
-TagRetrievalPos::retrieveData (ifstream & stream_fr, list<string>& data_Vtr ) const
+TagRetrievalPos::retrieveData (istream & stream_fr, list<string>& data_Vtr ) const
 {
     data_Vtr.clear();
 

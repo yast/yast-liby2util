@@ -23,7 +23,6 @@
 #define TagRetrievalPos_h
 
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <list>
 
@@ -67,12 +66,12 @@ class TagRetrievalPos {
 	/**
 	 * retrieve single-line data
 	 */
-	bool retrieveData (std::ifstream& input, std::string& data_r) const;
+	bool retrieveData (std::istream& input, std::string& data_r) const;
 
 	/**
 	 * retrieve multi-line data
 	 */
-	bool retrieveData (std::ifstream& input, std::list<std::string>& data_r) const;
+	bool retrieveData (std::istream& input, std::list<std::string>& data_r) const;
 };
 
 #endif // TagRetrievalPos_h
