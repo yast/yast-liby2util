@@ -4,3 +4,6 @@ Makefile.in
 .libs
 tmp.*
 *_test
+*.log
+*.exp
+*.sum
