@@ -21,6 +21,7 @@
 #define ExternalProgram_h
 
 #include <y2util/ExternalDataSource.h>
+#include <y2util/Pathname.h>
 
 /**
  * @short Execute a program and give access to its io
@@ -50,17 +51,20 @@ public:
      * @param commandline a shell commandline that is appended to
      * <tt>/bin/sh -c</tt>.
      * @param default_locale whether to set LC_ALL=C before starting
+     * @param root directory to chroot into, / or empty to not chroot
      */
     ExternalProgram (std::string commandline,
 		     Stderr_Disposition stderr_disp = Normal_Stderr,
-		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false);
+		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false,
+		     const Pathname& root = "");
 
     /**
      * Start an external program by giving the arguments as an arry of char *pointers.
      */
     ExternalProgram (const char *const *argv,
 		     Stderr_Disposition stderr_disp = Normal_Stderr,
-		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false);
+		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false,
+		     const Pathname& root = "");
 
     ExternalProgram (const char *binpath, const char *const *argv_1,
 		     bool use_pty = false);
@@ -97,7 +101,8 @@ private:
 
     void start_program (const char *const *argv,
 			Stderr_Disposition stderr_disp = Normal_Stderr,
-			int stderr_fd = -1, bool default_locale = false);
+			int stderr_fd = -1, bool default_locale = false,
+			const char* root = NULL);
 
 };
 

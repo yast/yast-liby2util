@@ -35,7 +35,8 @@ using namespace std;
 
 ExternalProgram::ExternalProgram (string commandline,
 				  Stderr_Disposition stderr_disp, bool use_pty,
-				  int stderr_fd, bool default_locale)
+				  int stderr_fd, bool default_locale,
+				  const Pathname& root)
     : use_pty (use_pty)
 {
     const char *argv[4];
@@ -43,16 +44,28 @@ ExternalProgram::ExternalProgram (string commandline,
     argv[1] = "-c";
     argv[2] = commandline.c_str();
     argv[3] = 0;
-    start_program (argv, stderr_disp, stderr_fd, default_locale);
+
+    const char* rootdir = NULL;
+    if(!root.empty() && root != "/")
+    {
+	rootdir = root.asString().c_str();
+    }
+    start_program (argv, stderr_disp, stderr_fd, default_locale, rootdir);
 }
 
 
 ExternalProgram::ExternalProgram (const char *const *argv,
 				  Stderr_Disposition stderr_disp, bool use_pty,
-				  int stderr_fd, bool default_locale)
+				  int stderr_fd, bool default_locale,
+				  const Pathname& root)
     : use_pty (use_pty)
 {
-    start_program (argv, stderr_disp, stderr_fd, default_locale);
+    const char* rootdir = NULL;
+    if(!root.empty() && root != "/")
+    {
+	rootdir = root.asString().c_str();
+    }
+    start_program (argv, stderr_disp, stderr_fd, default_locale, rootdir);
 }
 
 
@@ -100,7 +113,7 @@ ExternalProgram::~ExternalProgram()
 
 void
 ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
-				stderr_disp, int stderr_fd, bool default_locale)
+				stderr_disp, int stderr_fd, bool default_locale, const char* root)
 {
     pid = -1;
     int to_external[2], from_external[2];  // fds for pair of pipes
@@ -185,6 +198,20 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 
 	if(default_locale)
 		setenv("LC_ALL","C",1);
+	
+	if(root)
+	{
+	    if(chroot(root) == -1)
+	    {
+		ERR << "chroot to " << root << " failed: " << strerror(errno) << endl;
+		_exit (3);			// No sense in returning! I am forked away!!
+	    }
+	    if(chdir("/") == -1)
+	    {
+		ERR << "chdir to / inside chroot failed: " << strerror(errno) << endl;
+		_exit (4);			// No sense in returning! I am forked away!!
+	    }
+	}
 
 	execvp(argv[0], const_cast<char *const *>(argv));
 	ERR << "Cannot execute external program "
