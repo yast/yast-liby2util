@@ -1,0 +1,6 @@
+This library is still under heavy development, binary
+incompatabilities might be introduced any time without notice.
+However, if you make changes to any header file, please read the
+tips wrt binary compatability given in the libtool info page
+(section Versioning). Increase the version number in src/Makefile.am
+if needed.
