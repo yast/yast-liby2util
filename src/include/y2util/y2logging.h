@@ -15,6 +15,16 @@
 
 #include <string>
 
+enum loglevel_t
+{
+    LOG_DEBUG = 0,	// debug message
+    LOG_MILESTONE = 1,	// log great events, big steps
+    LOG_WARNING = 2,	// warning in application level
+    LOG_ERROR = 3,	// error in application level
+    LOG_SECURITY = 4,	// security relevant problem or incident
+    LOG_INTERNAL = 5	// internal bug. Please report to...
+};
+
 ///////////////////////////////////////////////////////////////////
 //
 namespace Y2Logging {
@@ -34,16 +44,6 @@ class DbgEnableBm {
 extern DbgEnableBm dbg_enabled_bm;
 
 /* Logging levels */
-
-enum loglevel_t
-{
-    LOG_DEBUG = 0,	// debug message
-    LOG_MILESTONE = 1,	// log great events, big steps
-    LOG_WARNING = 2,	// warning in application level
-    LOG_ERROR = 3,	// error in application level
-    LOG_SECURITY = 4,	// security relevant problem or incident
-    LOG_INTERNAL = 5	// internal bug. Please report to...
-};
 
 /* Logging functions */
 

@@ -70,7 +70,7 @@ class Y2Loglinebuf : public streambuf {
     friend class Y2Loglinestream;
 
     const char *const name;
-    const Y2Logging::loglevel_t  level;
+    const loglevel_t  level;
 
     const char *      file;
     const char *      func;
@@ -109,7 +109,7 @@ class Y2Loglinebuf : public streambuf {
 
     Y2Loglinebuf(  const char * myname, const unsigned mylevel )
       : name( myname )
-      , level( (Y2Logging::loglevel_t)mylevel )
+      , level( (loglevel_t)mylevel )
     {
       file = func = "";
       line = -1;
