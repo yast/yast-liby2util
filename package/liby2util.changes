@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
+
+- finally changed license to GPL for good
+
+-------------------------------------------------------------------
 Tue Mar 23 13:57:08 CET 2004 - visnov@suse.cz
 
 - use GNU-like output for log_simple mode
