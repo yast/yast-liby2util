@@ -27,7 +27,7 @@
 
 using std::vector;
 using std::map;
-using std::streampos;
+using std::streamoff;
 using std::istream;
 
 ///////////////////////////////////////////////////////////////////
@@ -46,11 +46,11 @@ class TagParser {
 
   private:
 
-    streampos lookupStart_i;
-    streampos startTag_i;
-    streampos startData_i;
-    streampos endData_i;
-    streampos endTag_i;
+    streamoff lookupStart_i;
+    streamoff startTag_i;
+    streamoff startData_i;
+    streamoff endData_i;
+    streamoff endTag_i;
 
     std::string    startTag_t;
     std::string    endTag_t;
@@ -62,7 +62,7 @@ class TagParser {
     void _reset();
     void _datareset();
 
-    static streampos  readLine( istream & stream_fr, std::string & cline_tr );
+    static streamoff  readLine( istream & stream_fr, std::string & cline_tr );
     static bool       tagOnLine( const std::string & cline_tr, std::string & tag_tr, std::string::size_type & delim_ir );
 
   public:
@@ -70,20 +70,20 @@ class TagParser {
     TagParser();
     virtual ~TagParser();
 
-    static const streampos nopos;
+    static const streamoff nopos;
 
-    streampos      lookupStart() const { return lookupStart_i; }
+    streamoff      lookupStart() const { return lookupStart_i; }
 
-    streampos      posStartTag() const { return startTag_i; }
+    streamoff      posStartTag() const { return startTag_i; }
     const std::string & startTag()    const { return startTag_t; }
 
-    streampos      posEndTag()   const { return endTag_i; }
+    streamoff      posEndTag()   const { return endTag_i; }
     const std::string & endTag()      const { return endTag_t; }
 
   public:
 
-    streampos      posDataStart()const { return startData_i; }
-    streampos      posDataEnd()  const { return endData_i; }
+    streamoff      posDataStart()const { return startData_i; }
+    streamoff      posDataEnd()  const { return endData_i; }
     unsigned       dataLength()  const { return endData_i - startData_i; }
     unsigned       dataLines()   const { return data_Vt.size(); }
 
@@ -99,10 +99,10 @@ class TagParser {
     bool parseData( istream & stream_fr, const std::string & etag_tr );
 
     static bool retrieveData( istream & stream_fr,
-			      streampos startData_ir, streampos endData_ir,
+			      streamoff startData_ir, streamoff endData_ir,
 			      std::string & data_tr );
     static bool retrieveData( istream & stream_fr,
-			      streampos startData_ir, streampos endData_ir,
+			      streamoff startData_ir, streamoff endData_ir,
 			      std::list<std::string> & data_Vtr );
     static std::string data2string( const std::list<std::string> & data_Vtr );
     static vector<std::string> split2words( const std::string & line_tr, const std::string & sepchars_tr = " \t\n" );

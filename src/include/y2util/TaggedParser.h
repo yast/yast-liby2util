@@ -30,7 +30,7 @@
 
 using std::vector;
 using std::map;
-using std::streampos;
+using std::streamoff;
 using std::istream;
 
 ///////////////////////////////////////////////////////////////////
@@ -77,9 +77,9 @@ class TaggedParser {
 
   private:
 
-    streampos _tagPos;		// position of tag
-    streampos _startPos;	// start postition of data
-    streampos _endPos;		// end position of data
+    streamoff _tagPos;		// position of tag
+    streamoff _startPos;	// start postition of data
+    streamoff _endPos;		// end position of data
 
     int _bufferPos;		// position of data in buffer
     unsigned int _bufferLen;	// length of data in buffer (unsigned for string::npos comparison)
@@ -101,7 +101,7 @@ class TaggedParser {
     void _datareset();
 
     // read line from stream
-    static streampos readLine (istream & stream_fr, std::string & cline_tr );
+    static streamoff readLine (istream & stream_fr, std::string & cline_tr );
 
     // check line for tag
     TagType tagOnLine (const std::string & cline_tr, std::string & tag_tr,
@@ -113,18 +113,18 @@ class TaggedParser {
     virtual ~TaggedParser();
 
     void asOldstyle (bool oldstyle) { _oldstyle = oldstyle; _offset = (oldstyle?0:1); }
-    static const streampos nopos;
+    static const streamoff nopos;
 
     int lineNumber () const { return _lineNumber; }
 
-    streampos tagPos() const { return _tagPos; }
+    streamoff tagPos() const { return _tagPos; }
     const std::string & currentTag() const { return _currentTag; }
     const std::string & currentLocale() const { return _currentLocale; }
 
   public:
 
-    streampos      dataStartPos () const { return _startPos; }
-    streampos      dataEndPos ()   const { return _endPos; }
+    streamoff      dataStartPos () const { return _startPos; }
+    streamoff      dataEndPos ()   const { return _endPos; }
     unsigned       dataLength ()   const { return _endPos - _startPos; }
 
     // valid after parseData()

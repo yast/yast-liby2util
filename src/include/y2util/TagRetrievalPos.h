@@ -32,8 +32,8 @@
 //
 class TagRetrievalPos {
     private:
-	std::streampos _begin;
-	std::streampos _end;
+	std::streamoff _begin;
+	std::streamoff _end;
 
 	// position stream and calculate expected characters
 	int positionStream (std::istream & stream_fr) const;
@@ -42,9 +42,9 @@ class TagRetrievalPos {
 	static char           buffer_ac[];
 
     public:
-	static const std::streampos nopos;
+	static const std::streamoff nopos;
 	TagRetrievalPos () : _begin(nopos), _end (nopos) {}
-	TagRetrievalPos (std::streampos begin, std::streampos end) : _begin(begin), _end (end) {}
+	TagRetrievalPos (std::streamoff begin, std::streamoff end) : _begin(begin), _end (end) {}
 	~TagRetrievalPos() {}
 
 	/**
@@ -55,14 +55,14 @@ class TagRetrievalPos {
 	/**
 	 * access functions
 	 */
-	const std::streampos begin() const { return _begin; }
-	const std::streampos end() const { return _end; }
+	const std::streamoff begin() const { return _begin; }
+	const std::streamoff end() const { return _end; }
 
 	/**
 	 * set position
 	 */
-	void set (std::streampos begin, std::streampos end) {
-	  if ( std::streamoff( begin ) < std::streamoff( end ) ) {
+	void set (std::streamoff begin, std::streamoff end) {
+	  if ( begin < end ) {
 	    _begin = begin;
 	    _end = end;
 	  }

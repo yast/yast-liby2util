@@ -37,7 +37,7 @@ using namespace std;
 
 const unsigned TaggedParser::bufferLen_i = 1024;
 char           TaggedParser::buffer_ac[bufferLen_i];
-const streampos TaggedParser::nopos = streampos(-1);
+const streamoff TaggedParser::nopos = streamoff(-1);
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -101,14 +101,14 @@ TaggedParser::~TaggedParser()
 //
 //
 //	METHOD NAME : TaggedParser::readLine
-//	METHOD TYPE : streampos
+//	METHOD TYPE : streamoff
 //
 //	DESCRIPTION : read a line from an istream to a string
-//		      return streampos of start of line
+//		      return streamoff of start of line
 //
-inline streampos TaggedParser::readLine( istream & stream_fr, string & cline_tr )
+inline streamoff TaggedParser::readLine( istream & stream_fr, string & cline_tr )
 {
-    streampos lineBegin_ii = stream_fr.tellg();
+    streamoff lineBegin_ii = streamoff( stream_fr.tellg() );
     cline_tr.erase();
 
     do
@@ -236,7 +236,7 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
     _reset();
     if ( stream_fr.good() )
     {
-	streampos         lineBegin_ii = nopos;
+	streamoff         lineBegin_ii = nopos;
 	string::size_type delim_ii = string::npos;
 	string            maybe_ti;	// tag candidate
 	string		  lang_ti;	// language
@@ -280,7 +280,7 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 	    {
 		// no data on this line
 
-		_startPos = _endPos = _tagPos + streamoff(currentLine.size());
+		_startPos = _endPos = _tagPos + currentLine.size();
 		_bufferPos = 0;
 		_bufferLen = 0;
 	    }
@@ -289,12 +289,12 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 		// delim_ii == first non-blank after tag ':'
 
 		_bufferPos = delim_ii;
-		_startPos = _tagPos + streamoff(delim_ii);
+		_startPos = _tagPos + delim_ii;
 
 		_bufferLen = currentLine.find_last_not_of (" \t") + 1 - delim_ii;
 		if (_bufferLen == string::npos)
 		    _bufferLen = 0;
-		_endPos = _startPos + streamoff (_bufferLen);
+		_endPos = _startPos + _bufferLen;
 	    }
 
 	    return type;
@@ -320,9 +320,9 @@ TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr,
     _datareset();
     if ( stream_fr.good() )
     {
-	_startPos = stream_fr.tellg();
+	_startPos = streamoff( stream_fr.tellg() );
 
-	streampos         lineBegin_ii = nopos;
+	streamoff         lineBegin_ii = nopos;
 	string::size_type delim_ii = string::npos;
 	string            maybe_ti;
 	string		  lang_ti;

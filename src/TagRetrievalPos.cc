@@ -15,7 +15,7 @@
   Author:     Klaus Kaempf <kkaempf@suse.de>
   Maintainer: Klaus Kaempf <kkaempf@suse.de>
 
-  Purpose: Realize data access at position 
+  Purpose: Realize data access at position
 
 /-*/
 
@@ -31,7 +31,7 @@ using namespace std;
 
 const unsigned TagRetrievalPos::bufferLen_i = 1024;
 char           TagRetrievalPos::buffer_ac[bufferLen_i];
-const streampos TagRetrievalPos::nopos = streampos(-1);
+const streamoff TagRetrievalPos::nopos = streamoff(-1);
 
 // ------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ TagRetrievalPos::positionStream (istream & stream_fr) const
 	|| _end == nopos
 	|| _end < _begin)
     {
-	ERR << "positions make no sense "<< stream_fr.rdstate() << "(" << (long long)streamoff(_begin) << ", " << (long long)streamoff(_end) << ")" << endl;;
+	ERR << "positions make no sense "<< stream_fr.rdstate() << "(" << _begin << ", " << _end << ")" << endl;;
    	return -1; // positions make no sense
     }
 
@@ -59,7 +59,7 @@ TagRetrievalPos::positionStream (istream & stream_fr) const
 
     if ( !stream_fr.good() )
     {
-	ERR << "seekg failed "<< stream_fr.rdstate() << "(" << (long long)streamoff(_begin) << ", " << (long long)streamoff(_end) << ")" << endl;;
+	ERR << "seekg failed "<< stream_fr.rdstate() << "(" << _begin << ", " << _end << ")" << endl;;
 	return -1; // illegal startData position
     }
 
@@ -95,7 +95,7 @@ TagRetrievalPos::retrieveData (istream & stream_fr, string & data_tr ) const
 	if ( stream_fr.gcount() != (int)toread_ii )
 	{
 	    data_tr.erase();
-	    ERR << "data missing "<< stream_fr.rdstate() << "(" << (long long)streamoff(_begin) << ", " << (long long)streamoff(_end) << ")" << endl;;
+	    ERR << "data missing "<< stream_fr.rdstate() << "(" << _begin << ", " << _end << ")" << endl;;
 	    return false; // not as many data available as expected
 	}
 	data_tr += string( buffer_ac, toread_ii );
@@ -131,14 +131,14 @@ TagRetrievalPos::retrieveData (istream & stream_fr, list<string>& data_Vtr ) con
     if ( expect_ii == 0)
 	return true;		// startData position is valid, but we don't expect any data
 
-    while (stream_fr.tellg() < _end)
+    while ( streamoff( stream_fr.tellg() ) < _end)
     {
         string ln = stringutil::getline( stream_fr );
-	if ( ! ( stream_fr.fail() || stream_fr.bad() ) ) 
+	if ( ! ( stream_fr.fail() || stream_fr.bad() ) )
 	{
 	    data_Vtr.push_back( ln );
-	} 
-	else 
+	}
+	else
 	{
 	    break;
 	}

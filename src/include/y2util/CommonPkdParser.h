@@ -62,9 +62,9 @@ class Tag
 	/** name of the endtag */
 	std::string _endtag;
 	/** starting position of data in stream */
-	std::streampos _startpos;
+	std::streamoff _startpos;
 	/** end position of data in stream */
-	std::streampos _endpos;
+	std::streamoff _endpos;
 	/** the actual data for a SINGLE type */
 	std::string _data;
 	/** the actual data for a MULTI type */
@@ -172,14 +172,14 @@ class Tag
 	assignstatus assign(const std::string& starttag, TagParser& parser, std::istream& istr);
 	/** return start position of data in stream
 	 * */
-	std::streampos posDataStart() { return _startpos; }
+	std::streamoff posDataStart() { return _startpos; }
 	/** return end position of data in stream
 	 * */
-	std::streampos posDataEnd() { return _endpos; }
+	std::streamoff posDataEnd() { return _endpos; }
 	void print(std::ostream& os)
 	{
 	    os << "Tag: " << _name;
-	    os << " ( " << std::streamoff( _startpos ) << "," << std::streamoff( _endpos ) << " ): "
+	    os << " ( " << _startpos << "," <<  _endpos << " ): "
 	       << _data << std::endl;
 	    if(_datatype == MULTI )
 		os << "EndTag: " << _endtag << std::endl;

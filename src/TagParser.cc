@@ -31,7 +31,7 @@ using namespace std;
 
 const unsigned TagParser::bufferLen_i = 1024;
 char           TagParser::buffer_ac[bufferLen_i];
-const streampos TagParser::nopos = streampos(-1);
+const streamoff TagParser::nopos = streamoff(-1);
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -92,14 +92,14 @@ TagParser::~TagParser()
 //
 //
 //	METHOD NAME : TagParser::readLine
-//	METHOD TYPE : streampos
+//	METHOD TYPE : streamoff
 //
 //	DESCRIPTION : read a line from an istream to a string
-//		      return streampos of start of line
+//		      return streamoff of start of line
 //
-inline streampos TagParser::readLine( istream & stream_fr, string & cline_tr )
+inline streamoff TagParser::readLine( istream & stream_fr, string & cline_tr )
 {
-  streampos lineBegin_ii = stream_fr.tellg();
+  streamoff lineBegin_ii = streamoff( stream_fr.tellg() );
   cline_tr.erase();
 
   do {
@@ -157,9 +157,9 @@ bool TagParser::lookupTag( istream & stream_fr, const string & stag_tr )
 {
   _reset();
   if ( stream_fr.good() ) {
-    lookupStart_i = stream_fr.tellg();
+    lookupStart_i = streamoff( stream_fr.tellg() );
 
-    streampos         lineBegin_ii = nopos;
+    streamoff         lineBegin_ii = nopos;
     string            cline_ti;
     string::size_type delim_ii = string::npos;
     string            maybe_ti;
@@ -181,12 +181,12 @@ bool TagParser::lookupTag( istream & stream_fr, const string & stag_tr )
       delim_ii = cline_ti.find_first_not_of( " \t", delim_ii+1 );
       if ( delim_ii == string::npos ) {
 	// no data on this line
-	startData_i = endData_i = startTag_i + streamoff(cline_ti.size());
+	startData_i = endData_i = startTag_i + cline_ti.size();
 	data_Vt.push_back( "" );
       } else {
-	startData_i = startTag_i + streamoff(delim_ii);
+	startData_i = startTag_i + delim_ii;
 	maybe_ti =  cline_ti.substr( delim_ii, cline_ti.find_last_not_of( " \t" ) + 1 - delim_ii );
-	endData_i   = startData_i + streamoff(maybe_ti.size());
+	endData_i   = startData_i + maybe_ti.size();
 	data_Vt.push_back( maybe_ti );
       }
 
@@ -210,9 +210,9 @@ bool TagParser::parseData( istream & stream_fr, const string & etag_tr )
 {
   _datareset();
   if ( stream_fr.good() ) {
-    startData_i = stream_fr.tellg();
+    startData_i = streamoff( stream_fr.tellg() );
 
-    streampos         lineBegin_ii = nopos;
+    streamoff         lineBegin_ii = nopos;
     string            cline_ti;
     string::size_type delim_ii = string::npos;
     string            maybe_ti;
@@ -251,12 +251,12 @@ bool TagParser::parseData( istream & stream_fr, const string & etag_tr )
 //	DESCRIPTION :	retrieve data from istream between two offsets
 //
 bool TagParser::retrieveData( istream & stream_fr,
-			      streampos startData_ir, streampos endData_ir,
+			      streamoff startData_ir, streamoff endData_ir,
 			      string & data_tr )
 {
   data_tr.erase();
   if ( startData_ir == nopos || endData_ir == nopos || endData_ir < startData_ir ) {
-    ERR << "positions make no sense "<< stream_fr.rdstate() << "(" << (long long)streamoff(startData_ir) << ", " << (long long)streamoff(endData_ir) << ")" << endl;;
+    ERR << "positions make no sense "<< stream_fr.rdstate() << "(" << startData_ir << ", " << endData_ir << ")" << endl;;
     return false; // positions make no sense
   }
 
@@ -264,7 +264,7 @@ bool TagParser::retrieveData( istream & stream_fr,
   stream_fr.seekg( startData_ir );
 
   if ( !stream_fr.good() ) {
-    ERR << "seekg failed "<< stream_fr.rdstate() << "(" << (long long)streamoff(startData_ir) << ", " << (long long)streamoff(endData_ir) << ")" << endl;;
+    ERR << "seekg failed "<< stream_fr.rdstate() << "(" << startData_ir << ", " << endData_ir << ")" << endl;;
     return false; // illegal startData position
   }
 
@@ -280,7 +280,7 @@ bool TagParser::retrieveData( istream & stream_fr,
     stream_fr.read( buffer_ac, toread_ii );
     if ( stream_fr.gcount() != (int)toread_ii ) {
       data_tr.erase();
-      ERR << "data missing "<< stream_fr.rdstate() << "(" << (long long)streamoff(startData_ir) << ", " << (long long)streamoff(endData_ir) << ")" << endl;;
+      ERR << "data missing "<< stream_fr.rdstate() << "(" << startData_ir << ", " << endData_ir << ")" << endl;;
       return false; // not as many data available as expected
     }
     data_tr += string( buffer_ac, toread_ii );
@@ -302,7 +302,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 //	DESCRIPTION :	retrieve data from istream between two offsets
 //
 bool TagParser::retrieveData( istream & stream_fr,
-			      streampos startData_ir, streampos endData_ir,
+			      streamoff startData_ir, streamoff endData_ir,
 			      list<string> & data_Vtr )
 {
   data_Vtr.clear();

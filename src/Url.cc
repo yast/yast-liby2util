@@ -19,6 +19,8 @@
 
 /-*/
 
+#include <cerrno>
+
 #include <iostream>
 
 #include <y2util/Y2SLog.h>
@@ -315,7 +317,7 @@ Url::Protocol Url::stringToProtocol( const string &protocolString )
   for ( it = _protocolStrings.begin(); it != _protocolStrings.end(); ++it ) {
     if ( it->second == protocolString ) return it->first;
   }
-  
+
   return unknown;
 }
 

@@ -86,7 +86,7 @@ namespace TaggedFile
 	    REJECTED_NOENDTAG	// 7
 	};
 
-	static const streampos nopos = streampos(-1);
+	static const streamoff nopos = streamoff(-1);
 
 /**
 * A Tag has a starttag, probably and endtag as well as data and the start and end positions in the stream
@@ -192,12 +192,12 @@ class Tag
 	/**
 	 * return start position of data in stream
 	 */
-	std::streampos posDataStart (const std::string& locale = "") const { return Pos(locale).begin(); }
+	std::streamoff posDataStart (const std::string& locale = "") const { return Pos(locale).begin(); }
 
 	/**
 	 * return end position of data in stream
 	 */
-	std::streampos posDataEnd (const std::string& locale = "") const { return Pos(locale).end(); }
+	std::streamoff posDataEnd (const std::string& locale = "") const { return Pos(locale).end(); }
 
 	friend std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj );
 };

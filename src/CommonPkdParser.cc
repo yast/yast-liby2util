@@ -182,8 +182,8 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 	}
     }
 
-    std::streampos startpos = parser.posDataStart();
-    std::streampos endpos = parser.posDataEnd();
+    std::streamoff startpos = parser.posDataStart();
+    std::streamoff endpos = parser.posDataEnd();
     // QString <-> std::string conversion
     if (_datatype == MULTI)
     {
