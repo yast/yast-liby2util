@@ -21,6 +21,7 @@ pkginclude_HEADERS = \
 	Y2SLog.h		\
 	TagParser.h		\
 	TagCacheRetrieval.h	\
+	TagCacheRetrievalPtr.h	\
 	CommonPkdParser.h	\
 	timeclass.h		\
 	ExternalDataSource.h	\

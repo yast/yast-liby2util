@@ -29,6 +29,8 @@
 #include <y2util/Pathname.h>
 #include <y2util/TagParser.h>
 
+#include <y2util/TagCacheRetrievalPtr.h>
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : TagCacheRetrievalPos
@@ -60,7 +62,8 @@ class TagCacheRetrievalPos {
 //
 //	CLASS NAME : TagCacheRetrieval
 //
-class TagCacheRetrieval {
+class TagCacheRetrieval : virtual public Rep {
+    REP_BODY(TagCacheRetrieval);
     private:
 	// the stream to read data from
 	std::ifstream _packages;

@@ -43,9 +43,9 @@ using namespace std;
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
 
 // FIXME
-#define Y2LOG_ROOT	LOGDIR "/y2utillog"
-#define Y2LOG_USER	"/.y2utillog"		/* Relative to $HOME */
-#define Y2LOG_FALLBACK	"/y2utillog"
+#define Y2LOG_ROOT	LOGDIR "/y2log"
+#define Y2LOG_USER	"/.y2log"		/* Relative to $HOME */
+#define Y2LOG_FALLBACK	"/y2log"
 
 #define LOGDIR		"/var/log/YaST2"
 
