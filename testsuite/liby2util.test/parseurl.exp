@@ -10,7 +10,7 @@ for {} { [ eof $in ] == 0 } { set line [ gets $in ] } {
   set number ""
   set url ""
 
-  regexp "(.*) (.*)" $line all number url
+  regexp {(\d+) (.*)} $line all number url
   
   if { [ string length $number ] > 0 &&  [ string index $number 0 ] != "#" } {
     set testname "url$number"
