@@ -95,6 +95,8 @@ inline std::string numstring( int n,           int w = 0 ) { return form( "%*d",
 inline std::string numstring( unsigned n,      int w = 0 ) { return form( "%*u",   w, n ); }
 inline std::string numstring( long n,          int w = 0 ) { return form( "%*ld",  w, n ); }
 inline std::string numstring( unsigned long n, int w = 0 ) { return form( "%*lu",  w, n ); }
+inline std::string numstring( long long n,     int w = 0 ) { return form( "%*lld",  w, n ); }
+inline std::string numstring( unsigned long long n, int w = 0 ) { return form( "%*llu",  w, n ); }
 
 /**
  * Print number as hex value with leading '0x'. Optional second argument sets the minimal
@@ -112,6 +114,8 @@ inline std::string hexstring( int n,           int w = 10 ){ return form( "%#0*x
 inline std::string hexstring( unsigned n,      int w = 10 ){ return form( "%#0*x",   w, n ); }
 inline std::string hexstring( long n,          int w = 10 ){ return form( "%#0*lx",  w, n ); }
 inline std::string hexstring( unsigned long n, int w = 10 ){ return form( "%#0*lx",  w, n ); }
+inline std::string hexstring( long long n,     int w = 0 ) { return form( "%#0*llx",  w, n ); }
+inline std::string hexstring( unsigned long long n, int w = 0 ) { return form( "%#0*llx",  w, n ); }
 
 /**
  * Print number as octal value with leading '0'. Optional second argument sets the minimal
@@ -129,6 +133,8 @@ inline std::string octstring( int n,           int w = 5 ) { return form( "%#0*o
 inline std::string octstring( unsigned n,      int w = 5 ) { return form( "%#0*o",    w, n ); }
 inline std::string octstring( long n,          int w = 5 ) { return form( "%#0*lo",   w, n ); }
 inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*lo",   w, n ); }
+inline std::string octstring( long long n,     int w = 0 ) { return form( "%#0*llo",  w, n ); }
+inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "%#0*llo",  w, n ); }
 
 /**
  * Return one line read from istream. Aftrwards the streampos is behind the delimiting '\n'
