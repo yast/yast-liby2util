@@ -49,17 +49,31 @@ inline std::string form( const char * format, ... )
  **/
 inline std::string form( const char * format, ... ) {
   char * buf = 0;
+  std::string val;
 
   va_list ap;
   va_start( ap, format );
-  vasprintf( &buf, format, ap );
-  va_end (ap);
 
-  std::string val;
+#if 0
+  vasprintf( &buf, format, ap );
   if ( buf ) {
     val = buf;
     free( buf );
   }
+#else
+  // Don't know wheter we actually nedd two va_lists, one to
+  // evaluate the buffer size needed, and one to actually fill
+  // the buffer. Maybe there's a save way to reuse a va_lists.
+  va_list ap1;
+  va_start( ap1, format );
+  buf = new char[vsnprintf( NULL, 0, format, ap ) + 1];
+  vsprintf( buf, format, ap1 );
+  val = buf;
+  delete [] buf;
+  va_end( ap1 );
+#endif
+
+  va_end( ap );
   return val;
 }
 
