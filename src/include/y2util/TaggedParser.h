@@ -144,9 +144,8 @@ class TaggedParser {
      * lookup end tag
      * set start and end retrieval positions
      */ 
-    TagType lookupEndTag ( istream & stream_fr, const std::string & etag_tr, const std::string & elang_tr = "");
-
-    TagType lookupYouEndTag( istream & strem_fr, const std::string & etag_tr, const std::string & elang_tr = "");
+    TagType lookupEndTag ( istream & stream_fr, const std::string & etag_tr,
+                           const std::string & elang_tr = "", bool reverseLocale = false );
 
     // helper functions
     static std::string data2string( const std::list<std::string> & data_Vtr );

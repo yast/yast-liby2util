@@ -314,71 +314,8 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 //	DESCRIPTION : skip all data from istream until endtag
 //
 TaggedParser::TagType
-TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const string & elang_tr)
-{
-    _datareset();
-    if ( stream_fr.good() )
-    {
-	_startPos = stream_fr.tellg();
-
-	streampos         lineBegin_ii = nopos;
-	string::size_type delim_ii = string::npos;
-	string            maybe_ti;
-	string		  lang_ti;
-	TagType		  type;
-
-	do {
-	    // read line
-	    lineBegin_ii = readLine( stream_fr, currentLine );
-	    _lineNumber++;
-
-	    // find tag
-	    type = tagOnLine( currentLine, maybe_ti, delim_ii, lang_ti);
-
-	    // check tag
-	    if (_oldstyle)
-	    {
-		if (type != OLDMULTI)
-		    continue;
-	    }
-	    else if (type != END)
-	    {
-		continue;
-	    }
-
-	    if ((strcasecmp (maybe_ti.c_str(), etag_tr.c_str()) == 0)		// the one we're expecting
-		&& ((elang_tr.size() == 0)					// no lang given
-		    || (strcasecmp (lang_ti.c_str(), elang_tr.c_str()) == 0)))				// correct lang found
-	    {
-		_endPos = lineBegin_ii;
-
-		// end found, return
-		return type;
-	    }
-
-	} while( stream_fr.good() );
-
-	// here saw no endTag
-	_datareset();
-    }
-
-    return NONE;
-}
-
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : TaggedParser::lookupYouEndTag
-//	METHOD TYPE : TaggedParser::TagType
-//
-//	DESCRIPTION : skip all data from istream until endtag.
-//                    end tag is of the style used in YOU, where
-//                    the locale is also reverted and preprended.
-//                    e.g.: Hsilgne.noitpircsedgnol
-//
-TaggedParser::TagType
-TaggedParser::lookupYouEndTag (istream & stream_fr, const string & etag_tr, const string & elang_tr)
+TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr,
+                            const string & elang_tr, bool reverseLocale)
 {
     _datareset();
     if ( stream_fr.good() )
@@ -392,22 +329,24 @@ TaggedParser::lookupYouEndTag (istream & stream_fr, const string & etag_tr, cons
 	TagType		  type;
 
         string revertedLocale;
-        unsigned int namepos = elang_tr.size();
-	if (namepos != 0) {
-	    revertedLocale.reserve (namepos);
-	    revertedLocale += toupper (elang_tr[--namepos]);
-	    for (;;)
-	    {
-	        namepos--;
-
-	        if (namepos == 0)
+        if ( reverseLocale ) {
+            unsigned int namepos = elang_tr.size();
+	    if (namepos != 0) {
+	        revertedLocale.reserve (namepos);
+	        revertedLocale += toupper (elang_tr[--namepos]);
+	        for (;;)
 	        {
-		    revertedLocale += tolower (elang_tr[namepos]);
-		    break;
+	            namepos--;
+
+	            if (namepos == 0)
+	            {
+		        revertedLocale += tolower (elang_tr[namepos]);
+		        break;
+	            }
+	            revertedLocale += elang_tr[namepos];
 	        }
-	        revertedLocale += elang_tr[namepos];
-	    }
-	    while (namepos > 0);
+	        while (namepos > 0);
+            }
         }
 
 	do {
@@ -416,14 +355,28 @@ TaggedParser::lookupYouEndTag (istream & stream_fr, const string & etag_tr, cons
 	    _lineNumber++;
 
 	    // find tag
-	    type = tagOnLine( currentLine, lang_ti, delim_ii, maybe_ti);
+            if ( reverseLocale ) {
+              type = tagOnLine( currentLine, lang_ti, delim_ii, maybe_ti);
+            } else {
+	      type = tagOnLine( currentLine, maybe_ti, delim_ii, lang_ti);
+            }
 
 	    // check tag
-	    if (type != OLDMULTI)
+	    if (_oldstyle)
+	    {
+		if (type != OLDMULTI)
+		    continue;
+	    }
+	    else if (type != END)
+	    {
 		continue;
+	    }
+
+            string locale = reverseLocale ? revertedLocale : elang_tr;
 
 	    if ((strcasecmp (maybe_ti.c_str(), etag_tr.c_str()) == 0)		// the one we're expecting
-		&& (strcasecmp (lang_ti.c_str(), revertedLocale.c_str()) == 0))	// correct lang found
+		&& ((elang_tr.size() == 0)					// no lang given
+		    || strcasecmp (lang_ti.c_str(), locale.c_str()) == 0 ))     // correct lang found
 	    {
 		_endPos = lineBegin_ii;
 

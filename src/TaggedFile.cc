@@ -134,7 +134,7 @@ Tag::assign (const std::string& locale, TaggedParser& parser, std::istream& istr
 	    }
 	break;
 	case MULTIYOU:
-	    if (parser.lookupYouEndTag (istr, _end, locale) != TaggedParser::OLDMULTI)
+	    if (parser.lookupEndTag (istr, _end, locale, true) != TaggedParser::OLDMULTI)
 	    {
 		D__ << "Endtag not found" << std::endl;
 		return REJECTED_NOENDTAG;
