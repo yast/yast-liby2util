@@ -166,6 +166,24 @@ public:
 	    setFirstChild( newChild );
 	}
     }
+
+
+    /**
+     * Check if this item is direct or indirect child of 'maybeParent' -
+     * or even the same.
+     **/
+    bool isChildOf( const TreeItem<PAYLOAD> * maybeParent ) const
+    {
+	const TreeItem<PAYLOAD> * child = this;
+	
+	while ( child )
+	{
+	    if ( child == maybeParent )
+		return true;
+	    child = child->parent();
+	}
+	return false;
+    }
     
 
 protected:
