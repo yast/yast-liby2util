@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 22 16:25:23 CET 2003 - cschum@suse.de
+
+- Added numstring, hexstring and optstring functions for long long
+  parameters.
+
+-------------------------------------------------------------------
 Wed Dec 18 13:39:51 CET 2002 - cschum@suse.de
 
 - Added Url::operator==().
