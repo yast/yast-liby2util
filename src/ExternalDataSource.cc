@@ -113,6 +113,30 @@ ExternalDataSource::receive (char *buffer, size_t length)
 	return 0;
 }
 
+void ExternalDataSource::setBlocking(bool mode)
+{
+    if(!inputfile) return;
+
+    int fd = ::fileno(inputfile);
+
+    if(fd == -1)
+	{ ERR << strerror(errno) << endl; return; }
+
+    int flags = ::fcntl(fd,F_GETFL);
+
+    if(flags == -1)
+	{ ERR << strerror(errno) << endl; return; }
+
+    if(!mode)
+	flags = flags | O_NONBLOCK;
+    else if(flags & O_NONBLOCK)
+	flags = flags ^ O_NONBLOCK;
+
+    flags = ::fcntl(fd,F_SETFL,flags);
+
+    if(flags == -1)
+	{ ERR << strerror(errno) << endl; return; }
+}
 
 string
 ExternalDataSource::receiveLine()

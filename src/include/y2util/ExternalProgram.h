@@ -89,6 +89,11 @@ public:
      */
     bool running();
 
+    /**
+     * return pid
+     * */
+    pid_t getpid() { return pid; }
+
 private:
 
     /**
