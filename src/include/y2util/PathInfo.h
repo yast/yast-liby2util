@@ -50,6 +50,19 @@ class PathInfo {
 
     enum Mode { STAT, LSTAT };
 
+    enum file_type {
+      NOT_AVAIL  = 0x00, // no typeinfo available
+      NOT_EXIST  = 0x01, // file does not exist
+      T_FILE     = 0x02,
+      T_DIR      = 0x04,
+      T_CHARDEV  = 0x08,
+      T_BLOCKDEV = 0x10,
+      T_FIFO     = 0x20,
+      T_LINK     = 0x40,
+      T_SOCKET   = 0x80
+    };
+    friend std::ostream & operator<<( std::ostream & str, file_type obj );
+
     /**
      * Wrapper class for mode_t values as derived from ::stat
      **/
@@ -96,6 +109,8 @@ class PathInfo {
     bool   isExist() const { return !error_i; }
 
     // file type
+    file_type fileType() const;
+
     bool   isFile()  const { return isExist() && S_ISREG( statbuf_C.st_mode ); }
     bool   isDir ()  const { return isExist() && S_ISDIR( statbuf_C.st_mode ); }
     bool   isLink()  const { return isExist() && S_ISLNK( statbuf_C.st_mode ); }
@@ -242,6 +257,30 @@ class PathInfo {
     static int readdir( std::list<std::string> & retlist,
 			const Pathname & path, bool dots = true );
 
+    struct direntry {
+      std::string name;
+      file_type   type;
+      direntry( const std::string & name_r = std::string(), file_type type_r = NOT_AVAIL )
+	: name( name_r )
+	, type( type_r )
+      {}
+    };
+
+    typedef std::list<direntry> dircontent;
+
+    /**
+     * Return content of directory via retlist. If dots is false
+     * entries starting with '.' are not reported. "." and ".."
+     * are never reported.
+     *
+     * The type of individual directory entries is determined accoding to
+     * statmode (i.e. via stat or lstat).
+     *
+     * @return 0 on success, errno on failure.
+     **/
+    static int readdir( dircontent & retlist, const Pathname & path,
+			bool dots = true, Mode statmode = STAT );
+
     ///////////////////////////////////////////////////////////////////
     // Files
     ///////////////////////////////////////////////////////////////////
@@ -333,6 +372,8 @@ class PathInfo::stat_mode {
     stat_mode( const mode_t & mode_r = 0 ) : _mode( mode_r ) {}
   public:
     // file type
+    file_type fileType() const;
+
     bool   isFile()  const { return S_ISREG( _mode ); }
     bool   isDir ()  const { return S_ISDIR( _mode ); }
     bool   isLink()  const { return S_ISLNK( _mode ); }

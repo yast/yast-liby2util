@@ -45,14 +45,16 @@ bool dbg_enabled_bm( init() );
 **
 **
 **	FUNCTION NAME : init
-**	FUNCTION TYPE : QAsciiDict<Y2Loglinestreamset>
+**	FUNCTION TYPE : bool
 **
 **	DESCRIPTION :
 */
 static bool init() {
-    if(getenv("Y2SLOG_FILE") == NULL) return false;
-    set_log_filename (getenv( "Y2SLOG_FILE" ));
-    return true;
+  char * y2lfile = getenv( "Y2SLOG_FILE" );
+  if ( y2lfile ) {
+    set_log_filename( y2lfile );
+  }
+  return( getenv( "Y2SLOG_DEBUG" ) != NULL );
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -50,6 +50,7 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 #define _Y2SLOG(c,l)    Y2SLog::get( c, l, __FILE__, __FUNCTION__, __LINE__ )
 #define _Y2SLOD(c,l)    Y2SLog::get( c"++", 1, __FILE__, __FUNCTION__, __LINE__ )
 #define _Y2SLOGDBG(c,l) Y2SLog::getdbg( c"-dbg", l, __FILE__, __FUNCTION__, __LINE__ )
+#define _Y2SLODDBG(c,l) Y2SLog::getdbg( c"-dbg++", 1, __FILE__, __FUNCTION__, __LINE__ )
 
 //
 // To log to component 'foo' write:
@@ -84,7 +85,7 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 //        #define Y2LOG "foo"
 //        D__ << ....
 //
-#define _D__(c) _Y2SLOGDBG( c, 0 )
+#define _D__(c) _Y2SLODDBG( c, 0 )
 #define _M__(c) _Y2SLOGDBG( c, 1 )
 #define _W__(c) _Y2SLOGDBG( c, 2 )
 #define _E__(c) _Y2SLOGDBG( c, 3 )

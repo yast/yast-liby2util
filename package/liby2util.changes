@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Fri May 21 17:01:49 CEST 2004 - ma@suse.de
+
+- fixed logging configuration (#40970)
+- 2.9.24
+
+-------------------------------------------------------------------
+Tue Apr 20 23:47:59 CEST 2004 - ma@suse.de
+
+- New enum PathInfo::file_type (file, directory, link, etc.)
+- New PathInfo::readdir which retrieves directory content and
+  file_type of each entry.
+- 2.9.23
+
+-------------------------------------------------------------------
 Tue Apr  6 16:44:42 CEST 2004 - lnussel@suse.de
 
 - SUSE is great (#38495)
@@ -19,7 +33,7 @@ Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
 Tue Mar 23 13:57:08 CET 2004 - visnov@suse.cz
 
 - use GNU-like output for log_simple mode
-- 2.9.19 
+- 2.9.19
 
 -------------------------------------------------------------------
 Mon Mar 22 12:53:09 CET 2004 - ma@suse.de

@@ -118,6 +118,19 @@ bool PathInfo::operator()()
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::fileType
+//	METHOD TYPE : PathInfo::file_type
+//
+PathInfo::file_type PathInfo::fileType() const
+{
+  if ( isExist() )
+    return stat_mode( st_mode() ).fileType();
+  return NOT_EXIST;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::userMay
 //	METHOD TYPE : mode_t
 //
@@ -160,6 +173,58 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
   }
   str.flags( state_ii );
   return str;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : std::ostream &
+**
+**	DESCRIPTION :
+*/
+ostream & operator<<( ostream & str, PathInfo::file_type obj )
+{
+  switch ( obj ) {
+#define EMUMOUT(T) case PathInfo::T: return str << #T; break
+    EMUMOUT( NOT_AVAIL );
+    EMUMOUT( NOT_EXIST );
+    EMUMOUT( T_FILE );
+    EMUMOUT( T_DIR );
+    EMUMOUT( T_CHARDEV );
+    EMUMOUT( T_BLOCKDEV );
+    EMUMOUT( T_FIFO );
+    EMUMOUT( T_LINK );
+    EMUMOUT( T_SOCKET );
+#undef EMUMOUT
+  }
+  return str;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::stat_mode::fileType
+//	METHOD TYPE : PathInfo::file_type
+//
+PathInfo::file_type PathInfo::stat_mode::fileType() const
+{
+  if ( isFile() )
+    return T_FILE;
+  if ( isDir() )
+    return T_DIR;
+  if ( isLink() )
+    return T_LINK;
+  if ( isChr() )
+    return T_CHARDEV;
+  if ( isBlk() )
+    return T_BLOCKDEV;
+  if ( isFifo() )
+    return T_FIFO;
+  if ( isSock() )
+    return T_SOCKET ;
+
+  return NOT_AVAIL;
 }
 
 /******************************************************************
@@ -419,6 +484,31 @@ int PathInfo::readdir( std::list<std::string> & retlist,
   ::closedir( dir );
 
   return _Log_Result( 0 );
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::readdir
+//	METHOD TYPE : int
+//
+int PathInfo::readdir( dircontent & retlist, const Pathname & path,
+		       bool dots, Mode statmode )
+{
+  retlist.clear();
+
+  list<string> content;
+  int res = readdir( content, path, dots );
+
+  if ( !res ) {
+    for ( list<string>::const_iterator it = content.begin(); it != content.end(); ++it ) {
+      PathInfo p( path + *it, statmode );
+      retlist.push_back( direntry( *it, p.fileType() ) );
+    }
+  }
+
+  return res;
 }
 
 ///////////////////////////////////////////////////////////////////
