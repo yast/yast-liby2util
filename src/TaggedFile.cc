@@ -66,7 +66,7 @@ Tag::assign (const std::string& locale, TaggedParser& parser, std::istream& istr
 
     // this tag _again_ ?
 
-    std::map <std::string,TagRetrievalPos>::iterator it = _pos.find (locale);
+    posmaptype::iterator it = _pos.find (locale);
 
     if (it != _pos.end())		// we already had this one
     {
@@ -147,6 +147,13 @@ std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj )
 // TagSet
 //-------------------------------------------------------------------
 
+TagSet::TagSet()
+    : _allow_multiple_sets (false)
+    , _allow_unknown_tags (true)
+    , _reuse_previous_tag (false)
+{
+}
+
 TagSet::~TagSet()
 {
     // delete tags from map, allocated in addTag()
@@ -168,16 +175,18 @@ TagSet::~TagSet()
 assignstatus
 TagSet::assign (const std::string& starttag, const std::string& startlocale, TaggedParser& parser, std::istream& istr)
 {
-//std::cerr << "TagSet::assign(" << starttag << "." << startlocale << ")@" << parser.lineNumber() << std::endl;
     // find given Tag in map
 
     tagmaptype::iterator t = _tags.find (starttag);
 
     if (t == _tags.end())
     {
+	if (_allow_unknown_tags)
+	    return ACCEPTED;
 	return REJECTED_NOMATCH;
     }
 
+//MIL << "TagSet::assign(" << starttag << "." << startlocale << ")@" << parser.lineNumber() << std::endl;
     // assign to found tag
     return t->second->assign (startlocale, parser, istr);
 }
@@ -195,6 +204,8 @@ assignstatus
 TagSet::assignSet (TaggedParser& parser, std::istream& istr)
 {
 //std::cerr << "TagSet::assignSet(-------------------)@" << parser.lineNumber() << std::endl;
+
+
     // reset tag set
 
     tagmaptype::iterator it;
@@ -203,41 +214,61 @@ TagSet::assignSet (TaggedParser& parser, std::istream& istr)
 	it->second->clear();
     }
 
+    int count = -1;
+
     // fill tag set
 
-    assignstatus ret;
+    assignstatus ret = ACCEPTED;
     do
     {
 	// only call parser if it isn't already set from a previous
 	// ACCEPTED_FULL
 
-	if (_initial_assign_set)		// must to initial assignment
+	if (!_reuse_previous_tag)
 	{
 	    TaggedParser::TagType tagtype = parser.lookupTag (istr);
 
 	    if (tagtype == TaggedParser::NONE)	// no tag found
 	    {
 		if (istr.eof ())
-		    ret = ACCEPTED_FULL;
+		{
+		    if (count > 0)
+			ret = ACCEPTED_FULL;
+		    else
+			ret = REJECTED_EOF;
+		}
+		else if (_allow_unknown_tags)
+		{
+		    continue;
+		}
 		else
+		{
 		    ret = REJECTED_NOMATCH;
+		}
 		break;
 	    }
+	    else
+		ret = ACCEPTED;
 	}
 	else
 	{
-//std::cerr << "re-use '" << parser.currentTag() << "." << parser.currentLocale() << "'" << std::endl;
-	    _initial_assign_set = true;
+	    _reuse_previous_tag = false;
 	}
-	ret = assign (parser.currentTag(), parser.currentLocale(), parser, istr);
+
+	if (ret == ACCEPTED)
+	{
+	    ret = assign (parser.currentTag(), parser.currentLocale(), parser, istr);
+	    ++count;
+	}
     }
     while (ret == ACCEPTED);
 
-    if (ret == ACCEPTED_FULL)
+    if ((ret == ACCEPTED_FULL)
+	&& _allow_multiple_sets)
     {
-	_initial_assign_set = false;
+	// re use last scanned tag on next entry
+	_reuse_previous_tag = true;
     }
-
     return ret;
 }
 

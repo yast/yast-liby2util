@@ -224,7 +224,8 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 	string		  lang_ti;	// language
 	TagType		  type;
 
-	do {
+	do
+	{
 	    lineBegin_ii = readLine (stream_fr, currentLine);
 	    _lineNumber++;
 
@@ -237,10 +238,10 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 	    if (type == NONE )
 		continue; // no tag on cline
 
-	    if ( stag_tr.size() && maybe_ti != stag_tr )
+	    if ( !stag_tr.empty() && maybe_ti != stag_tr )
 		continue; // tag does not match given stag_tr
 
-	    if ( slang_tr.size() && lang_ti != slang_tr )
+	    if ( !slang_tr.empty() && lang_ti != slang_tr )
 		continue; // tag does not match given slang_tr
 
 	    // here we've got a valid tag

@@ -60,6 +60,8 @@ namespace TaggedFile
 	 * ACCEPTED = single tag accepted
 	 * ACCEPTED_FULL = new start tag found
 	 * <br>
+	 * REJECTED_EOF = at end of file
+	 * <br>
 	 * REJECTED_NOMATCH = no matching tag found
 	 * <br>
 	 * REJECTED_LOCALE = matching tag found but locale not allowed
@@ -74,6 +76,7 @@ namespace TaggedFile
 	enum assignstatus {
 	    ACCEPTED,
 	    ACCEPTED_FULL,
+	    REJECTED_EOF,
 	    REJECTED_NOMATCH,
 	    REJECTED_LOCALE,
 	    REJECTED_NOLOCALE,
@@ -195,6 +198,12 @@ class Tag
 class TagSet
 {
     private:
+	/** file contains multiple sets or single set */
+	bool _allow_multiple_sets;
+
+	/** allow unknown tags */
+	bool _allow_unknown_tags;
+
 	/** language dependant tags, needed for setting the encoding */	
 	typedef std::map<std::string, Tag *> tagmaptype;
 
@@ -226,11 +235,11 @@ class TagSet
 	}
 
 	/**
-	 * initial assignment of set
+	 * re-use previous tag
 	 * (used in assignSet() to re-use last parser state from
 	 *  previous ACCEPTED_FULL)
 	 */
-	bool _initial_assign_set;
+	bool _reuse_previous_tag;
 
 	/**
 	 * lookup single Tag responsible for parsing starttag in map and
@@ -242,8 +251,18 @@ class TagSet
 	assignstatus assign (const std::string& starttag, const std::string& startlocale, TaggedParser& parser, std::istream& istr);
 
     public:
-    	TagSet() : _initial_assign_set(true) {}
+    	TagSet();
 	virtual ~TagSet();
+
+	/**
+	 * allow multiple sets
+	 */
+	void setAllowMultipleSets (bool flag) { _allow_multiple_sets = flag; }
+
+	/**
+	 * allow unknown tags
+	 */
+	void setAllowUnknownTags (bool flag) { _allow_unknown_tags = flag; }
 
 	/** add Tag to TagSet
 	 *
@@ -266,8 +285,6 @@ class TagSet
 	 * @param istr stream to parse
 	 */
 	assignstatus assignSet (TaggedParser& parser, std::istream& istr);
-
-	void restart (void) { _initial_assign_set = true; }
 
 	/** get Tag by number instead of string
 	 *

@@ -52,9 +52,9 @@ class TaggedParser {
   public:
     typedef enum tag_type {
 	NONE=0,		// no tag
-	SINGLE,		// single
-	START,		// start
-	END		// end
+	SINGLE,		// single value
+	START,		// start of multi value
+	END		// end of multi value
     } TagType;
 
   private:
