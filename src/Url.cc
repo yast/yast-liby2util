@@ -42,6 +42,7 @@ Url::ProtocolStrings::ProtocolStrings()
   insert( value_type( dir,     "dir"   ) );
   insert( value_type( hd,      "hd"    ) );
   insert( value_type( smb,     "smb"   ) );
+  insert( value_type( cifs,    "cifs"  ) );
 }
 
 Url::ProtocolStrings Url::_protocolStrings;

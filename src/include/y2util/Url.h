@@ -42,7 +42,7 @@ class Url
 	typedef std::map<std::string,std::string> OptionMapType;
 
         enum Protocol { unknown, file, ftp, http, https, cd, dvd, nfs, dir,
-                        hd, smb };
+                        hd, smb, cifs };
 
     private:
 
