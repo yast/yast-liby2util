@@ -12,6 +12,10 @@ LDFLAGS = -L$(libdir)			\
 	$(top_builddir)/src/liby2util.la	\
 	-Xlinker --no-whole-archive
 
+check_PROGRAMS = parseurl
+
+parseurl_SOURCES = parseurl.cc
+
 noinst_PROGRAMS = parser.prg	\
 	test_taggedparser.prg	\
 	test_Y2SLog.prg		\

@@ -1,0 +1,7 @@
+Input: ftp://user:pw@host:21/pub;type=b;proxyuser=blub;password=nix
+asString: ftp://user:PASSWORD@host:21/pub;password=nix;proxyuser=blub;type=b
+isValid: true
+protocol: ftp
+host: host
+port: 21
+path: /pub

@@ -1,0 +1,7 @@
+Input: file:/etc/hosts
+asString: ://
+isValid: false
+protocol: 
+host: 
+port: 
+path: 

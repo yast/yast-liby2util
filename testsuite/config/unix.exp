@@ -1,4 +1,4 @@
 load_lib "liby2util_init.exp"
-proc liby2_exit {} {}
-proc liby2_version {} {}
+proc liby2util_exit {} {}
+proc liby2util_version {} {}
 

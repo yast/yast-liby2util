@@ -1,0 +1,44 @@
+# Test suite for Url class parsing
+
+set in [ open $srcdir/tests/urls ]
+
+set line [ gets $in ]
+
+for {} { [ eof $in ] == 0 } { set line [ gets $in ] } {
+  set number ""
+  set url ""
+
+  regexp "(.*) (.*)" $line all number url
+  
+  if { [ string length $number ] > 0 &&  [ string index $number 0 ] != "#" } {
+    set testname "url$number"
+    
+    set errfile tmp.err
+    set outfile $srcdir/tests/out/$number.out
+    
+    exec bash $srcdir/parseurl $url >$outfile 2>$errfile
+
+    if { [ file size $errfile ] > 0 } {
+      puts "Unexpected stderr:"
+      exec cat $errfile
+      fail $testname
+      continue
+    }
+
+    set refoutfile "$srcdir/tests/$number.out"
+
+    if { [ file exists $refoutfile ] == 0 } {
+      perror "Missing file $refoutfile" 0
+      continue
+    }
+
+    if { [ diff $refoutfile $outfile ] == 0 } {
+      puts "Output doesn't match expected data:"
+      exec diff $refoutfile $outfile
+      fail $testname
+      continue
+    }
+    
+    pass $testname
+  }
+}
