@@ -25,6 +25,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <assert.h>
 
 const size_t primes[] = { 31, 101, 503, 1009, 2003, 5003 };
@@ -116,8 +117,6 @@ public:
 
 	typedef hash_iterator<list_elem> iterator;
 	typedef hash_iterator<const list_elem> const_iterator;
-	friend class iterator;
-	friend class const_iterator;
 
 protected:
 	vector_type v;
@@ -309,18 +308,18 @@ class hash : public basic_hash<Key,HashElt<Key,T> > {
 
 	// helper called from copy constructor and operator=
 	void construct( const hash& S ) {
-		hf = S.hf;
-		vsize = S.vsize;
-		v = vector_type( vsize, 0 );
-		n_elements = 0;
-		n_buckets = 0;
+		this->hf = S.hf;
+		this->vsize = S.vsize;
+		this->v = vector_type( this->vsize, 0 );
+		this->n_elements = 0;
+		this->n_buckets = 0;
 		for( typename basic_hash<Key,HashElt<Key,T> >::const_iterator t = S.begin(); t != S.end(); ++t )
 			insert( t );
 	}
 
 	void resize( typename basic_hash<Key,HashElt<Key,T> >::size_type new_size ) {
-		hash newhash(new_size, hf);
-		for( typename basic_hash<Key,HashElt<Key,T> >::const_iterator t = begin(); t != end(); ++t )
+		hash newhash(new_size, this->hf);
+		for( typename basic_hash<Key,HashElt<Key,T> >::const_iterator t = this->begin(); t != this->end(); ++t )
 			newhash.insert( t );
 		swap( newhash );
 	}
@@ -329,10 +328,10 @@ public:
 	hash( typename basic_hash<Key,HashElt<Key,T> >::size_type size = 31, typename basic_hash<Key,HashElt<Key,T> >::hashfun_t f = hashfun ) :
 		basic_hash<Key,HashElt<Key,T> >( size, hashfun ) {};
 	hash( const hash& S ) { construct(S); }
-	~hash() { clear(); }
+	~hash() { this->clear(); }
 	hash& operator= ( const hash& S ) {
 		if (this != &S) {
-			clear();
+			this->clear();
 			construct(S);
 		}
 		return *this;
@@ -354,7 +353,7 @@ public:
 			return q;
 		else {
 			*p = new list_type(k,v);
-			++n_elements;
+			++this->n_elements;
 			return *p;
 		}
 	}
@@ -368,12 +367,12 @@ public:
 
 template <class Key, class list_elem>
 void basic_hash<Key, list_elem>::statistics() {
-	cout << n_elements << " elements in " << n_buckets << "/" << vsize
+	std::cout << this->n_elements << " elements in " << this->n_buckets << "/" << this->vsize
 		 << " buckets\n";
 	unsigned free = 0, alloced = 0, maxlen = 0, sumlen = 0;
 	size_type maxbuck;
 
-	for( size_type adr = 0; adr < vsize; ++adr ) {
+	for( size_type adr = 0; adr < this->vsize; ++adr ) {
 		if (!v[adr])
 			++free;
 		else {
@@ -388,11 +387,11 @@ void basic_hash<Key, list_elem>::statistics() {
 			sumlen += len;
 		}
 	}
-	cout << free << " buckets free, " << alloced << " used\n";
-	cout << "avg. list len " << (float)sumlen/alloced <<
-		" max len " << maxlen << endl;
+	std::cout << free << " buckets free, " << alloced << " used\n";
+	std::cout << "avg. list len " << (float)sumlen/alloced <<
+		" max len " << maxlen << std::endl;
 
-	cout << "Estimated avg. list len " << (float)n_elements/n_buckets << endl;
+	std::cout << "Estimated avg. list len " << (float)this->n_elements/this->n_buckets << std::endl;
 }
 
 #endif	/* _PkgDb_hash_h */
