@@ -334,7 +334,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 //
 string TagParser::data2string( const list<string> & data_Vtr )
 {
-    if ( !data_Vtr.size() )
+    if ( data_Vtr.empty() )
 	return "";
 
     string ret_ti;
