@@ -123,7 +123,7 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
     if (use_pty)
     {
 	// Create pair of ttys
-	DBG << "Using ttys for communication with " << argv[0] << endl;
+        D__ << "Using ttys for communication with " << argv[0] << endl;
 	if (openpty (&master_tty, &slave_tty, 0, 0, 0) != 0)
 	{
 	    ERR << "openpty failed" << endl;
@@ -252,9 +252,9 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    inputfile = fdopen(from_external[0], "r");
 	    outputfile = fdopen(to_external[1], "w");
 	}
-#if 1
-	DBG << "pid " << pid << " launched" << endl;
-#endif
+
+	D__ << "pid " << pid << " launched" << endl;
+
 	if (!inputfile || !outputfile)
 	{
 	    ERR << "Cannot create streams to external program " << argv[0] << endl;
@@ -276,7 +276,6 @@ ExternalProgram::close()
 	do
 	{
 	    ret = waitpid(pid, &status, 0);
-//	    DBG << "waitpid called" << endl;
 	}
 	while (ret == -1 && errno == EINTR);
 
@@ -301,13 +300,13 @@ int ExternalProgram::checkStatus( int status )
 	status = WEXITSTATUS (status);
 	if(status)
 	{
-	    DBG << "pid " << pid << " exited with status " << status << endl;
+	    D__ << "pid " << pid << " exited with status " << status << endl;
 	}
 	else
 	{
 	    // if 'launch' is logged, completion should be logged,
 	    // even if successfull.
-//		    DBG << "pid " << pid << " successfully completed" << endl;
+	    D__ << "pid " << pid << " successfully completed" << endl;
 	}
     }
     else if (WIFSIGNALED (status))
@@ -324,7 +323,6 @@ int ExternalProgram::checkStatus( int status )
     }
     else {
 	ERR << "pid " << pid << " exited with unknown error" << endl;
-//		abort ();
     }
 
     return status;
@@ -346,7 +344,7 @@ bool
 ExternalProgram::running()
 {
     if ( pid < 0 ) return false;
-    
+
     int status = 0;
     int p = waitpid( pid, &status, WNOHANG );
     if ( p < 0 ) return false;
