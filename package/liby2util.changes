@@ -2,6 +2,7 @@
 Tue Sep 10 00:57:33 CEST 2002 - ma@suse.de
 
 - add PathInfo::rename()
+- 2.6.15
 
 -------------------------------------------------------------------
 Mon Sep  9 13:36:41 CEST 2002 - lnussel@suse.de
