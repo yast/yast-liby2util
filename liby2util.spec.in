@@ -30,6 +30,5 @@ Summary:	-
 %defattr(-,root,root)
 %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-@includedir@/Y2UTIL.h
-@includedir@/y2util
+@includedir@
 %doc @docdir@
