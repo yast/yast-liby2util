@@ -35,7 +35,8 @@ liby2util_la_SOURCES = \
 	YRpmGroupsTree.cc	\
 	diff.cc			\
 	DiskSpace.cc		\
-        GPGCheck.cc
+        GPGCheck.cc             \
+        SysConfig.cc
 
 
 liby2util_la_LDFLAGS = -version-info 2:0

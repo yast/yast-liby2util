@@ -16,3 +16,4 @@ validate_packages_lang
 validate_selection
 validate_tagged
 test_oldsel
+test_sysconfig

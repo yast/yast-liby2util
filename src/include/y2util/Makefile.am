@@ -38,7 +38,8 @@ pkginclude_HEADERS = \
 	YStringTree.h		\
 	YTransText.h            \
 	DiskSpace.h             \
-        GPGCheck.h
+        GPGCheck.h              \
+        SysConfig.h
 
 
 #<INSTALL-HEADER-TARGET>
