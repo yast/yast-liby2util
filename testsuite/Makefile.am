@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)
 
-CPPFLAGS =
+CPPFLAGS = -DY2LOG=__FILE__
 
 LDFLAGS = -L$(libdir)	\
 	-Xlinker --whole-archive	\
