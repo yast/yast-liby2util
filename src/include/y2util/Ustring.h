@@ -67,7 +67,7 @@ class UstringHash {
  * to keep the strings representaion class (which contains the
  * actual data) unique.
  *
- * That way Ustrings of the same value and unsing the same
+ * That way Ustrings of the same value and using the same
  * UstringHash can be stored at various locations, while the
  * actual string data are stored only once.
  *
@@ -87,7 +87,7 @@ class UstringHash {
  *   ustr->size(); // short for ((const std::string &)u).size();
  * </PRE>
  *
- * Most common usage will be deriving somne class from Ustring,
+ * Most common usage will be deriving some class from Ustring,
  * that provides a static UstringHash, and some constructor.
  * Everything else is provided by Ustring.
  *
