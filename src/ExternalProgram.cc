@@ -50,7 +50,8 @@ ExternalProgram::ExternalProgram (string commandline,
     {
 	rootdir = root.asString().c_str();
     }
-    start_program (argv, stderr_disp, stderr_fd, default_locale, rootdir);
+    Environment environment;
+    start_program (argv, environment, stderr_disp, stderr_fd, default_locale, rootdir);
 }
 
 
@@ -65,7 +66,23 @@ ExternalProgram::ExternalProgram (const char *const *argv,
     {
 	rootdir = root.asString().c_str();
     }
-    start_program (argv, stderr_disp, stderr_fd, default_locale, rootdir);
+    Environment environment;
+    start_program (argv, environment, stderr_disp, stderr_fd, default_locale, rootdir);
+}
+
+
+ExternalProgram::ExternalProgram (const char *const *argv, const Environment & environment,
+				  Stderr_Disposition stderr_disp, bool use_pty,
+				  int stderr_fd, bool default_locale,
+				  const Pathname& root)
+    : use_pty (use_pty)
+{
+    const char* rootdir = NULL;
+    if(!root.empty() && root != "/")
+    {
+	rootdir = root.asString().c_str();
+    }
+    start_program (argv, environment, stderr_disp, stderr_fd, default_locale, rootdir);
 }
 
 
@@ -79,32 +96,24 @@ ExternalProgram::ExternalProgram (const char *binpath, const char *const *argv_1
     const char *argv[i + 1];
     argv[0] = binpath;
     memcpy (&argv[1], argv_1, (i - 1) * sizeof (char *));
-    start_program (argv);
+    Environment environment;
+    start_program (argv, environment);
 }
 
-/*
-ExternalProgram::ExternalProgram (const YCPList &args, const char *binpath,
+
+ExternalProgram::ExternalProgram (const char *binpath, const char *const *argv_1, const Environment & environment,
 				  bool use_pty)
     : use_pty (use_pty)
 {
-    const char *argv[args->size() + 1];
-    if (binpath == 0)
-    {
-	if (!args->isTerm()) {
-	    y2error ("Fatal error in %s: args is not a YCPTerm",
-		     __PRETTY_FUNCTION__);
-	    abort();
-	}
-	binpath = args->asTerm()->symbol()->symbol_cstr();
-    }
+    int i = 0;
+    while (argv_1[i++])
+	;
+    const char *argv[i + 1];
     argv[0] = binpath;
-    int i;
-    for (i = 0; i < args->size(); i++)
-	argv[i + 1] = args->value(i)->asString()->value_cstr();
-    argv[i] = 0;
-    start_program (argv);
+    memcpy (&argv[1], argv_1, (i - 1) * sizeof (char *));
+    start_program (argv, environment);
 }
-*/
+
 
 ExternalProgram::~ExternalProgram()
 {
@@ -112,8 +121,9 @@ ExternalProgram::~ExternalProgram()
 
 
 void
-ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
-				stderr_disp, int stderr_fd, bool default_locale, const char* root)
+ExternalProgram::start_program (const char *const *argv, const Environment & environment,
+				Stderr_Disposition stderr_disp,
+				int stderr_fd, bool default_locale, const char* root)
 {
     pid = -1;
     _exitStatus = 0;
@@ -198,6 +208,10 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    // Note: We don't have to close anything regarding stderr_fd.
 	    // Our caller is responsible for that.
 	    dup2 (stderr_fd, 2);
+	}
+
+	for ( Environment::const_iterator it = environment.begin(); it != environment.end(); ++it ) {
+	  setenv( it->first.c_str(), it->second.c_str(), 1 );
 	}
 
 	if(default_locale)

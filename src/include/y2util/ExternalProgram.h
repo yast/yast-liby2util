@@ -20,6 +20,9 @@
 #ifndef ExternalProgram_h
 #define ExternalProgram_h
 
+#include <map>
+#include <string>
+
 #include <y2util/ExternalDataSource.h>
 #include <y2util/Pathname.h>
 
@@ -46,6 +49,11 @@ public:
     };
 
     /**
+     * For passing additional environment variables to set
+     */
+    typedef std::map<std::string,std::string> Environment;
+
+    /**
      * Start the external program by using the shell <tt>/bin/sh<tt>
      * with the option <tt>-c</tt>. You can use io direction symbols < and >.
      * @param commandline a shell commandline that is appended to
@@ -60,8 +68,15 @@ public:
 
     /**
      * Start an external program by giving the arguments as an arry of char *pointers.
+     * If environment is provided, varaiables will be added to the childs environment,
+     * overwriting existing ones.
      */
     ExternalProgram (const char *const *argv,
+		     Stderr_Disposition stderr_disp = Normal_Stderr,
+		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false,
+		     const Pathname& root = "");
+
+    ExternalProgram (const char *const *argv, const Environment & environment,
 		     Stderr_Disposition stderr_disp = Normal_Stderr,
 		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false,
 		     const Pathname& root = "");
@@ -69,11 +84,10 @@ public:
     ExternalProgram (const char *binpath, const char *const *argv_1,
 		     bool use_pty = false);
 
-/*
-    ExternalProgram (const YCPList &, const char *binpath = 0,
+
+    ExternalProgram (const char *binpath, const char *const *argv_1, const Environment & environment,
 		     bool use_pty = false);
-*/
-    // ExternalProgram(const YCPTermRep *);
+
 
     ~ExternalProgram();
 
@@ -108,7 +122,7 @@ private:
     pid_t pid;
     int _exitStatus;
 
-    void start_program (const char *const *argv,
+    void start_program (const char *const *argv, const Environment & environment,
 			Stderr_Disposition stderr_disp = Normal_Stderr,
 			int stderr_fd = -1, bool default_locale = false,
 			const char* root = NULL);
