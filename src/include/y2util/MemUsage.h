@@ -32,14 +32,18 @@ class MemUsage
 {
 protected:
     typedef std::set <MemUsage *> data;
-    static data m_mu_instances;
+    static data* m_mu_instances;
 
     MemUsage () {
-	m_mu_instances.insert (this);
+	if ( ! m_mu_instances ) 
+	{
+	    m_mu_instances = new data;
+	}
+	m_mu_instances->insert (this);
     }
 
     virtual ~MemUsage () {
-	m_mu_instances.erase (this);
+	m_mu_instances->erase (this);
     }
 public:
     //! dump all classes and nuber of their instances

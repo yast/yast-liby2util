@@ -25,7 +25,7 @@ $Id$
 #include <cxxabi.h>
 
 // top init priority, because all objects derived from MemUsage use it
-MemUsage::data MemUsage::m_mu_instances __attribute__ ((init_priority (101)));
+MemUsage::data* MemUsage::m_mu_instances = 0;
 
 // http://www.codesourcery.com/cxx-abi/abi.html#demangler
 static std::string demangle (const char *sym)
@@ -45,8 +45,8 @@ void MemUsage::MuDump ()
     // determine the type of each instance. now it is possible
     // because we are not in the constructor
     data::iterator
-	ii = m_mu_instances.begin (),
-	ie = m_mu_instances.end ();
+	ii = m_mu_instances->begin (),
+	ie = m_mu_instances->end ();
     for (; ii != ie; ++ii)
     {
 	const char * name = typeid (**ii).name ();
@@ -66,8 +66,8 @@ void MemUsage::MuDump ()
 void MemUsage::MuDumpVal (const char *aname)
 {
     data::iterator
-	ii = m_mu_instances.begin (),
-	ie = m_mu_instances.end ();
+	ii = m_mu_instances->begin (),
+	ie = m_mu_instances->end ();
     for (; ii != ie; ++ii)
     {
 	std::string dname = demangle (typeid (**ii).name ());
