@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Aug 18 07:32:19 CEST 2002 - kkaempf@suse.de
+
+- add TagCacheRetrievalPtr
+- add reference pointer statistics
+
+-------------------------------------------------------------------
 Fri Aug 16 12:14:02 CEST 2002 - kk@suse.de
 
 - split off core logging functions for use by liby2util
