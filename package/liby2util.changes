@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Apr  4 14:48:17 CEST 2004 - kkaempf@suse.de
+
+- add 'cifs' to URL (#37871)
+- 2.9.21
+
+-------------------------------------------------------------------
 Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
 
 - finally changed license to GPL for good
