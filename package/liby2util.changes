@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 22 12:36:58 CEST 2003 - sh@suse.de
+
+- V 2.8.13
+- Changed license to GPL like for all other YaST2 core binaries 
+
+-------------------------------------------------------------------
 Thu Sep 18 22:10:00 CEST 2003 - ma@suse.de
 
 - Provide virtual methods Rep::ref_to and Rep::unref_to triggered
