@@ -79,7 +79,7 @@ void Tag::setEndTag(const std::string& endtag, endtagtype etype )
 
 Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
-    D__ << "assign(" << starttag << ")" << std::endl;
+//    D__ << "assign(" << starttag << ")" << std::endl;
     if (!comparebeforedot(starttag))
 	return REJECTED_NOMATCH;
 
@@ -174,7 +174,7 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 	{
 		real_endtag = _endtag;
 	}
-	D__ << "parse to endtag >" << real_endtag << "<" << std::endl;
+//	D__ << "parse to endtag >" << real_endtag << "<" << std::endl;
 	if (!parser.parseData (istr, real_endtag))
 	{
 	    D__ << "Endtag not found" << std::endl;
