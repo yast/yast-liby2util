@@ -2,6 +2,7 @@
 Thu Feb 19 18:02:18 CET 2004 - visnov@suse.cz
 
 - ensure initialization of memusage counter
+- 2.9.9
 
 -------------------------------------------------------------------
 Wed Feb 18 10:22:29 CET 2004 - msvec@suse.cz
