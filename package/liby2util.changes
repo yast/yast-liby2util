@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep  3 22:08:00 CEST 2002 - kkaempf@suse.de
+
+- add vendor checks
+- improve TaggedParser/TaggedFile to read old common.pkd format
+- 2.6.10
+
+-------------------------------------------------------------------
 Tue Sep  3 16:47:39 CEST 2002 - mvidner@suse.cz
 
 - kdoc cleanup: better cross references and fixed some parsing issues.
