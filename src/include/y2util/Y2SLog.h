@@ -48,6 +48,7 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 ///////////////////////////////////////////////////////////////////
 
 #define _Y2SLOG(c,l)    Y2SLog::get( c, l, __FILE__, __FUNCTION__, __LINE__ )
+#define _Y2SLOD(c,l)    Y2SLog::get( c"++", 1, __FILE__, __FUNCTION__, __LINE__ )
 #define _Y2SLOGDBG(c,l) Y2SLog::getdbg( c"-dbg", l, __FILE__, __FUNCTION__, __LINE__ )
 
 //
@@ -59,7 +60,7 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 //        DBG << ....
 //
 
-#define _DBG(c) _Y2SLOG( c, 0 )
+#define _DBG(c) _Y2SLOD( c, 0 )
 #define _MIL(c) _Y2SLOG( c, 1 )
 #define _WAR(c) _Y2SLOG( c, 2 )
 #define _ERR(c) _Y2SLOG( c, 3 )

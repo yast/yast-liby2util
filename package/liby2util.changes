@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 22 19:35:14 CET 2004 - ma@suse.de
+
+- Compile with gcc-3.4
+- 2.9.5
+
+-------------------------------------------------------------------
 Thu Dec 18 19:20:43 CET 2003 - ma@suse.de
 
 - Restored Y2SLog providing a default log component name.
