@@ -145,11 +145,11 @@ int main(void)
 //    std::string commonpkd("/var/adm/current_package_descr/suse/setup/descr/common.pkd");
     std::cerr << "starting parser" << std::endl;
 #ifdef SELECTION
-    std::string commonpkd("default.sel");
+    std::string commonpkd("test.data/default.sel");
 #elif defined YOUPATCH
-    std::string commonpkd("sample.youpatch");
+    std::string commonpkd("test.data/sample.youpatch");
 #else
-    std::string commonpkd("common.pkd");
+    std::string commonpkd("test.data/common.pkd");
 #endif
     TagParser parser;
     std::string tagstr;
