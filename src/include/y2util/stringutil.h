@@ -168,11 +168,17 @@ extern std::string join( const std::vector<std::string> & words_r,
 			 const std::string & sep_r = " " );
 
 /**
- * Remove leading/trailing/surrounding whitespace
+ * Return string with leading/trailing/surrounding whitespace removed
  **/
 extern std::string ltrim( const std::string & s );
 extern std::string rtrim( const std::string & s );
 inline std::string  trim( const std::string & s ) { return ltrim( rtrim( s ) ); }
+
+/**
+ * Return string converted to lower/upper case
+ **/
+extern std::string toLower( const std::string & s );
+extern std::string toUpper( const std::string & s );
 
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil

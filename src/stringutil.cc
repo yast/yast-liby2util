@@ -147,6 +147,48 @@ std::string rtrim( const std::string & s )
   return s.substr( 0, p+1 );
 }
 
+/******************************************************************
+**
+**
+**	FUNCTION NAME : toLower
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+std::string toLower( const std::string & s )
+{
+  if ( s.empty() )
+    return s;
+
+  string ret( s );
+  for ( string::size_type i = 0; i < ret.length(); ++i ) {
+    if ( isupper( ret[i] ) )
+      ret[i] = static_cast<char>(tolower( ret[i] ));
+  }
+  return ret;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : toUpper
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+std::string toUpper( const std::string & s )
+{
+  if ( s.empty() )
+    return s;
+
+  string ret( s );
+  for ( string::size_type i = 0; i < ret.length(); ++i ) {
+    if ( islower( ret[i] ) )
+      ret[i] = static_cast<char>(toupper( ret[i] ));
+  }
+  return ret;
+}
+
 ///////////////////////////////////////////////////////////////////
 }  // namespace stringutil
 ///////////////////////////////////////////////////////////////////

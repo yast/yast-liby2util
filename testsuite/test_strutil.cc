@@ -27,10 +27,20 @@ void chktr( const std::string & line_r ) {
   MIL << " r" << '"' << rtrim(line_r) << '"' << endl;
   MIL << " t" << '"' <<  trim(line_r) << '"' << endl;
 }
+
+void chkul( const std::string & line_r ) {
+  MIL << "->" << '"' << line_r << '"' << endl;
+  MIL << " l" << '"' << toLower(line_r) << '"' << endl;
+  MIL << " u" << '"' << toUpper(line_r) << '"' << endl;
+}
+
 int main()
 {
   Y2SLog::setLogfileName("-");
   DBG << "START" << endl;
+
+  chkul( "" );
+  chkul( "aBcDeF" );
 
   chktr( "" );
   chktr( " \t \n " );
