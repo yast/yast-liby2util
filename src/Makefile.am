@@ -4,7 +4,7 @@
 
 SUBDIRS = include qt
 
-INCLUDES = -Iqt -I$(srcdir)/include -I$(includedir)
+INCLUDES = -I$(srcdir)/qt -I$(srcdir)/include -I$(includedir)
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 
