@@ -36,7 +36,14 @@
  **/
 ///////////////////////////////////////////////////////////////////
 namespace stringutil {
-///////////////////////////////////////////////////////////////////
+;//////////////////////////////////////////////////////////////////
+
+enum Trim {
+  NO_TRIM = 0x00,
+  L_TRIM  = 0x01,
+  R_TRIM  = 0x02,
+  TRIM    = (L_TRIM|R_TRIM)
+};
 
 inline std::string form( const char * format, ... )
     __attribute__ ((format (printf, 1, 2)));
@@ -161,7 +168,7 @@ inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "
  * }
  * </PRE>
  **/
-extern std::string getline( std::istream & str, const bool trimed = false );
+extern std::string getline( std::istream & str, const Trim trim_r = NO_TRIM );
 
 /**
  * Split line into words
@@ -248,7 +255,19 @@ extern std::string stripFirstWord( std::string & value, const bool ltrim_first =
  **/
 extern std::string ltrim( const std::string & s );
 extern std::string rtrim( const std::string & s );
-inline std::string  trim( const std::string & s ) { return ltrim( rtrim( s ) ); }
+inline std::string  trim( const std::string & s, const Trim trim_r = TRIM ) {
+  switch ( trim_r ) {
+  case L_TRIM:
+    return ltrim( s );
+  case R_TRIM:
+    return rtrim( s );
+  case TRIM:
+    return ltrim( rtrim( s ) );
+  case NO_TRIM:
+    break;
+  }
+  return s;
+}
 
 /**
  * Return string converted to lower/upper case

@@ -40,7 +40,7 @@ char           tmpBuff[tmpBuffLen];
 **
 **	DESCRIPTION :
 */
-std::string getline( std::istream & str, const bool trimed )
+std::string getline( std::istream & str, const Trim trim_r )
 {
   string ret;
   do {
@@ -49,7 +49,7 @@ std::string getline( std::istream & str, const bool trimed )
     ret += tmpBuff;
   } while( str.rdstate() == ios::failbit );
 
-  return( trimed ? trim( ret ) : ret );
+  return trim( ret, trim_r );
 }
 
 /******************************************************************
