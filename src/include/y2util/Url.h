@@ -120,7 +120,7 @@ class Url {
 	/**
 	 * use this function to get full Url for storing it in a file
 	 * */
-	std::string saveAsString() { return asString(true,true,true); }
+	std::string saveAsString() const { return asString(true,true,true); }
 
 
 	/** split url into tokens
