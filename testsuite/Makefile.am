@@ -5,11 +5,11 @@ SUBDIRS = lib test_rep
 
 AUTOMAKE_OPTIONS = dejagnu
 
-INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)
+INCLUDES= -I$(QTDIR)/include -I$(top_srcdir)/src/include -I$(includedir)
 
 LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
-	../src/liby2util.la		\
+	$(top_builddir)/src/liby2util.la		\
 	-Xlinker --no-whole-archive
 
 

@@ -7,7 +7,7 @@ INCLUDES= -I$(top_srcdir)/src/include -I$(includedir) -I$(QTDIR)/include
 
 LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
-	$(top_srcdir)/src/liby2util.la	\
+	$(top_builddir)/src/liby2util.la	\
 	-Xlinker --no-whole-archive
 
 clean-local:
