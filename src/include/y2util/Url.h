@@ -69,6 +69,8 @@ class Url {
 
 	~Url(){}
 
+        bool operator==( const Url & );
+
         void setProtocol( const std::string &str ) { _protocol = str; }
         void setUsername( const std::string &str ) { _username = str; }
         void setPassword( const std::string &str ) { _password = str; }

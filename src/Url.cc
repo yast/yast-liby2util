@@ -35,6 +35,11 @@ Url::Url( const string & url )
     clearifinvalid(_valid);
 }
 
+bool Url::operator==( const Url &url )
+{
+  return ( saveAsString() == url.saveAsString() );
+}
+
 void Url::clearifinvalid(bool valid)
 {
     if(valid) return;
