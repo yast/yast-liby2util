@@ -56,7 +56,9 @@ class Url {
 
     public:
 
-	Url () {}
+	/** default constructor creating an (invalid) empty Url
+	 * */
+	Url ();
 
 	/** construct new url
 	 *

@@ -24,6 +24,11 @@
 
 using namespace std;
 
+Url::Url()
+    : _valid( false )
+{
+}
+
 Url::Url( const string & url )
 {
     _valid = split( url, _protocol, _username, _password, _host, _port, _path, _options );
