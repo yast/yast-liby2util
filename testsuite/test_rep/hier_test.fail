@@ -1,0 +1,18 @@
+hier.cc: In function `int main()':
+hier.cc:40: invalid conversion from `const void*' to `For*'
+hier.cc:40:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+hier.cc:40: invalid conversion from `const void*' to `For*'
+hier.cc:40:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+hier.cc:40: invalid conversion from `const void*' to `For*'
+hier.cc:40:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+hier.cc:40: invalid conversion from `const void*' to `For*'
+hier.cc:40:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+hier.cc:42: invalid conversion from `const void*' to `Bse*'
+hier.cc:42:   initializing argument 1 of `BsePtr& BsePtr::operator=(Bse*)'
+hier.cc:43: invalid conversion from `const void*' to `Obj*'
+hier.cc:43:   initializing argument 1 of `ObjPtr& ObjPtr::operator=(Obj*)'
+hier.cc:44: invalid conversion from `const void*' to `Pkg*'
+hier.cc:44:   initializing argument 1 of `PkgPtr& PkgPtr::operator=(Pkg*)'
+hier.cc:45: invalid conversion from `const void*' to `Sel*'
+hier.cc:45:   initializing argument 1 of `SelPtr& SelPtr::operator=(Sel*)'
+make[1]: *** [nc_hier_test-hier.o] Error 1

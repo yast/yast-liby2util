@@ -1,0 +1,56 @@
+const.cc: In function `int main()':
+const.cc:35: invalid conversion from `const void*' to `For*'
+const.cc:35:   initializing argument 1 of `ForPtr::ForPtr(For*)'
+const.cc:36: invalid conversion from `const void*' to `For*'
+const.cc:36:   initializing argument 1 of `ForPtr::ForPtr(For*)'
+const.cc:43: invalid conversion from `const void*' to `For*'
+const.cc:43:   initializing argument 1 of `ForPtr::ForPtr(For*)'
+const.cc:44: invalid conversion from `const void*' to `For*'
+const.cc:44:   initializing argument 1 of `ForPtr::ForPtr(For*)'
+const.cc:70: invalid conversion from `const void*' to `For*'
+const.cc:70:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+const.cc:71: invalid conversion from `const void*' to `For*'
+const.cc:71:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+const.cc:76: passing `const ForPtr' as `this' argument of `ForPtr& 
+   ForPtr::operator=(const ForPtr&)' discards qualifiers
+const.cc:77: passing `const ForPtr' as `this' argument of `ForPtr& 
+   ForPtr::operator=(const ForPtr&)' discards qualifiers
+const.cc:78: passing `const ForPtr' as `this' argument of `ForPtr& 
+   ForPtr::operator=(For*)' discards qualifiers
+const.cc:78: invalid conversion from `const void*' to `For*'
+const.cc:78:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+const.cc:79: passing `const ForPtr' as `this' argument of `ForPtr& 
+   ForPtr::operator=(For*)' discards qualifiers
+const.cc:79: invalid conversion from `const void*' to `For*'
+const.cc:79:   initializing argument 1 of `ForPtr& ForPtr::operator=(For*)'
+const.cc:90: passing `const constForPtr' as `this' argument of `constForPtr& 
+   constForPtr::operator=(const constForPtr&)' discards qualifiers
+const.cc:91: passing `const constForPtr' as `this' argument of `constForPtr& 
+   constForPtr::operator=(const constForPtr&)' discards qualifiers
+const.cc:92: passing `const constForPtr' as `this' argument of `constForPtr& 
+   constForPtr::operator=(const constForPtr&)' discards qualifiers
+const.cc:93: passing `const constForPtr' as `this' argument of `constForPtr& 
+   constForPtr::operator=(const constForPtr&)' discards qualifiers
+const.cc:107: conversion from `constForPtr' to non-scalar type `ForPtr' 
+   requested
+const.cc:108: conversion from `const constForPtr' to non-scalar type `ForPtr' 
+   requested
+const.cc:115: conversion from `constForPtr' to non-scalar type `ForPtr' 
+   requested
+const.cc:116: conversion from `const constForPtr' to non-scalar type `ForPtr' 
+   requested
+const.cc:138: could not convert `c_P' to `ForPtr&'
+const.cc:11: in passing argument 1 of `void rfncP(ForPtr&)'
+const.cc:139: could not convert `CP' to `ForPtr&'
+const.cc:11: in passing argument 1 of `void rfncP(ForPtr&)'
+const.cc:140: could not convert `c_CP' to `ForPtr&'
+const.cc:11: in passing argument 1 of `void rfncP(ForPtr&)'
+const.cc:147: could not convert `CP' to `const ForPtr&'
+const.cc:12: in passing argument 1 of `void rfncc_P(const ForPtr&)'
+const.cc:148: could not convert `c_CP' to `const ForPtr&'
+const.cc:12: in passing argument 1 of `void rfncc_P(const ForPtr&)'
+const.cc:154: could not convert `c_P' to `constForPtr&'
+const.cc:13: in passing argument 1 of `void rfncCP(constForPtr&)'
+const.cc:158: could not convert `c_CP' to `constForPtr&'
+const.cc:13: in passing argument 1 of `void rfncCP(constForPtr&)'
+make[1]: *** [nc_const_test-const.o] Error 1

@@ -1,7 +1,8 @@
 #
 # Makefile.am for liby2util/testsuite
 #
-SUBDIRS = lib
+SUBDIRS = lib test_rep
+
 AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)

@@ -10,10 +10,13 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       RepDef.h
+  File:       RepDef.h
 
-   Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
+  Author:     Michael Andres <ma@suse.de>
+  Maintainer: Michael Andres <ma@suse.de>
+
+  Purpose: Provides a set of macros to define data and pointer classes.
+  For details see the liby2util documentation (CountedPtr.html).
 
 /-*/
 #ifndef RepDef_h
@@ -24,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 //
-// NOTE: Data classes should virtual inherit clas Rep:
+// NOTE: Data classes should virtual inherit class Rep:
 //
 // class CLNAME : virtual public Rep {
 //   REP_BODY(CLNAME);
@@ -49,117 +52,129 @@
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 //
-// NOTE: Handle classes are derived virtual. This allows implicit
+// NOTE: Pointerclasses are derived virtual. This allows implicit
 // conversion from 'Ptr' to 'constPtr'. BUT they will not work together
-// with representation classes, that contain multimple independent
-// instances of the same Baseclass.
+// with data classes, that inherit multimple independent instances of
+// the same base class.
 //
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-#define DEFINE_BASIC_HANDLES(NAME)	\
-  class CLASS_CONST_PTR(NAME) {		\
-    BODY_CONST_PTR(NAME)		\
-  };					\
-  class CLASS_PTR(NAME) {		\
-    BODY_PTR(NAME)			\
-  };
-
 ///////////////////////////////////////////////////////////////////
+// Define base pointer classes directly derived from constRepPtr/RepPtr:
+//
+// class const##NAME##Ptr : virtual public constRepPtr
+// class NAME##Ptr        : virtual public RepPtr
 ///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-
-#define DEFINE_DERIVED_HANDLES(NAME,MODE,BASE)	\
-  class CLASS_CONST_PTR(NAME), virtual MODE const##BASE##Ptr {	\
-    BODY_CONST_PTR(NAME)					\
+#define DEFINE_BASE_POINTER(NAME)				\
+  class NAME;							\
+  class const##NAME##Ptr : virtual public constRepPtr  {	\
+    GEN_BODY( const##NAME##Ptr, const NAME *, constRepPtr )	\
   };								\
-  class CLASS_PTR(NAME), virtual MODE BASE##Ptr {		\
-    BODY_PTR(NAME)						\
+  class NAME##Ptr : virtual public const##NAME##Ptr, virtual public RepPtr {			\
+    GEN_BODY( NAME##Ptr, NAME *, RepPtr )			\
   };
 
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
 
-#define DEFINE_DOUBLE_DERIVED_HANDLES(NAME,MODE,BASE,MODE2,BASE2)	\
-  class CLASS_CONST_PTR(NAME), virtual MODE const##BASE##Ptr, virtual MODE2 const##BASE2##Ptr {	\
-    BODY_CONST_PTR(NAME)									\
-  };												\
-  class CLASS_PTR(NAME), virtual MODE BASE##Ptr, virtual MODE2 BASE2##Ptr {			\
-    BODY_PTR(NAME)										\
+///////////////////////////////////////////////////////////////////
+// Define derived pointer classes:
+//
+// class const##NAME##Ptr : virtual public const##FROM##Ptr
+// class NAME##Ptr        : virtual public FROM##Ptr
+//
+// Third arg BASE is the name of the bottommost pointer class of this
+// hierarchy. We need to know it, to allow construction and assignment
+// from const##BASE##Ptr or BASE##Ptr via dynamic_casts.
+//
+// A typical hierarchy would look like this:
+//
+// DEFINE_BASE_POINTER(Bse);
+// DEFINE_DERIVED_POINTER(Obj,Bse,Bse);
+// DEFINE_DERIVED_POINTER(Pkg,Obj,Bse);
+// DEFINE_DERIVED_POINTER(Sel,Obj,Bse);
+//
+///////////////////////////////////////////////////////////////////
+#define DEFINE_DERIVED_POINTER(NAME,FROM,BASE)						\
+  class NAME;										\
+  class const##NAME##Ptr : virtual public const##FROM##Ptr  {				\
+    GEN_BODY( const##NAME##Ptr, const NAME *, constRepPtr )				\
+    GEN_BASECONSTRUCT( const##NAME##Ptr, const##BASE##Ptr, const BASE *, constRepPtr )	\
+  };											\
+  class NAME##Ptr : virtual public const##NAME##Ptr, virtual public FROM##Ptr {		\
+    GEN_BODY( NAME##Ptr, NAME *, RepPtr )						\
+    GEN_BASECONSTRUCT( NAME##Ptr, BASE##Ptr, BASE *, RepPtr )				\
   };
 
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-
-#define IMPL_HANDLES(NAME)	\
-  IMPL_CONST_PTR(NAME)	\
-  IMPL_PTR(NAME)
 
 ///////////////////////////////////////////////////////////////////
+// Implementation for base pointer classes
 ///////////////////////////////////////////////////////////////////
+#define IMPL_BASE_POINTER(NAME)					\
+  GEN_IMPL( const##NAME##Ptr, const NAME *, constRepPtr )	\
+  GEN_IMPL( NAME##Ptr, NAME *, RepPtr )
+
+
 ///////////////////////////////////////////////////////////////////
-
-#define CLASS_CONST_PTR(NAME) GEN_CLASS( const##NAME##Ptr, NAME, const )
-#define CLASS_PTR(NAME)       GEN_CLASS( NAME##Ptr,        NAME,       ), virtual public const##NAME##Ptr
-
-#define BODY_CONST_PTR(NAME)  GEN_BODY( const##NAME##Ptr, NAME, const )
-#define BODY_PTR(NAME)        GEN_BODY( NAME##Ptr,        NAME,       )
-
-#define IMPL_CONST_PTR(NAME)  GEN_IMPL( const##NAME##Ptr, NAME, const )
-#define IMPL_PTR(NAME)        GEN_IMPL( NAME##Ptr,        NAME,       )
+// Implementation for derived pointer classes
+///////////////////////////////////////////////////////////////////
+#define IMPL_DERIVED_POINTER(NAME,FROM,BASE)							\
+  IMPL_BASE_POINTER(NAME)									\
+  GEN_BASECONSTRUCT_IMPL( const##NAME##Ptr, const##BASE##Ptr, const BASE *, constRepPtr )	\
+  GEN_BASECONSTRUCT_IMPL( NAME##Ptr, BASE##Ptr, BASE *, RepPtr )
 
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-#define GEN_CLASS(CLNAME,REPNAME,MAYCONST)	\
-  REPNAME; class CLNAME : virtual public MAYCONST##RepPtr
-
-///////////////////////////////////////////////////////////////////
-
-#define GEN_BODY(CLNAME,REPNAME,MAYCONST)	\
-  public:								\
-    CLNAME( MAYCONST REPNAME * p = 0 );					\
-    CLNAME( const CLNAME & rhs );					\
-    CLNAME( const MAYCONST##RepPtr & rhs );				\
-    CLNAME & operator=( MAYCONST REPNAME * p );				\
-    CLNAME & operator=( const CLNAME & rhs );				\
-    CLNAME & operator=( const MAYCONST##RepPtr & rhs );			\
-    MAYCONST REPNAME * operator->() const;				\
-  protected:								\
-    MAYCONST REPNAME * rep() const;					\
-    MAYCONST REPNAME * rep( const MAYCONST##RepPtr & rhs ) const;	\
+#define GEN_BODY(PTRCLASS,DATAPTR,REPPTRCLASS)		\
+  public:						\
+    PTRCLASS( DATAPTR p = 0 );				\
+    PTRCLASS( const PTRCLASS & rhs );			\
+    PTRCLASS & operator=( DATAPTR p );			\
+    PTRCLASS & operator=( const PTRCLASS & rhs );	\
+  public:						\
+    DATAPTR operator->() const;				\
+  protected:						\
+    DATAPTR rep() const;				\
+    DATAPTR rep( const REPPTRCLASS & rhs ) const;	\
   private:
 
 
+#define GEN_BASECONSTRUCT(PTRCLASS,BASEPTRCLASS,BASEDATAPTR,REPPTRCLASS)	\
+  public:									\
+    PTRCLASS( BASEDATAPTR p );							\
+    PTRCLASS( const BASEPTRCLASS & rhs );					\
+  private:
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-//
-// ! Always initialize constRepPtr, It's the bottommost class
-//
+#define GEN_IMPL(PTRCLASS,DATAPTR,REPPTRCLASS)			\
+PTRCLASS::PTRCLASS( DATAPTR p ) : constRepPtr( p )		\
+  {}								\
+PTRCLASS::PTRCLASS( const PTRCLASS & rhs ) : constRepPtr( rhs )	\
+  {}								\
+PTRCLASS & PTRCLASS::operator=( DATAPTR p )			\
+  { REPPTRCLASS::operator=( p ); return *this; }		\
+PTRCLASS & PTRCLASS::operator=( const PTRCLASS & rhs )		\
+  { REPPTRCLASS::operator=( rhs ); return *this; }		\
+DATAPTR PTRCLASS::operator->() const 				\
+  { return rep(); }						\
+DATAPTR PTRCLASS::rep() const					\
+  { return dynamic_cast<DATAPTR>(baseRep()); }			\
+DATAPTR PTRCLASS::rep( const REPPTRCLASS & rhs ) const		\
+  { return dynamic_cast<DATAPTR>(baseRep( rhs )); }
 
-#define GEN_IMPL(CLNAME,REPNAME,MAYCONST)	\
-CLNAME::CLNAME( MAYCONST REPNAME * p ) : constRepPtr( p )			\
-  {}										\
-CLNAME::CLNAME( const CLNAME & rhs ) : constRepPtr( rhs )			\
-  {}										\
-CLNAME::CLNAME( const MAYCONST##RepPtr & rhs ) : constRepPtr( rep( rhs ) )	\
-  {}										\
-CLNAME & CLNAME::operator=( MAYCONST REPNAME * p )				\
-  { MAYCONST##RepPtr::operator=( p ); return *this; }				\
-CLNAME & CLNAME::operator=( const CLNAME & rhs )				\
-  { MAYCONST##RepPtr::operator=( rhs ); return *this; }				\
-CLNAME & CLNAME::operator=( const MAYCONST##RepPtr & rhs )			\
-  { MAYCONST##RepPtr::operator=( rep( rhs ) ); return *this; }			\
-MAYCONST REPNAME * CLNAME::operator->() const 					\
-  { return rep(); }								\
-MAYCONST REPNAME * CLNAME::rep() const						\
-  { return dynamic_cast<MAYCONST REPNAME *>(baseRep()); }			\
-MAYCONST REPNAME * CLNAME::rep( const MAYCONST##RepPtr & rhs ) const		\
-  { return dynamic_cast<MAYCONST REPNAME *>(baseRep( rhs )); }
 
+#define GEN_BASECONSTRUCT_IMPL(PTRCLASS,BASEPTRCLASS,BASEDATAPTR,REPPTRCLASS)		\
+PTRCLASS::PTRCLASS( BASEDATAPTR p ) : constRepPtr( 0 )					\
+  { operator=( BASEPTRCLASS( p ) ); }							\
+PTRCLASS::PTRCLASS( const BASEPTRCLASS & rhs ) : constRepPtr( rep( rhs ) )		\
+  {}
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
 #endif // RepDef_h

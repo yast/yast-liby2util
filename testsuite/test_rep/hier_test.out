@@ -1,0 +1,26 @@
+<0> [TEST] hier.cc(main):26 START=================================
+<0> [TEST] hier.cc(main):42 ------------------------
+<0> [TEST] hier.cc(main):42 b=B Bse(id:2 ref:2 [5])
+<0> [TEST] hier.cc(main):42 b=O Obj(id:3 ref:2 [5])
+<0> [TEST] hier.cc(main):42 b=P Pkg(id:4 ref:2 [5])
+<0> [TEST] hier.cc(main):42 b=S Sel(id:5 ref:2 [5])
+<0> [TEST] hier.cc(main):42 ------------------------
+<0> [TEST] hier.cc(main):43 ------------------------
+<0> [TEST] hier.cc(main):43 o=B Rep(nil)
+<0> [TEST] hier.cc(main):43 o=O Obj(id:3 ref:2 [5])
+<0> [TEST] hier.cc(main):43 o=P Pkg(id:4 ref:2 [5])
+<0> [TEST] hier.cc(main):43 o=S Sel(id:5 ref:2 [5])
+<0> [TEST] hier.cc(main):43 ------------------------
+<0> [TEST] hier.cc(main):44 ------------------------
+<0> [TEST] hier.cc(main):44 p=B Rep(nil)
+<0> [TEST] hier.cc(main):44 p=O Rep(nil)
+<0> [TEST] hier.cc(main):44 p=P Pkg(id:4 ref:2 [5])
+<0> [TEST] hier.cc(main):44 p=S Rep(nil)
+<0> [TEST] hier.cc(main):44 ------------------------
+<0> [TEST] hier.cc(main):45 ------------------------
+<0> [TEST] hier.cc(main):45 s=B Rep(nil)
+<0> [TEST] hier.cc(main):45 s=O Rep(nil)
+<0> [TEST] hier.cc(main):45 s=P Rep(nil)
+<0> [TEST] hier.cc(main):45 s=S Sel(id:5 ref:2 [5])
+<0> [TEST] hier.cc(main):45 ------------------------
+<0> [TEST] hier.cc(main):47 END===================================

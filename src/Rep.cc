@@ -33,7 +33,7 @@ unsigned Rep::rep_Total = 0;
  * #define REP_DEBUG_REF to additionally log calls to rep_ref()/rep_unref().
  *
  * #define REP_DEBUG_STREAM to the std::ostream that should be used for logging.
- * Default is std::cerr. It might be helpfull, if derived classes overload rep_name().
+ * Default is to log via Y2SLog (class "Rep", level "Debug")
  *
  **/
 #ifdef REP_DEBUG_REF
@@ -64,15 +64,12 @@ void Rep::_dbg( const char f ) const
 #ifdef REP_DEBUG
   switch ( f ) {
   case 'c':
-    ++rep_Total;
     Rep::dumpOn( REP_DEBUG_STREAM << "+++ " ) << std::endl;
     break;
   case 'C':
-    ++rep_Total;
     Rep::dumpOn( REP_DEBUG_STREAM << "+c+ " ) << std::endl;
     break;
   case 'd':
-    --rep_Total;
     Rep::dumpOn( REP_DEBUG_STREAM << "--- " ) << std::endl;
     break;
 
@@ -99,15 +96,7 @@ void Rep::_dbg( const char f ) const
 //
 std::ostream & Rep::dumpOn( std::ostream & str ) const
 {
-  str << rep_name()
-#ifdef REP_DEBUG
-    << "_" << rep_id
-#endif
-    << "(" << (const void*)this << " * " << rep_cnt_i
-#ifdef REP_DEBUG
-    << " [" << rep_Total << "]"
-#endif
-    << ")";
+  str << rep_name() << "(id:" << rep_id << " ref:" << rep_cnt_i << " [" << rep_Total << "])";
   return str;
 }
 

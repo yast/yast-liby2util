@@ -89,6 +89,7 @@ class Rep {
      * Constructor. Initial reference count is zero.
      **/
     Rep() : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
+      ++rep_Total;
       _dbg( 'c' );
     }
 
@@ -97,6 +98,7 @@ class Rep {
      **/
     Rep( const Rep & rhs ) : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
       // do not copy refcount
+      ++rep_Total;
       _dbg( 'C' );
     }
 
@@ -113,25 +115,27 @@ class Rep {
     virtual ~Rep() {
       if ( rep_cnt_i )
 	throw( this );
+      --rep_Total;
       _dbg( 'd' );
     }
 
   private:
 
     /**
-     * REP_DEBUG: Provides numerical ids.
+     * Provides numerical ids.
      **/
     static unsigned rep_IDs;
     /**
-     * REP_DEBUG: Counts total ammount of objects in memeory.
+     * Counts total ammount of objects in memeory.
      **/
     static unsigned rep_Total;
     /**
-     * REP_DEBUG: This objects numerical id.
+     * This objects numerical id.
      **/
     const unsigned rep_id;
     /**
-     * REP_DEBUG: Write debug line
+     * Write debug lines if liby2util was compiled with REP_DEBUG
+     * or REP_DEBUG_REF. See Rep.cc for details.
      **/
     void _dbg( const char f ) const;
 
@@ -275,7 +279,7 @@ class constRepPtr {
   public:
 
     /**
-     * Allow test for NULL.
+     * Allow test '== NULL'
      **/
     operator const void *() const { return rep_p; }
 
