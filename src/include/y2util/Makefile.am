@@ -40,6 +40,7 @@ pkginclude_HEADERS =		\
 	diff.h			\
 	hash.h			\
 	miniini.h		\
+	setutil.h		\
 	stringutil.h		\
 	timeclass.h		\
 	y2log.h

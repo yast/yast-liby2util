@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  1 22:53:30 CET 2004 - ma@suse.de
+
+- Added common set operations (setutil.h)
+- 2.9.12
+
+-------------------------------------------------------------------
 Tue Feb 24 16:30:17 CET 2004 - mvidner@suse.cz
 
 - Toggle debug on SIGUSR1, reread log.conf on SIGUSR2.
