@@ -7,22 +7,23 @@ pkgincludedir = $(includedir)/y2util
 # these go to $(pkgincludedir)
 
 pkginclude_HEADERS = \
-	stringutil.h	\
-	hash.h		\
-	Ustring.h	\
-		LangCode.h	\
-	Pathname.h	\
-	PathInfo.h	\
-	Rep.h	\
-	RepDef.h	\
-	BitField.h	\
-	RefObject.h	\
-	Y2SLog.h	\
-	TagParser.h	\
-	CommonPkdParser.h \
-	timeclass.h \
-	ExternalDataSource.h \
-		ExternalProgram.h \
+	stringutil.h		\
+	hash.h			\
+	Ustring.h		\
+	LangCode.h		\
+	Pathname.h		\
+	PathInfo.h		\
+	Rep.h			\
+	RepDef.h		\
+	BitField.h		\
+	RefObject.h		\
+	Y2SLog.h		\
+	TagParser.h		\
+	TagCacheRetrieval.h	\
+	CommonPkdParser.h	\
+	timeclass.h		\
+	ExternalDataSource.h	\
+	ExternalProgram.h	\
 	Url.h
 
 

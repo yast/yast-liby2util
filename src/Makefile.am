@@ -11,18 +11,19 @@ AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES = \
-	stringutil.cc	\
-	hash.cc \
-	LangCode.cc	\
-	Rep.cc \
-	BitField.cc \
-	Pathname.cc \
-	PathInfo.cc \
-	TagParser.cc \
-	CommonPkdParser.cc \
-	Y2SLog.cc \
-	ExternalDataSource.cc \
-		ExternalProgram.cc \
+	stringutil.cc		\
+	hash.cc			\
+	LangCode.cc		\
+	Rep.cc			\
+	BitField.cc		\
+	Pathname.cc		\
+	PathInfo.cc		\
+	TagParser.cc		\
+	TagCacheRetrieval.cc	\
+	CommonPkdParser.cc	\
+	Y2SLog.cc		\
+	ExternalDataSource.cc	\
+	ExternalProgram.cc	\
 	Url.cc
 
 
