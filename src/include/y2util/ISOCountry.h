@@ -79,6 +79,7 @@ inline bool operator!=( const ISOCountry & lhs, const std::string & rhs ) {
 
 ///////////////////////////////////////////////////////////////////
 
+template<>
 inline bool std::less<ISOCountry>::operator()( const ISOCountry & lhs,
 					       const ISOCountry & rhs ) const
 {

@@ -98,6 +98,7 @@ inline bool operator!=( const LangCode & lhs, const std::string & rhs ) {
 
 ///////////////////////////////////////////////////////////////////
 
+template<>
 inline bool std::less<LangCode>::operator()( const LangCode & lhs,
 					     const LangCode & rhs ) const
 {
