@@ -113,7 +113,7 @@ class ProgressCounter {
 
   private:
 
-    const Callback & _cb;
+    const Callback _cb;
 
     State    _state;
     unsigned _cycle;
@@ -130,9 +130,22 @@ class ProgressCounter {
   public:
 
     /**
-     * Constructor. Defaults to no callback.
+     * Constructor. Create Callback from function pointer.
+     * Defaults to no Callback.
      **/
-    ProgressCounter( const Callback & cb_r = Callback() )
+    ProgressCounter( Callback::Func cb_r = 0 )
+      : _cb( cb_r )
+      , _state( st_stop )
+      , _cycle( 0 )
+      , _min( 0 )
+      , _max( 0 )
+      , _val( 0 )
+    {}
+
+    /**
+     * Constructor. Copy provided Callback.
+     **/
+    ProgressCounter( const Callback & cb_r )
       : _cb( cb_r )
       , _state( st_stop )
       , _cycle( 0 )
