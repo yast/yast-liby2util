@@ -17,3 +17,4 @@ validate_selection
 validate_tagged
 test_oldsel
 test_sysconfig
+test_timer
