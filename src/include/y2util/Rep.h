@@ -56,13 +56,13 @@ class Rep {
     /**
      * Trigger derived classes after refCount was increased.
      **/
-    virtual void ref_to( unsigned rep_cnt_r ) const {}
+    virtual void ref_to( unsigned /* rep_cnt_r */ ) const {}
     /**
      * Trigger derived classes after refCount was decreased.
      * No trigger is sent, if refCount got zero (i.e. the
      * object is deleted).
      **/
-    virtual void unref_to( unsigned rep_cnt_r ) const {}
+    virtual void unref_to( unsigned /* rep_cnt_r */ ) const {}
 
   public:
 
@@ -191,7 +191,7 @@ class CountedRep : public Rep {
     /**
      * CopyConstructor.
      **/
-    CountedRep( const CountedRep & rhs ) : _objectId( ++_objectIds ) { ++_objectCount; }
+    CountedRep( const CountedRep & rhs ) : Rep( rhs ), _objectId( ++_objectIds ) { ++_objectCount; }
     /**
      * Assignment. objectId remains untouched.
      **/
@@ -508,7 +508,7 @@ class Ptr : public PtrBase<_Bt> {
     /**
      * CopyConstructor. From Ptr<_Tp,_Bt>.
      **/
-    Ptr( const Ptr & rhs ) : _ptr( rhs._ptr ) {}
+    Ptr( const Ptr & rhs ) : PtrBase<_Bt>( rhs ), _ptr( rhs._ptr ) {}
     /**
      * Constructor. From Ptr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
      **/
@@ -584,7 +584,7 @@ class constPtr : public constPtrBase<_Bt> {
     /**
      * CopyConstructor. From constPtr<_Tp,_Bt>.
      **/
-    constPtr( const constPtr & rhs ) : _ptr( rhs._ptr ) {}
+    constPtr( const constPtr & rhs ) : constPtrBase<_Bt>( rhs ), _ptr( rhs._ptr ) {}
     /**
      * Constructor. From constPtr<..,_Bt>, i.e. pointer to an object that inherits _Bt.
      **/
