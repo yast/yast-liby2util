@@ -418,11 +418,13 @@ bool should_be_logged (int loglevel, string componentname) {
     return log_debug;
 }
 
+
 /**
  * Set (or reset) the simple mode
  */
-void set_simple(bool simple) {
+void set_log_simple_mode(bool simple) {
     log_simple = simple;
 }
+
 
 /* EOF */

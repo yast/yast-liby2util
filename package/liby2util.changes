@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 18 10:22:29 CET 2004 - msvec@suse.cz
+
+- better function name for the simple log mode
+
+-------------------------------------------------------------------
 Tue Feb 17 14:58:07 CET 2004 - mvidner@suse.cz
 
 - Added MemUsage
