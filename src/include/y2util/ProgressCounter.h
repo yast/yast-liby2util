@@ -71,7 +71,7 @@
  * <PRE>
  * #include &lt;y2util/ProgressCounter.h>
  *
- * void mycallback( const ProgressCounter & pcnt, void * userdata );
+ * void mycallback( const ProgressCounter & pcnt, const void * userdata );
  * </PRE>
  *
  * Code connecting action and callback might look like:

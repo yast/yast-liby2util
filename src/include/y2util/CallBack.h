@@ -25,9 +25,9 @@
 //
 //	CLASS NAME : CallBackData<typename Func>
 /**
- * @short Template class keeping callback function and userdata pointer.
+ * @short Template class storing callback function and userdata pointer.
  *
- * <CODE>CallBackData&lt;typename Func></CODE> keeps a pointer to
+ * <CODE>CallBackData&lt;typename Func></CODE> stores a pointer to
  * function of type <CODE>Func</CODE> (passed as template argument),
  * and a <CODE>void*</CODE> which may serve as hook for user data
  * that shall be passed to the callback function.
@@ -50,7 +50,7 @@ template <typename Func> class CallBackData {
     /**
      * Hook for user data.
      **/
-    void * _data;
+    const void * _data;
 
   public:
 
@@ -62,38 +62,28 @@ template <typename Func> class CallBackData {
     /**
      * Returns the current user data.
      **/
-    void * data() const { return _data; }
+    const void * data() const { return _data; }
 
   public:
 
     /**
-     * Set a new callback function pointer. Return the previous one.
+     * Set a new callback function and user data pointer.
      **/
-    Func   setFunc( Func func_r )   { Func   ret = _func; _func = func_r; return ret; }
-
-    /**
-     * Set new user data pointer. Return the previous one.
-     **/
-    void * setData( void * data_r ) { void * ret = _data; _data = data_r; return ret; }
-
-    /**
-     * Set a new callback function pointer and new user data pointer.
-     **/
-    void   set( Func func_r, void * data_r = 0 ) {
-      setFunc( func_r );
-      setData( data_r );
+    void set( Func func_r, const void * data_r = 0 ) {
+      _func = func_r;
+      _data = data_r;
     }
     /**
      * Set callback function pointer and user data pointer to 0.
      **/
-    void   unset() { set( 0 ); }
+    void unset() { set( 0 ); }
 
   public:
 
     /**
      * Constructor.
      **/
-    CallBackData( Func func_r = 0, void * data_r = 0 ) { set( func_r, data_r ); }
+    CallBackData( Func func_r = 0, const void * data_r = 0 ) { set( func_r, data_r ); }
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -102,7 +92,7 @@ template <typename Func> class CallBackData {
 //
 //	CLASS NAME : CallBack
 /**
- * @short Template classes for callback handling.
+ * @short Template class to store and invoke a calback.
  *
  * The template classes <CODE>CallBack<B>[1-9]</B></CODE> follow the
  * same rules as <CODE>CallBack</CODE>. The only difference is their
@@ -110,11 +100,11 @@ template <typename Func> class CallBackData {
  * (passed as template argument).
  *
  * Common rule for all callback functions is that they return <CODE>void</CODE>
- * and take a <CODE>void*</CODE> as last argument.
+ * and take a <CODE>const void*</CODE> as last argument.
  *
  * Common to all <CODE>CallBack</CODE> classes is that they define
  * <CODE>bool operator() const</CODE> that takes the same arguments as the
- * callback function, except for the trailing <CODE>void*</CODE>, which is automaticaly
+ * callback function, except for the trailing <CODE>const void*</CODE>, which is automaticaly
  * provided.<CODE>operator()</CODE> returns <CODE>false</CODE>, if no callback function
  * is set. Otherwise the callback function is executed and it returns <CODE>true</CODE>.
  *
@@ -123,7 +113,7 @@ template <typename Func> class CallBackData {
  *
  * Assume a callback function that should return a <CODE>bool</CODE> (via reference argument):
  * <PRE>
- * <B>void mycallback( bool & ret, void * data )</B> {
+ * <B>void mycallback( bool & ret, const void * data )</B> {
  *   ret = true;
  * }
  *
@@ -142,7 +132,7 @@ template <typename Func> class CallBackData {
  *   }
  *
  *   <B>callback = mycallback; // Set callback to mycallback.</B>
- *   // same as e.g.: callback.setFunc( mycallback )
+ *   // same as e.g.: callback.set( mycallback )
  *
  *   <B>if ( callback( cbret ) )</B> {
  *     <B>// This time mycallback was executed, setting cbret true.</B>
@@ -155,7 +145,7 @@ template <typename Func> class CallBackData {
  * </PRE>
  * For a callback function that takes two arguments:
  * <PRE>
- * <B>void two_arg_callback( int a1, const std::string & a2, void * data )</B> {
+ * <B>void two_arg_callback( int a1, const std::string & a2, const void * data )</B> {
  *   ....;
  * }
  *
@@ -170,11 +160,11 @@ template <typename Func> class CallBackData {
  * }
  * </PRE>
  **/
-class CallBack : public CallBackData<void(*)(void*)> {
+class CallBack : public CallBackData<void(*)(const void*)> {
   public:
-    typedef void(*Func)(void*);
-    CallBack( Func func_r = 0, void * data_r = 0 )
-      : CallBackData<void(*)(void*)>( func_r, data_r )
+    typedef void(*Func)(const void*);
+    CallBack( Func func_r = 0, const void * data_r = 0 )
+      : CallBackData<void(*)(const void*)>( func_r, data_r )
     {}
   public:
     bool operator()() const {
@@ -193,11 +183,11 @@ class CallBack : public CallBackData<void(*)(void*)> {
 //
 ///////////////////////////////////////////////////////////////////
 #define DEF_CBCLASS(N,TAL,FAL,CAL) \
-template < TAL > class CallBack##N : public CallBackData<void(*)(FAL,void*)> { \
+template < TAL > class CallBack##N : public CallBackData<void(*)(FAL,const void*)> { \
   public: \
-    typedef void(*Func)(FAL,void*); \
-    CallBack##N( Func func_r = 0, void * data_r = 0 ) \
-      : CallBackData<void(*)(FAL,void*)>( func_r, data_r ) \
+    typedef void(*Func)(FAL,const void*); \
+    CallBack##N( Func func_r = 0, const void * data_r = 0 ) \
+      : CallBackData<void(*)(FAL,const void*)>( func_r, data_r ) \
     {} \
   public: \
     bool operator()( FAL ) const { if ( !_func ) return false; (*_func)( CAL, _data ); return true; } \
@@ -257,6 +247,89 @@ DEF_CBCLASS( 9
 #undef DEF_CBTAL
 #undef DEF_CBFAL
 #undef DEF_CBCAL
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : BasicSettings<..>
+/**
+ * @short Template base class managing e.g. callback settings
+ *
+ * This class maintains static default settings and a pointer to
+ * redirect the settings to use to a different location. The
+ * concrete type of settings is passed as template argument.
+ * <PRE>
+ * class RpmDb {
+ *   public:
+ *     class Callbacks : protected BasicSettings&lt;Callbacks> {
+ *       friend class RpmDb; // may set _defaults
+ *       public:
+ *         BasicSettings&lt;Callbacks>::inUse;     // adjusted to public scope
+ *         BasicSettings&lt;Callbacks>::use;       // adjusted to public scope
+ *         //BasicSettings&lt;Callbacks>::provide; // stays protected
+ *       public:
+ *         ProgressCounter::Callback _convertDb;
+ *         ProgressCounter::Callback _rebuildDb;
+ *         ProgressCounter::Callback _installPkg;
+ *     };
+ *     ...
+ * };
+ *
+ * {
+ *   RpmDb rpmdb;
+ *   RpmDb::Callbacks my_cb;
+ *
+ *   my_cb._convertDb.set( my_convertDb );
+ *   my_cb._rebuildDb.set( my_rebuildDb );
+ *   my_cb._installPkg.set( my_installPkg );
+ *
+ *   RpmDb::Callbacks::use( &my_cb );
+ *   // using my callbacks
+ *   ...
+ *
+ *   RpmDb::Callbacks::use( 0 );
+ *   // using defaults
+ *   ...
+ * }
+ * </PRE>
+ **/
+template <typename T> class BasicSettings {
+
+  protected:
+
+    /**
+     * Default settings.
+     **/
+    static T _default;
+
+    /**
+     * Settings in use.
+     **/
+    static const T * _inuse;
+
+  public:
+
+    /**
+     * @return Settings in use, NULL if defaults are used.
+     **/
+    static const T * inUse() { return _inuse; }
+
+    /**
+     * Assign settings to use, NULL for using defaults.
+     * @return Previously used settigns.
+     **/
+    static const T * use( const T * ncb_r ) {
+      const T * ret = _inuse;
+      _inuse = ncb_r;
+      return ret;
+    }
+
+    /**
+     * @return Current settings (either settings in use, or defaults).
+     **/
+    static const T & provide() { return( _inuse ? *_inuse : _default ); }
+};
 
 ///////////////////////////////////////////////////////////////////
 
