@@ -68,10 +68,12 @@ class Url {
 
 	~Url(){}
 
-	void  setHost( const std::string & hostStr )
-	{ _host = hostStr; }
-	void setPath( const std::string &pathStr )
-	{ _path = pathStr; }
+        void setProtocol( const std::string &str ) { _protocol = str; }
+        void setUsername( const std::string &str ) { _username = str; }
+        void setPassword( const std::string &str ) { _password = str; }
+	void setHost( const std::string &str ) { _host = str; }
+	void setPort( const std::string &str ) { _port = str; }
+	void setPath( const std::string &str ) { _path = str; }
 
 	const std::string & getProtocol() const { return _protocol; }
 	const std::string & getUsername() const { return _username; }
