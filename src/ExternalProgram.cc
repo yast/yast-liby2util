@@ -139,14 +139,13 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	}
     }
 
-    DBG << "Executing ";
+    MIL << "Executing \'";
     for(int i=0; argv[i]; i++)
     {
-	DBG << '\'';
-	DBG << argv[i];
-	DBG << "\' ";
+	MIL << argv[i];
+	MIL << " ";
     }
-    DBG << endl;
+    MIL << "'" << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
@@ -248,9 +247,9 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    inputfile = fdopen(from_external[0], "r");
 	    outputfile = fdopen(to_external[1], "w");
 	}
-
+#if 0
 	DBG << "pid " << pid << " launched" << endl;
-
+#endif
 	if (!inputfile || !outputfile)
 	{
 	    ERR << "Cannot create streams to external program " << argv[0] << endl;
@@ -289,7 +288,7 @@ ExternalProgram::close()
 		{
 		    // if 'launch' is logged, completion should be logged,
 		    // even if successfull.
-		    DBG << "pid " << pid << " successfully completed" << endl;
+//		    DBG << "pid " << pid << " successfully completed" << endl;
 		}
 	    }
 	    else if (WIFSIGNALED (status))
