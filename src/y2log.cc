@@ -71,7 +71,6 @@ static bool log_to_file = true;
 static bool log_to_syslog = false;
 
 static bool log_all_variable = false;
-static bool log_debug_variable = false;
 static bool log_simple = false;
 
 static FILE *Y2LOG_STDERR = stderr;		/* Default output */
@@ -351,20 +350,28 @@ static void shift_log_files(string filename)
  */
 static void signal_handler (int signum)
 {
-    did_read_logconf = false;
+    if (signum == SIGHUP)
+    {
+	did_read_logconf = false;
+    }
+    else if (signum == SIGUSR1)
+    {
+	log_debug = !log_debug;
+    }
 }
 
-static void set_signal_handler ()
+static void set_signal_handler (int signum)
 {
     struct sigaction a;
     a.sa_handler = signal_handler;
     a.sa_flags = 0;
     sigemptyset (&a.sa_mask);
 
-    int ret = sigaction (SIGUSR1, &a, NULL);
+    int ret = sigaction (signum, &a, NULL);
     if (ret != 0)
     {
-	fprintf (stderr, "Could not set signal handler for y2log: %d\n", ret);
+	fprintf (stderr, "Could not set handler of signal #%d for y2log: %d\n",
+		 signum, ret);
     }
 }
 
@@ -375,7 +382,8 @@ void set_log_conf(string confname) {
 
     did_read_logconf = true;
 
-    set_signal_handler ();
+    set_signal_handler (SIGHUP);
+    set_signal_handler (SIGUSR1);
 
     string logconfname = confname;
     if(logconfname == "") {
@@ -392,7 +400,6 @@ void set_log_conf(string confname) {
 	    logconfname = "/etc/YaST2/" Y2LOG_CONF;
     }
 
-    if(getenv(Y2LOG_VAR_DEBUG)) log_debug_variable = true;
     if(getenv(Y2LOG_VAR_ALL)) log_all_variable = true;
 
     /* We have to remember the errno. Otherwise a call of
@@ -403,7 +410,7 @@ void set_log_conf(string confname) {
 
     log_to_file = i["Log"]["file"] != "false";
     log_to_syslog = i["Log"]["syslog"] == "true";
-    log_debug = i["Log"]["debug"] == "true";
+    log_debug = (i["Log"]["debug"] == "true") || getenv(Y2LOG_VAR_DEBUG);
 
     if(i["Log"]["filename"] != "")
 	logname = strdup(i["Log"]["filename"].c_str());
@@ -437,10 +444,6 @@ bool should_be_logged (int loglevel, string componentname) {
     if(logconf.find(componentname) != logconf.end())
 	return logconf[componentname] == "true";
 
-    /* Environment variable */
-    if(log_debug_variable) return true;
-
-    /* Config setting */
     return log_debug;
 }
 
