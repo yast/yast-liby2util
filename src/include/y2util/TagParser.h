@@ -21,6 +21,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <list>
 #include <vector>
 #include <map>
 
@@ -54,7 +55,7 @@ class TagParser {
     std::string    startTag_t;
     std::string    endTag_t;
 
-    vector<std::string> data_Vt;
+    std::list<std::string> data_Vt;
 
   private:
 
@@ -86,7 +87,7 @@ class TagParser {
     unsigned       dataLength()  const { return endData_i - startData_i; }
     unsigned       dataLines()   const { return data_Vt.size(); }
 
-    const vector<std::string> & data() const { return data_Vt; }
+    const std::list<std::string> & data() const { return data_Vt; }
 
   public:
 
@@ -102,10 +103,8 @@ class TagParser {
 			      std::string & data_tr );
     static bool retrieveData( istream & stream_fr,
 			      streampos startData_ir, streampos endData_ir,
-			      vector<std::string> & data_Vtr );
-
-    static std::string data2string( const vector<std::string> & data_Vtr );
-
+			      std::list<std::string> & data_Vtr );
+    static std::string data2string( const std::list<std::string> & data_Vtr );
     static vector<std::string> split2words( const std::string & line_tr, const std::string & sepchars_tr = " \t\n" );
 };
 
@@ -145,7 +144,7 @@ extern std::ostream & operator<<( std::ostream & str, const TagParser & obj );
 extern std::ostream & operator<<( std::ostream & str, const TagSet & obj );
 
 ///////////////////////////////////////////////////////////////////
-#endif
+#endif		// #if 0
 
 #endif // TagParser_h
 

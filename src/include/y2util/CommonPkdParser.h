@@ -22,7 +22,7 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include <vector>
+#include <list>
 #include <y2util/TagParser.h>
 
 namespace CommonPkdParser
@@ -68,7 +68,7 @@ class Tag
 	/** the actual data for a SINGLE type */
 	std::string _data;
 	/** the actual data for a MULTI type */
-	std::vector<std::string> _multidata;
+	std::list<std::string> _multidata;
 	/** which locale is to be preferred, e.g. DE */
 	std::string _prefmainlocale;
 	/** which locale is to be preferred, e.g. de */
@@ -108,7 +108,7 @@ class Tag
 	{
 	    return _data;
 	}
-	const std::vector<std::string>& MultiData() const
+	const std::list<std::string>& MultiData() const
 	{
 	    return _multidata;
 	}
@@ -191,7 +191,7 @@ class Tag
 class TagSet
 {
     public:
-	typedef vector<CommonPkdParser::Tag*> tagvectortype;
+	typedef std::vector<CommonPkdParser::Tag*> tagvectortype;
 	
     protected:
 	/** insert tag into tagmap

@@ -305,7 +305,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 //
 bool TagParser::retrieveData( istream & stream_fr,
 			      streampos startData_ir, streampos endData_ir,
-			      vector<string> & data_Vtr )
+			      list<string> & data_Vtr )
 {
   data_Vtr.clear();
   string data_ti;
@@ -330,19 +330,23 @@ bool TagParser::retrieveData( istream & stream_fr,
 //	METHOD NAME : TagParser::data2string
 //	METHOD TYPE : string
 //
-//	DESCRIPTION : concatenate vector of strings to single string
+//	DESCRIPTION : concatenate list of strings to single string
 //
-string TagParser::data2string( const vector<string> & data_Vtr )
+string TagParser::data2string( const list<string> & data_Vtr )
 {
-  if ( !data_Vtr.size() )
-    return "";
-
-  string ret_ti( data_Vtr[0] );
-  for ( unsigned i = 1; i < data_Vtr.size(); ++i ) {
-    ret_ti += '\n';
-    ret_ti += data_Vtr[i];
-  }
-  return ret_ti;
+    if ( !data_Vtr.size() )
+	return "";
+    string ret_ti;
+#if 0 // triggers compiler bug
+    for (list<string>&::iterator pos = data_Vtr.begin();
+	 pos < data_Vtr.end(); pos++ )
+    {
+	if (!ret_ti.empty())
+	    ret_ti += '\n';
+	ret_ti += *pos;
+    }
+#endif
+    return ret_ti;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -392,7 +396,7 @@ ostream & operator<<( ostream & str, const TagParser & obj )
       << " [" << obj.posDataStart() << "-" << obj.posDataEnd() << "=" << obj.dataLength() << "]"
       << " (" << obj.dataLines() << ")";
   if ( obj.dataLines() )
-    str << " \"" << obj.data()[0] << '"';
+    str << " \"" << obj.data().front() << '"';
 
   return str << '}';
 

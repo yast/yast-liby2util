@@ -187,14 +187,17 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
     // QString <-> std::string conversion
     if (_datatype == MULTI)
     {
-	std::vector<std::string> tmp;
+	std::list<std::string> tmp;
 	parser.retrieveData (istr, startpos, endpos, tmp);
 	if (!throwawaydata)
 	{
 	    _multidata = tmp;
+
+	    // fill _data as a fallback in case someone wants a single value
+	    // for a multi-value key
 	    if (_multidata.size () > 0)
 	    {
-		_data = _multidata[0];
+		_data = _multidata.front();
 	    }
 	    else
 	    {
