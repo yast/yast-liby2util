@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 16 17:09:45 CET 2004 - lnussel@suse.de
+
+- disable -DD_MEMUSAGE otherwise all depending packages need to enable it too
+- 2.9.15
+
+-------------------------------------------------------------------
 Mon Mar 15 16:03:18 CET 2004 - mvidner@suse.cz
 
 - fixed initialization of LangCode::_nameHash
