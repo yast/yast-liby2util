@@ -20,6 +20,7 @@
 /-*/
 
 #include <iostream>
+#include <fstream>
 
 #include <y2util/stringutil.h>
 
@@ -28,6 +29,28 @@ using namespace std;
 namespace stringutil {
 ///////////////////////////////////////////////////////////////////
 
+const unsigned tmpBuffLen = 1024;
+char           tmpBuff[tmpBuffLen];
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : getline
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+std::string getline( std::istream & str, const bool trimed )
+{
+  string ret;
+  do {
+    str.clear();
+    str.getline( tmpBuff, tmpBuffLen ); // always writes '\0' terminated
+    ret += tmpBuff;
+  } while( str.rdstate() == ios::failbit );
+
+  return( trimed ? trim( ret ) : ret );
+}
 
 /******************************************************************
 **
@@ -104,6 +127,42 @@ std::string join( const std::vector<std::string> & words_r,
     ret += sep_r + words_r[i];
   }
 
+  return ret;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : stripFirstWord
+**	FUNCTION TYPE : std::string
+**
+**	DESCRIPTION :
+*/
+string stripFirstWord( string & line, const bool ltrim_first )
+{
+  if ( ltrim_first )
+    line = ltrim( line );
+
+  if ( line.empty() )
+    return line;
+
+  string ret;
+  string::size_type p = line.find_first_of( " \t" );
+
+  if ( p == string::npos ) {
+    // no ws on line
+    ret = line;
+    line.erase();
+  } else if ( p == 0 ) {
+    // starts with ws
+    // ret remains empty
+    line = ltrim( line );
+  }
+  else {
+    // strip word and ltim line
+    ret = line.substr( 0, p );
+    line = ltrim( line.erase( 0, p ) );
+  }
   return ret;
 }
 

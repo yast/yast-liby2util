@@ -26,6 +26,7 @@
 #include <cstdio>
 #include <cstdarg>
 
+#include <iosfwd>
 #include <vector>
 #include <string>
 
@@ -130,6 +131,32 @@ inline std::string octstring( long n,          int w = 5 ) { return form( "%#0*l
 inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*lo",   w, n ); }
 
 /**
+ * Return one line read from istream. Aftrwards the streampos is behind the delimiting '\n'
+ * (or at EOF). The delimiting '\n' is <b>not</b> returned.
+ *
+ * If trim is true, the string returned is trimmed (surrounding whitespaces removed).
+ * <PRE>
+ * ifstream s( "somefile" );
+ *
+ * while ( s ) {
+ *   string l = getline( s );
+ *   if ( !(s.fail() || s.bad()) ) {
+ *
+ *     // l contains valid data to be consumed.
+ *     // In case it makes any difference to you:
+ *     if ( s.good() ) {
+ *       // A delimiting '\n' was read.
+ *     } else {
+ *       // s.eof() is set: There's no '\n' at the end of file.
+ *       // Note: The line returned may netvertheless be empty if trimed is true.
+ *     }
+ *   }
+ * }
+ * </PRE>
+ **/
+extern std::string getline( std::istream & str, const bool trimed = false );
+
+/**
  * Split line into words
  *
  * <b>singlesep_r = false</b>: Separator is any nonenmpty sequence of characters listed in sep_t.
@@ -166,6 +193,25 @@ extern unsigned split( const std::string          line_r,
 
 extern std::string join( const std::vector<std::string> & words_r,
 			 const std::string & sep_r = " " );
+
+/**
+ * Strip the first word (delimited by blank or tab) from value, and return it.
+ * Adjust value to start with the second word afterwards.
+ *
+ * If value starts with blank or tab, the <b>first word is empty</b> and value will be
+ * ltrimmed afterwards.
+ *
+ * If ltrim_first is true, value will be ltrimmed before stripping the first word. Thus
+ * first word is empty, iff value is empty or contains whitespace only.
+ *
+ * <PRE>
+ * stripFirstWord( "1st" )             ==  "1st" and value truncated to ""
+ * stripFirstWord( "1st word" )        ==  "1st" and value truncated to "word"
+ * stripFirstWord( " 1st word" )       ==  ""    and value truncated to "1st word"
+ * stripFirstWord( " 1st word", true ) ==  "1st" and value truncated to "word"
+ * </PRE>
+ **/
+extern std::string stripFirstWord( std::string & value, const bool ltrim_first = false );
 
 /**
  * Return string with leading/trailing/surrounding whitespace removed
