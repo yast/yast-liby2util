@@ -62,7 +62,7 @@ bool SysConfig::load()
   string line;
   ifstream in( _path.asString().c_str() );
   if ( in.fail() ) {
-    ERR << "Unable to load '" << _path << "'" << endl;
+    WAR << "Unable to load '" << _path << "'" << endl;
     return false;
   }
   while( getline( in, line ) ) {
