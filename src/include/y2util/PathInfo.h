@@ -331,6 +331,13 @@ class PathInfo {
      **/
     static int copy_file2dir( const Pathname & file, const Pathname & dest );
 
+    /**
+     * Compute a files md5sum.
+     *
+     * @return the files md5sum on success, otherwise an empty string..
+     **/
+    static std::string md5sum( const Pathname & file );
+
     ///////////////////////////////////////////////////////////////////
     // permissions
     ///////////////////////////////////////////////////////////////////

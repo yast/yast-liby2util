@@ -1,8 +1,13 @@
 -------------------------------------------------------------------
+Thu Jul  1 18:39:01 CEST 2004 - ma@suse.de
+
+- New PathInfo::md5sum
+
+-------------------------------------------------------------------
 Thu Jun 24 15:04:58 CEST 2004 - lnussel@suse.de
 
 - link against openssl so that the dependencies are added to liby2util.la
-- new class for message digests (MD5, SHA1 etc) 
+- new class for message digests (MD5, SHA1 etc)
 - 2.10.1
 
 -------------------------------------------------------------------
@@ -45,7 +50,7 @@ Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
 -------------------------------------------------------------------
 Tue Mar 23 13:57:08 CET 2004 - visnov@suse.cz
 
-- use GNU-like output for log_simple mode
+PathInfo::md5sum- use GNU-like output for log_simple mode
 - 2.9.19
 
 -------------------------------------------------------------------
