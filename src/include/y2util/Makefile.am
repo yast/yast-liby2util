@@ -24,7 +24,9 @@ pkginclude_HEADERS = \
 	timeclass.h		\
 	ExternalDataSource.h	\
 	ExternalProgram.h	\
-	Url.h
+	Url.h			\
+	Date.h			\
+	FSize.h
 
 
 #<INSTALL-HEADER-TARGET>
