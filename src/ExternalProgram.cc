@@ -141,15 +141,15 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 
     // do not remove the single quotes around every argument, copy&paste of
     // command to shell will not work otherwise!
-    DBG << "Executing ";
+    D__ << "Executing ";
     for (int i = 0; argv[i]; i++)
     {
-	if (i>0) DBG << ' ';
-	DBG << '\'';
-	DBG << argv[i];
-	DBG << '\'';
+	if (i>0) D__ << ' ';
+	D__ << '\'';
+	D__ << argv[i];
+	D__ << '\'';
     }
-    DBG << endl;
+    D__ << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
