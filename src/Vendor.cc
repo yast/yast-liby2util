@@ -32,12 +32,12 @@ UstringHash Vendor::_nameHash;
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Vendor::isSuSE
-//	METHOD TYPE : bool
+//	METHOD NAME : Vendor::Vendor
+//	METHOD TYPE : Constructor
 //
-//	DESCRIPTION :
-//
-bool Vendor::isSuSE() const
+Vendor::Vendor( const std::string & n )
+    : Ustring( _nameHash, n )
 {
-  return( asString().substr( 0, 4 ) == "SuSE" );
+  _isSuSE = (    asString().substr( 0, 4 )  == "SuSE"
+	      || asString().substr( 0, 11 ) == "UnitedLinux" );
 }

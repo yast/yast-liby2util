@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar 14 16:27:10 CET 2003 - ma@suse.de
+
+- In vendor check isSuSE() return true for "UnitedLinux" too.
+- 2.7.15
+
+-------------------------------------------------------------------
 Thu Mar  6 17:14:37 CET 2003 - ma@suse.de
 
 - Added 'int PathInfo::chmod( const Pathname & path, mode_t mode );'
