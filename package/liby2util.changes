@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 21 21:24:18 CET 2003 - ma@suse.de
+
+- 2.7.10
+
+-------------------------------------------------------------------
 Wed Feb 19 13:55:37 CET 2003 - cschum@suse.de
 
 - GPGCheck: Don't prompt user, when destination file can't be removed.
