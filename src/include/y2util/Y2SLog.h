@@ -50,6 +50,10 @@ extern std::ostream & getdbg( const char * which, const unsigned level,
 //        #define Y2LOG "foo"
 //        DBG << ....
 //
+#ifndef Y2LOG
+#define Y2LOG "DEFINE_Y2LOG"
+#endif
+
 #define _DBG(c) _Y2SLOG( c, 0 )
 #define _MIL(c) _Y2SLOG( c, 1 )
 #define _WAR(c) _Y2SLOG( c, 2 )
