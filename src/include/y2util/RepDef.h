@@ -73,6 +73,7 @@
   };								\
   class NAME##Ptr : virtual public const##NAME##Ptr, virtual public RepPtr {			\
     GEN_BODY( NAME##Ptr, NAME *, RepPtr )			\
+    GEN_CONSTCAST( NAME  )					\
   };
 
 
@@ -103,6 +104,7 @@
   class NAME##Ptr : virtual public const##NAME##Ptr, virtual public FROM##Ptr {		\
     GEN_BODY( NAME##Ptr, NAME *, RepPtr )						\
     GEN_BASECONSTRUCT( NAME##Ptr, BASE##Ptr, BASE *, RepPtr )				\
+    GEN_CONSTCAST( NAME )								\
   };
 
 
@@ -112,7 +114,6 @@
 #define IMPL_BASE_POINTER(NAME)					\
   GEN_IMPL( const##NAME##Ptr, const NAME *, constRepPtr )	\
   GEN_IMPL( NAME##Ptr, NAME *, RepPtr )
-
 
 ///////////////////////////////////////////////////////////////////
 // Implementation for derived pointer classes
@@ -144,6 +145,17 @@
   public:									\
     PTRCLASS( BASEDATAPTR p );							\
     PTRCLASS( const BASEPTRCLASS & rhs );					\
+  private:
+
+
+#define GEN_CONSTCAST( NAME )							\
+  public:									\
+    static NAME##Ptr cast_away_const( const NAME##Ptr & rhs ) {			\
+      return rhs;								\
+    }										\
+    static NAME##Ptr cast_away_const( const const##NAME##Ptr & rhs ) {		\
+      return const_cast<NAME *>( rhs.operator->() );				\
+    }										\
   private:
 
 ///////////////////////////////////////////////////////////////////

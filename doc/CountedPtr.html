@@ -70,11 +70,15 @@ While a <CODE>const Data *</CODE> is provided by <CODE>constDataPtr</CODE>.
 <tr><td>const <CODE>DataPtr</CODE></td>      <td>Data *const</td></tr>
 </table>
 
-<p> Construction, assignment, and implicit conversion on pointer classes will follow the
-same rules as with traditional pointers. And like traditional pointers, you'll have to test
+<H4>Construction, assignment, and implicit conversion</H4>
+
+<p> Construction, assignment, and implicit conversion on pointer classes will follow
+the same rules as with traditional pointers. And like traditional pointers, you'll have to test
 for <CODE>!= NULL</CODE> before trying to access the data object using the
 <CODE>-></CODE> operator.
 </p>
+
+<H4>Casting up the pointer class hierarchy (dynamic_cast)</H4>
 
 <p> A little bit different is the situation, if you want to cast up the pointer class
 hierarchy. Something like <CODE>dynamic_cast&lt;PackagePtr>(ObjectPtr)</CODE> will not
@@ -92,6 +96,31 @@ pointer class inhertiting <CODE>SolvablePtr</CODE> (<CODE>ObjectPtr</CODE>). If 
 pointer class does not actually reference a <CODE>Package</CODE> object, the created
 <CODE>PackagePtr</CODE> will be <CODE>NULL</CODE>.
 </p>
+
+<H4>Casting away constness (const_cast)</H4>
+
+<p> In some situation it's desirable being able to convert a e.g.
+<CODE>constPackagePtr</CODE> into a <CODE>PackagePtr</CODE>, casting away constness like a
+<CODE>const_cast&lt;Package *>(const Package *)</CODE>.
+</p>
+
+<p> For this each (nonconst) pointer class defines a static member function
+<CODE>cast_away_const</CODE>, returning a (nonconst) pointer referencing the same data
+object as the (const) pointer passed as argument.
+</p>
+
+<table bgcolor="#BEEAE0" border="0" width="100%">
+<tr><td><PRE>
+PackagePtr PackagePtr::cast_away_const( const constPackagePtr & rhs );
+</PRE></td></tr>
+<tr><td><PRE>
+bool lookup ( constPackagePtr el ) {
+  PackagePtr p = PackagePtr::cast_away_const( el );
+  ...
+}
+</PRE></td></tr>
+</table>
+
 
 <!-- ****************************************************************************** -->
 <H2>Creating base classes</H2>

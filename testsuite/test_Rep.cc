@@ -15,6 +15,14 @@ int main()
   p = 0;
   p = new Pkg;
 
+  constPkgPtr c( new Pkg );
+  DBG << "p " << p << endl;
+  DBG << "c " << c << endl;
+  p = PkgPtr::cast_away_const( p );
+  DBG << "p " << p << endl;
+  p = PkgPtr::cast_away_const( c );
+  DBG << "p " << p << endl;
+
   DBG << "==================================" << endl;
   return 0;
 }
