@@ -26,8 +26,8 @@
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : LangCode
-/*
- *
+/**
+ * Ustrings to contain ISO <code>language</code> or <code>language_country</code> codes.
  **/
 class LangCode : public Ustring {
 
@@ -38,6 +38,18 @@ class LangCode : public Ustring {
   public:
 
     explicit LangCode( const std::string & n = "" ) : Ustring( _nameHash, n ) {}
+
+  public:
+
+    /**
+     * True if this contains an <code>_country</code> code.
+     **/
+    bool hasCountry() const;
+
+    /**
+     * Returns the <code>language</code> part only.
+     **/
+    LangCode languageOnly() const;
 };
 
 ///////////////////////////////////////////////////////////////////
