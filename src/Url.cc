@@ -17,6 +17,8 @@
 
 /-*/
 
+#include <iostream>
+
 #include <y2util/Y2SLog.h>
 #include <y2util/Url.h>
 
@@ -80,7 +82,7 @@ string Url::asString( bool path, bool options )   const
 	    }
 	}
     }
-    
+
     return url;
 }
 
@@ -117,7 +119,7 @@ bool Url::split( const string& url,
 	protocol = url.substr(0,pos);
     else
 	return false;
-    
+
     D__ << "protocol " << protocol << endl;
 
     lastpos = pos+1;
@@ -127,7 +129,7 @@ bool Url::split( const string& url,
 	return false;
 
     lastpos = pos = lastpos + 2;
-    
+
     // check if non local url
     if( url[lastpos] != '/' )
     {
@@ -147,7 +149,7 @@ bool Url::split( const string& url,
 		if(pos==0) return false;
 
 		password = userandpass.substr(pos+1);
-		D__ << "password " << password << endl;
+		D__ << "password " << string( password.size(), '*' ) << endl;
 	    }
 	    username = userandpass.substr(0,pos);
 	    D__ << "username " << username << endl;
@@ -213,6 +215,19 @@ bool Url::split( const string& url,
     }
 
     return true;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : ostream &
+**
+**	DESCRIPTION :
+*/
+ostream & operator<<( ostream & str, const Url & obj )
+{
+  return str << obj.asString();
 }
 
 

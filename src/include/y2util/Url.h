@@ -20,6 +20,8 @@
 #ifndef _Url_h_
 #define _Url_h_
 
+#include <iosfwd>
+
 #include <string>
 #include <map>
 
@@ -88,7 +90,7 @@ class Url {
 	bool isLocal()   const { return _host.empty(); }
 
 	bool isValid() const { return _valid; }
-	
+
 	/** set url
 	 *
 	 * @param url string of the form protocol://[[username[:password]]@hostname[:port]]/path[;options]
@@ -106,7 +108,7 @@ class Url {
 	 * */
 	std::string asString( bool path = true, bool options = true) const;
 
-	
+
 	/** split url into tokens
 	 *
 	 * @param url string of the form protocol://[[username[:password]]@hostname[:port]]/path[;options]
@@ -121,6 +123,8 @@ class Url {
 		      std::string& port,
 		      std::string& path,
 		      OptionMapType& options );
+
+	friend std::ostream & operator<<( std::ostream & str, const Url & obj );
 };
 
 #endif // _Url_h_
