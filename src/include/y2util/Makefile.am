@@ -39,6 +39,7 @@ pkginclude_HEADERS =		\
 	YTransText.h		\
 	diff.h			\
 	hash.h			\
+	miniini.h		\
 	stringutil.h		\
 	timeclass.h		\
 	y2log.h
