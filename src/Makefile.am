@@ -2,9 +2,9 @@
 # Makefile.am for liby2util/src
 #
 
-SUBDIRS = include
+SUBDIRS = include qt
 
-INCLUDES = -I$(QTDIR)/include -I$(srcdir)/include -I$(includedir)
+INCLUDES = -Iqt -I$(srcdir)/include -I$(includedir)
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 
@@ -27,17 +27,29 @@ liby2util_la_SOURCES = \
 	ExternalProgram.cc	\
 	Url.cc			\
 	Date.cc			\
-	FSize.cc
+	FSize.cc		\
+	qt/qbitarray.cpp	\
+	qt/qcstring.cpp	\
+	qt/qdatastream.cpp	\
+	qt/qgarray.cpp	\
+	qt/qgdict.cpp	\
+	qt/qglist.cpp	\
+	qt/qglobal.cpp	\
+	qt/qgvector.cpp	\
+	qt/qiodevice.cpp	\
+	qt/qptrcollection.cpp	\
+	qt/qregexp.cpp	\
+	qt/qstring.cpp	\
+	qt/qstringlist.cpp	\
+	qt/qtextstream.cpp
 
+
+liby2util_la_LDFLAGS = -version-info 2:0
 
 #liby2util_la_LDFLAGS = -version-info 2:0 \
-# 	-Bstatic -L$(QTLIBDIR) -lqt-mt -Bdynamic
-
-liby2util_la_LDFLAGS = -version-info 2:0 \
- 	-L$(QTLIBDIR)
+# 	-L$(QTLIBDIR)
 
 liby2util_la_LIBADD = \
-	-lqt-mt	\
 	-lutil
 
 # for debug

@@ -5,7 +5,7 @@ SUBDIRS = lib test_rep
 PACKAGE = liby2util
 AUTOMAKE_OPTIONS = dejagnu
 
-INCLUDES= -I$(QTDIR)/include -I$(top_srcdir)/src/include -I$(includedir)
+INCLUDES= -I$(top_srcdir)/src/qt -I$(top_srcdir)/src/include -I$(includedir)
 
 LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\

@@ -2,8 +2,11 @@
 # Makefile.am for liby2util/src/qt
 #
 
+y2qtincludedir = $(includedir)/y2util/qt
 
-EXTRA_DIST = 	\
+# these go to $(pkgincludedir)
+
+y2qtinclude_HEADERS = \
 	qasciidict.h	\
 	qbitarray.h	\
 	qconfig.h	\
@@ -28,8 +31,9 @@ EXTRA_DIST = 	\
 	qstrlist.h	\
 	qtextstream.h	\
 	qtl.h	\
-	qvaluelist.h	\
-	\
+	qvaluelist.h
+
+EXTRA_DIST = 	\
 	qbitarray.cpp	\
 	qcstring.cpp	\
 	qdatastream.cpp	\
