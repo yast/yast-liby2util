@@ -350,7 +350,7 @@ static void shift_log_files(string filename)
  */
 static void signal_handler (int signum)
 {
-    if (signum == SIGHUP)
+    if (signum == SIGUSR2)
     {
 	did_read_logconf = false;
     }
@@ -382,7 +382,7 @@ void set_log_conf(string confname) {
 
     did_read_logconf = true;
 
-    set_signal_handler (SIGHUP);
+    set_signal_handler (SIGUSR2);
     set_signal_handler (SIGUSR1);
 
     string logconfname = confname;
