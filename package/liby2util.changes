@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 18 14:32:24 CET 2003 - ma@suse.de
+
+- Added PathInfo::userMay methods, evaluating file permissions according
+  to current uid/gid.
+- 2.7.9
+
+-------------------------------------------------------------------
 Tue Feb 11 12:54:52 CET 2003 - sh@suse.de
 
 - (Partial) fix for bug #19603: RPM groups not translated

@@ -140,6 +140,19 @@ class PathInfo {
 
     mode_t st_mode() const { return isExist() ? statbuf_C.st_mode : 0; }
 
+    // permission according to current uid/gid (returns [0-7])
+    mode_t userMay() const;
+
+    bool   userMayR() const { return( userMay() & 01 ); }
+    bool   userMayW() const { return( userMay() & 02 ); }
+    bool   userMayX() const { return( userMay() & 04 ); }
+
+    bool   userMayRW()  const { return( (userMay() & 03) == 03 ); }
+    bool   userMayRX()  const { return( (userMay() & 05) == 05 ); }
+    bool   userMayWX()  const { return( (userMay() & 06) == 06 ); }
+
+    bool   userMayRWX() const { return( userMay() == 07 ); }
+
     // device
     dev_t  dev()     const { return isExist() ? statbuf_C.st_dev  : 0; }
     dev_t  rdev()    const { return isExist() ? statbuf_C.st_rdev : 0; }

@@ -119,6 +119,26 @@ bool PathInfo::operator()()
   return !error_i;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::userMay
+//	METHOD TYPE : mode_t
+//
+//	DESCRIPTION :
+//
+mode_t PathInfo::userMay() const
+{
+  if ( !isExist() )
+    return 0;
+  if ( owner() == getuid() ) {
+    return( uperm()/0100 );
+  } else if ( group() == getgid() ) {
+    return( gperm()/010 );
+  }
+  return operm();
+}
+
 /******************************************************************
 **
 **
