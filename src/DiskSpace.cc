@@ -48,10 +48,10 @@ DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal, bool filter_pseudo)
 
 	info.device     = vec[0];
 	info.fstype     = vec[1];
-	info.total      = atoi(vec[2].c_str());
-	info.used       = atoi(vec[3].c_str());
-	info.available  = atoi(vec[4].c_str());
-	info.percent    = atoi(vec[5].c_str());
+	info.total      = atoll(vec[2].c_str()) * 1024;
+	info.used       = atoll(vec[3].c_str()) * 1024;
+	info.available  = atoll(vec[4].c_str()) * 1024;
+	info.percent    = atoll(vec[5].c_str());
 	info.mountpoint = vec[6];
 
 	string::size_type pos = info.mountpoint.find("\n");
