@@ -66,9 +66,7 @@ std::string FSize::form( const Unit unit_r, unsigned fw, unsigned prec, const bo
       case K:  prec = 1; break;
       case B:  prec = 0; break;
     }
-  }
-
-  if ( unit_r == B )
+  } else if ( unit_r == B )
     prec = 0; // doesn't make sense for Byte
 
   string ret = stringutil::form( "%*.*f", fw, prec, ( double( _size ) / factor( unit_r ) ) );
