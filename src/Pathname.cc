@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include "Pathname.h"
+#include <y2util/Pathname.h>
 
 using namespace std;
 

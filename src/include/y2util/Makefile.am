@@ -6,7 +6,12 @@ pkgincludedir = $(includedir)/y2util
 
 # these go to $(pkgincludedir)
 
-pkginclude_HEADERS =
+pkginclude_HEADERS = \
+	hash.h		\
+	UniqStr.h	\
+	Pathname.h	\
+	PathInfo.h	\
+	timeclass.h
 
 #<INSTALL-HEADER-TARGET>
 

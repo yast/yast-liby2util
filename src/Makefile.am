@@ -3,18 +3,15 @@
 #
 
 SUBDIRS = include
+INCLUDES = -I$(srcdir)/include -I$(includedir)
 
 lib_LTLIBRARIES = liby2util.la
 
-liby2util_la_SOURCES = hash.cc Pathname.cc
-liby2util_la_LDFLAGS = -static
+liby2util_la_SOURCES = hash.cc Pathname.cc PathInfo.cc
+liby2util_la_LDFLAGS = -version-info 2:0
 
-INCLUDES = -I$(srcdir)/include -I$(includedir)
+# for debug
 
-noinst_PROGRAMS = refptrtest
+noinst_LIBRARIES = liby2util.a
 
-refptrtest_SOURCES = refptrtest.cc
-refptrtest_LDADD = liby2util.la
-
-# only for debug
-refptrtest_LDFLAGS = -static
+liby2util_a_SOURCES = $(liby2util_la_SOURCES)

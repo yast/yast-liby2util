@@ -6,6 +6,7 @@ tmp.err*
 tmp.log*
 .deps
 .libs
-runy2util
 *.log
 *.sum
+runy2util
+refptrtest

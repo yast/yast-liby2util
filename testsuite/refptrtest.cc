@@ -1,4 +1,4 @@
-#include <RefObject.h>
+#include <y2util/RefObject.h>
 #include <iostream>
 #include <list>
 #include <string>
@@ -31,7 +31,7 @@ void testlist(strptr a, strptr b)
 		//std::cout << it.operator->()->operator->()->c_str() << std::endl;
 		std::cout << **it << std::endl;
 	}
-	
+
 	strlist.remove(b);
 
 	std::cout << "-***" << std::endl;

@@ -6,13 +6,11 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 const size_t primes[] = { 31, 101, 503, 1009, 2003, 5003 };
 
 inline size_t hashfun( unsigned p ) { return size_t(p); };
-size_t hashfun( const string& s );
-size_t hashfun( string& s );
+size_t hashfun( const std::string& s );
+size_t hashfun( std::string& s );
 size_t hashfun( const char * p );
 
 template<class Key>
@@ -27,13 +25,13 @@ class basic_hash {
 public:
 	typedef size_t size_type;
 	typedef list_elem list_type;
-	typedef vector<list_elem*> vector_type;
+	typedef std::vector<list_elem*> vector_type;
 	typedef size_type (*hashfun_t)( const Key& );
 
 	template<class le>
 	class hash_iterator {
 		friend class basic_hash<Key, list_elem>;
-		typedef forward_iterator_tag iterator_category;
+		typedef std::forward_iterator_tag iterator_category;
 	  private:
 		le *current;
 		size_type adr;
@@ -53,7 +51,7 @@ public:
 
 		// The following operators allow to test a hash in a condition if the
 		// iterator is defined
-		operator const void* () const { return vec; }	
+		operator const void* () const { return vec; }
 		bool operator! () const { return vec == 0; }
 
 		le& operator* () const {
@@ -143,7 +141,7 @@ private:
 		}
 		return false;
 	}
-	
+
   public:
 	basic_hash( size_type size = 31, hashfun_t f = hashfun ) :
 		v(size, 0), vsize(size), n_elements(0), n_buckets(0), hf(f) {}
@@ -198,7 +196,7 @@ private:
 		n_elements = 0;
 		n_buckets = 0;
 	}
-	
+
 	list_elem *find( const Key& k, list_elem ***where = 0 ) {
 		size_type adr = hf(k) % vsize;
 		list_elem **p = &v[adr];
@@ -220,11 +218,11 @@ private:
 	const list_elem *find( const Key& k ) const {
 		return (const_cast<basic_hash<Key,list_elem>*>(this)->find(k));
 	}
-	
+
 	bool exists( const Key& k ) const {
 		return (const_cast<basic_hash<Key,list_elem>*>(this)->find(k) != 0);
 	};
-	
+
 	// insert methods for compatibility with STL
 	list_elem* insert( const Key& k ) {
 		list_elem **p;
@@ -239,7 +237,7 @@ private:
 	}
 	list_elem* insert( const list_elem *e ) { return insert( e->k ); }
 	list_elem* insert( const iterator& i )  { return insert( i->k ); }
-	
+
 	bool erase( const Key& k ) {
 		size_type adr = hf(k) % vsize;
 		list_elem **p = &v[adr];
@@ -353,7 +351,7 @@ void basic_hash<Key, list_elem>::statistics() {
 		 << " buckets\n";
 	unsigned free = 0, alloced = 0, maxlen = 0, sumlen = 0;
 	size_type maxbuck;
-	
+
 	for( size_type adr = 0; adr < vsize; ++adr ) {
 		if (!v[adr])
 			++free;

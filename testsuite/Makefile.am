@@ -6,7 +6,9 @@ AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I../src/include -I$(includedir)
 
-noinst_PROGRAMS = runy2util
+CPPFLAGS = -DDEBUG
+
+noinst_PROGRAMS = runy2util refptrtest
 
 runy2util_SOURCES = runy2util.cc
 runy2util_LDADD = -ly2util
@@ -15,6 +17,8 @@ runy2util_LDFLAGS = -L$(libdir)	\
 	../src/liby2util.la	\
 	-Xlinker --no-whole-archive
 
+refptrtest_SOURCES = refptrtest.cc
+refptrtest_LDADD = ../src/liby2util.a
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \

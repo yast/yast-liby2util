@@ -1,28 +1,27 @@
-/* $Header$
-//
-// $Log$
-// Revision 1.4  2002/05/27 13:30:06  lnussel
-// made void* operator work
-//
-// Revision 1.3  2002/05/27 10:56:41  lnussel
-// - testfunction for refobjects stored in a list
-// - removed private operator new and implemented operator& in RefObject.h
-// - added debug() macro
-//
-// Revision 1.2  2002/05/27 08:30:56  lnussel
-// - build static library
-// - fix gcc3 warnings
-// - add skeleton class for time handling
-//
-// Revision 1.1  2002/05/21 14:07:29  lnussel
-// added Pathname, RefObject, UniqueStr and hash classes
-//
-*/
+/*---------------------------------------------------------------------\
+|                                                                      |
+|                      __   __    ____ _____ ____                      |
+|                      \ \ / /_ _/ ___|_   _|___ \                     |
+|                       \ V / _` \___ \ | |   __) |                    |
+|                        | | (_| |___) || |  / __/                     |
+|                        |_|\__,_|____/ |_| |_____|                    |
+|                                                                      |
+|                               core system                            |
+|                                                        (C) SuSE GmbH |
+\----------------------------------------------------------------------/
+
+   File:       RefObject.h
+
+   Author:     Michael Andres <ma@suse.de>
+   Maintainer: Michael Andres <ma@suse.de>
+
+/-*/
 #ifndef RefObject_h
 #define RefObject_h
 
 #include <unistd.h> // size_t
 #include <iosfwd>
+
 #include <Y2UTIL.h>
 
 ///////////////////////////////////////////////////////////////////

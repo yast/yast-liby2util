@@ -8,7 +8,7 @@ pkgincludedir = $(includedir)
 
 # these go to $(pkgincludedir)
 
-pkginclude_HEADERS = Y2UTIL.h RefObject.h hash.h UniqStr.h Pathname.h timeclass.h
+pkginclude_HEADERS = Y2UTIL.h
 
 #<INSTALL-HEADER-TARGET>
 

@@ -1,6 +1,8 @@
 // from PHI
 
-#include "hash.h"
+#include <y2util/hash.h>
+
+using namespace std;
 
 size_t hashfun( string& s ) {
 	unsigned h = 0;
