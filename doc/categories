@@ -16,14 +16,6 @@ TaggedFile::TagSet
 TagRetrievalPos
 TagCacheRetrievalPtr
 
-* CountedPtr
-See CountedPtr.html
-RefObject<T>
-DerivedRefObject<T, Base>
-Rep
-RepPtr
-constRepPtr
-
 * Others
 
 Date (time_t)
