@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 16 12:14:02 CEST 2002 - kk@suse.de
+
+- split off core logging functions for use by liby2util
+  and yast2-core
+
+-------------------------------------------------------------------
 Thu May 16 10:32:54 CEST 2002 - ma@suse.de
 
 - Initial version.
