@@ -36,14 +36,16 @@ extern "C"
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : PathInfo
-//
-//	DESCRIPTION :
-//
+/**
+ * @short Wrapper class for ::stat/::lstat and other file/directory related operations.
+ **/
 class PathInfo {
 
   public:
 
     enum Mode { STAT, LSTAT };
+
+    class stat_mode;
 
   private:
 
@@ -245,6 +247,59 @@ class PathInfo {
      * is no directory, otherwise the commands return value.
      **/
     static int copy_file2dir( const Pathname & file, const Pathname & dest );
+};
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : PathInfo
+/**
+ * @short Wrapper class for mode_t values as derived from ::stat
+ **/
+class PathInfo::stat_mode {
+  private:
+    mode_t _mode;
+  public:
+    stat_mode( const mode_t & mode_r = 0 ) : _mode( _mode ) {}
+  public:
+    // file type
+    bool   isFile()  const { return S_ISREG( _mode ); }
+    bool   isDir ()  const { return S_ISDIR( _mode ); }
+    bool   isLink()  const { return S_ISLNK( _mode ); }
+    bool   isChr()   const { return S_ISCHR( _mode ); }
+    bool   isBlk()   const { return S_ISBLK( _mode ); }
+    bool   isFifo()  const { return S_ISFIFO( _mode ); }
+    bool   isSock()  const { return S_ISSOCK( _mode ); }
+
+    // permission
+    bool   isRUsr()  const { return (_mode & S_IRUSR); }
+    bool   isWUsr()  const { return (_mode & S_IWUSR); }
+    bool   isXUsr()  const { return (_mode & S_IXUSR); }
+
+    bool   isR()     const { return isRUsr(); }
+    bool   isW()     const { return isWUsr(); }
+    bool   isX()     const { return isXUsr(); }
+
+    bool   isRGrp()  const { return (_mode & S_IRGRP); }
+    bool   isWGrp()  const { return (_mode & S_IWGRP); }
+    bool   isXGrp()  const { return (_mode & S_IXGRP); }
+
+    bool   isROth()  const { return (_mode & S_IROTH); }
+    bool   isWOth()  const { return (_mode & S_IWOTH); }
+    bool   isXOth()  const { return (_mode & S_IXOTH); }
+
+    bool   isUid()   const { return (_mode & S_ISUID); }
+    bool   isGid()   const { return (_mode & S_ISGID); }
+    bool   isVtx()   const { return (_mode & S_ISVTX); }
+
+    mode_t uperm()   const { return (_mode & S_IRWXU); }
+    mode_t gperm()   const { return (_mode & S_IRWXG); }
+    mode_t operm()   const { return (_mode & S_IRWXO); }
+    mode_t perm()    const { return (_mode & (S_IRWXU|S_IRWXG|S_IRWXO|S_ISUID|S_ISGID|S_ISVTX)); }
+
+    bool   isPerm ( mode_t m ) const { return (m == perm()); }
+    bool   hasPerm( mode_t m ) const { return (m == (m & perm())); }
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -1,3 +1,11 @@
+-------------------------------------------------------------------
+Thu Jan 23 12:15:42 CET 2003 - ma@suse.de
+
+- Added class PathInfo::stat_mode. Standalone wrapper class for mode_t
+  values (filetype and protection) as derived from ::stat().
+- 2.7.4
+
+-------------------------------------------------------------------
 Thu Jan 23 12:15:42 CET 2003 - ma@suse.de
 
 - Added stringutil::splitToLines. Split string into a list of lines
