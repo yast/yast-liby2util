@@ -4,22 +4,7 @@
 
 htmldir = $(docdir)/autodocs
 
-html_DATA = index.html heir.html \
-	DerivedRefObject.html \
-	PathInfo.html \
-	Pathname.html \
-	RefObject.html \
-	Rep.html \
-	T.html \
-	Tag.html \
-	TagParser.html \
-	TagSet.html \
-	TimeClass.html \
-	UniqStr.html \
-	UniqStrInternal.html \
-	list_elem.html
-
-EXTRA_DIST = $(html_DATA)
+html_DATA = index.html $(wildcard *.html)
 
 CLEANFILES = $(html_DATA)
 
