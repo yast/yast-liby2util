@@ -295,19 +295,19 @@ class hash : public basic_hash<Key,HashElt<Key,T> > {
 		v = vector_type( vsize, 0 );
 		n_elements = 0;
 		n_buckets = 0;
-		for( const_iterator t = S.begin(); t != S.end(); ++t )
+		for( typename basic_hash<Key,HashElt<Key,T> >::const_iterator t = S.begin(); t != S.end(); ++t )
 			insert( t );
 	}
 
-	void resize( size_type new_size ) {
+	void resize( typename basic_hash<Key,HashElt<Key,T> >::size_type new_size ) {
 		hash newhash(new_size, hf);
-		for( const_iterator t = begin(); t != end(); ++t )
+		for( typename basic_hash<Key,HashElt<Key,T> >::const_iterator t = begin(); t != end(); ++t )
 			newhash.insert( t );
 		swap( newhash );
 	}
 
 public:
-	hash( size_type size = 31, hashfun_t f = hashfun ) :
+	hash( typename basic_hash<Key,HashElt<Key,T> >::size_type size = 31, typename basic_hash<Key,HashElt<Key,T> >::hashfun_t f = hashfun ) :
 		basic_hash<Key,HashElt<Key,T> >( size, hashfun ) {};
 	hash( const hash& S ) { construct(S); }
 	~hash() { clear(); }
@@ -341,9 +341,9 @@ public:
 	}
 	list_type* insert( const list_type *e ) {
 		return insert( e->key, e->value ); }
-	list_type* insert( const hash<Key,T>::iterator& i ) {
+	list_type* insert( const typename hash<Key,T>::iterator& i ) {
 		return insert( i->key, i->value ); }
-	list_type* insert( const const_iterator& i ) {
+	list_type* insert( const typename hash<Key,T>::const_iterator& i ) {
 		return insert( i->key, i->value ); }
 };
 

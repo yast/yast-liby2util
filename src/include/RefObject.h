@@ -1,6 +1,11 @@
 /* $Header$
 //
 // $Log$
+// Revision 1.2  2002/05/27 08:30:56  lnussel
+// - build static library
+// - fix gcc3 warnings
+// - add skeleton class for time handling
+//
 // Revision 1.1  2002/05/21 14:07:29  lnussel
 // added Pathname, RefObject, UniqueStr and hash classes
 //
@@ -22,7 +27,7 @@ template <class ObjT> class RefObject {
   void * operator new( size_t ); // no new
   RefObject * operator&();       // no address
 
-  private:
+  protected:
 
     ///////////////////////////////////////////////////////////////////
     //
@@ -89,19 +94,19 @@ template <class ObjT> class RefObject {
   public:
 
     RefObject( ObjT * obj_pr = 0 ) {
-      cout << __PRETTY_FUNCTION__ << endl;
+      std::cout << __PRETTY_FUNCTION__ << std::endl;
       body_p = 0;
       body_assign( obj_pr ? new Ref( *obj_pr ) : 0 );
     }
 
     RefObject( const RefObject & handle_v ) {
-      cout << __PRETTY_FUNCTION__ << endl;
+      std::cout << __PRETTY_FUNCTION__ << std::endl;
       body_p = 0;
       body_assign( handle_v.body_p );
     }
 
     RefObject & operator=( const RefObject & handle_v ) {
-      cout << __PRETTY_FUNCTION__ << endl;
+      std::cout << __PRETTY_FUNCTION__ << std::endl;
       body_assign( handle_v.body_p );
       return *this;
     }
@@ -115,13 +120,14 @@ template <class ObjT> class RefObject {
 
   public:
 
-    operator void *()  const { return body_p ? *body_p : 0; }
+    operator void *()  const { return ( body_p != NULL ? *body_p : NULL ); }
     Ref & operator->() const { return assert_body(); }
 
     ObjT & operator*() const { return *assert_body(); }
 
 };
 ///////////////////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////////////////
@@ -134,15 +140,15 @@ template <class ObjT> class RefHandle : protected RefObject<ObjT> {
 
   public:
 
-    RefHandle( ObjT * obj_pr = 0 )                : RefObject<ObjT>( obj_pr )   {cout << __PRETTY_FUNCTION__ << endl;}
-    RefHandle( const RefObject<ObjT> & handle_v ) : RefObject<ObjT>( handle_v ) {cout << __PRETTY_FUNCTION__ << endl;}
+    RefHandle( ObjT * obj_pr = 0 )                : RefObject<ObjT>( obj_pr )   {std::cout << __PRETTY_FUNCTION__ << std::endl;}
+    RefHandle( const RefObject<ObjT> & handle_v ) : RefObject<ObjT>( handle_v ) {std::cout << __PRETTY_FUNCTION__ << std::endl;}
 
     virtual ~RefHandle() {}
 
   public:
 
     RefObject<ObjT>::operator void *;
-    const Ref & operator->() const { return RefObject<ObjT>::operator->(); }
+    const typename RefObject<ObjT>::Ref & operator->() const { return RefObject<ObjT>::operator->(); }
 
     const ObjT & operator*() const { return RefObject<ObjT>::operator*(); }
 
