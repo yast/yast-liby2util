@@ -78,6 +78,7 @@ class Date {
      * Constructor
      **/
     Date( time_t date_r = 0 ) : _date( date_r ) {}
+    Date( const std::string & seconds_r ) : _date( fromSECONDS (seconds_r) ) {}
 
     /**
      * Conversion to time_t
