@@ -68,6 +68,9 @@ class TagCacheRetrieval : virtual public Rep {
 	// the name of the file
 	std::string _name;
 
+	// hint to keep stream open
+	bool _keep_open;
+
 	// the stream to read data from
 	std::ifstream _stream;
 
@@ -79,11 +82,13 @@ class TagCacheRetrieval : virtual public Rep {
 	TagCacheRetrieval (const Pathname& filename);
 	~TagCacheRetrieval();
 
+	void startRetrieval();
+	void stopRetrieval();
+
 	/**
 	 * access to stream and parser
 	 * these are non-const because the caller might clobber the values
 	 */
-	std::ifstream& getStream (void) { return _stream; }
 	std::string& getName (void) { return _name; }
 	TagParser& getParser (void) { return _parser; }
 

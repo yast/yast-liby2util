@@ -45,7 +45,7 @@ IMPL_BASE_POINTER(TagCacheRetrieval);
 //
 TagCacheRetrieval::TagCacheRetrieval(const Pathname& name)
     : _name (name.asString())
-    , _stream (name.asString().c_str())
+    , _keep_open (false)
 {
 }
 
@@ -74,19 +74,63 @@ TagCacheRetrieval::~TagCacheRetrieval()
 bool
 TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::string> &data_r)
 {
-    return (_parser.retrieveData (_stream, pos.begin(), pos.end(), data_r));
+    if (!_stream.is_open())
+    {
+	_stream.open (_name.c_str());
+	if (_stream.fail())
+	{
+	    ERR << "Open (" << _name << ") failed" << endl;
+	    return false;
+	}
+    }
+    bool ret = _parser.retrieveData (_stream, pos.begin(), pos.end(), data_r);
+    if (!_keep_open)
+    {
+	_stream.close ();
+    }
+    return ret;
 }
 
 bool
 TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::string &data_r)
 {
+    if (!_stream.is_open())
+    {
+	_stream.open (_name.c_str());
+	if (_stream.fail())
+	{
+	    ERR << "Open (" << _name << ") failed";
+	    return false;
+	}
+    }
     std::list<std::string> listdata;
+    bool ret = false;
     if (_parser.retrieveData (_stream, pos.begin(), pos.end(), listdata)
 	&& !listdata.empty())
     {
 	data_r = listdata.front();
-	return true;
+	ret = true;
     }
-    return false;
+    if (!_keep_open)
+    {
+	_stream.close ();
+    }
+    return ret;
+}
+
+
+
+void
+TagCacheRetrieval::startRetrieval()
+{
+    _keep_open = true;
+}
+
+void
+TagCacheRetrieval::stopRetrieval()
+{
+    if (_stream.is_open())
+	_stream.close();
+    _keep_open = false;
 }
 
