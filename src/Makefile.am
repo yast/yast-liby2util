@@ -30,6 +30,7 @@ liby2util_la_SOURCES = \
 	FSize.cc		\
 	YStringTree.cc		\
 	YRpmGroupsTree.cc	\
+	diff.cc			\
 	qt/qbitarray.cpp	\
 	qt/qcstring.cpp		\
 	qt/qdatastream.cpp	\

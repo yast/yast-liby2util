@@ -31,6 +31,7 @@ pkginclude_HEADERS = \
 	FSize.h			\
 	TreeItem.h		\
 	YRpmGroupsTree.h	\
+	diff.h			\
 	YStringTree.h		\
 	YTransText.h
 
