@@ -24,8 +24,11 @@
 #include <iostream>
 #include <iomanip>
 
-#include <y2util/PathInfo.h>
 #include <y2util/Y2SLog.h>
+#include <y2util/stringutil.h>
+#include <y2util/ExternalProgram.h>
+
+#include <y2util/PathInfo.h>
 
 using namespace std;
 
@@ -160,6 +163,23 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
   return str;
 }
 
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : _Log_Result
+**	FUNCTION TYPE : int
+**
+**	DESCRIPTION : Helper function to log return values.
+*/
+inline int _Log_Result( const int res, const char * rclass = "errno" )
+{
+  if ( res )
+    DBG << " FAILED: " << rclass << " " << res;
+  DBG << endl;
+  return res;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -170,10 +190,11 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
 //
 int PathInfo::mkdir( const Pathname & path, unsigned mode )
 {
+  DBG << "mkdir " << path << ' ' << stringutil::octstring( mode );
   if ( ::mkdir( path.asString().c_str(), mode ) == -1 ) {
-    return errno;
+    return _Log_Result( errno );
   }
-  return 0;
+  return _Log_Result( 0 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -217,5 +238,52 @@ int PathInfo::assert_dir( const Pathname & path, unsigned mode )
 	lastpos = pos+1;
     }
     return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::rmdir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::rmdir( const Pathname & path )
+{
+  DBG << "rmdir " << path;
+  if ( ::rmdir( path.asString().c_str() ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::recursive_rmdir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::recursive_rmdir( const Pathname & path )
+{
+  DBG << "recursive_rmdir " << path << ' ';
+  PathInfo p( path );
+
+  if ( !p.isExist() ) {
+    return _Log_Result( 0 );
+  }
+
+  if ( !p.isDir() ) {
+    return _Log_Result( ENOTDIR );
+  }
+
+  string cmd( stringutil::form( "rm -r '%s'", path.asString().c_str() ) );
+  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
+    DBG << "  " << output;
+  }
+  int ret = prog.close();
+  return ret;
 }
 

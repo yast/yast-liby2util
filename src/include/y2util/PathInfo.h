@@ -148,7 +148,7 @@ class PathInfo {
     ///////////////////////////////////////////////////////////////////
 
     /**
-     * Like 'mkdir'. Attempt to create a new directory named path. mode
+     * Like '::mkdir'. Attempt to create a new directory named path. mode
      * specifies the permissions to use. It is modified by the process's
      * umask in the usual way.
      *
@@ -164,6 +164,21 @@ class PathInfo {
      * @return 0 on success, errno on failure
      **/
     static int assert_dir( const Pathname & path, unsigned mode = 0755 );
+
+    /**
+     * Like '::rmdir'. Delete a directory, which must be empty.
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int rmdir( const Pathname & path );
+
+    /**
+     * Like 'rm -r DIR'. Delete a directory, recursively removing its contents.
+     *
+     * @return 0 on success, ENOTDIR if path is not a directory, otherwise the
+     * commands return value.
+     **/
+    static int recursive_rmdir( const Pathname & path );
 };
 
 ///////////////////////////////////////////////////////////////////
