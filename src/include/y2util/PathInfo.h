@@ -197,6 +197,15 @@ class PathInfo {
     static int clean_dir( const Pathname & path );
 
     /**
+     * Like 'cp -a srcpath destpath'. Copy directory tree. srcpath/destpath must be
+     * directories. 'basename srcpath' must not exist in destpath.
+     *
+     * @return 0 on success, ENOTDIR if srcpath/destpath is not a directory, EEXIST if
+     * 'basename srcpath' exists in destpath, otherwise the commands return value.
+     **/
+    static int copy_dir( const Pathname & srcpath, const Pathname & destpath );
+
+    /**
      * Return content of directory via retlist. If dots is false
      * entries starting with '.' are not reported. "." and ".."
      * are never reported.

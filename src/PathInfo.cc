@@ -301,7 +301,7 @@ int PathInfo::recursive_rmdir( const Pathname & path )
     DBG << "  " << output;
   }
   int ret = prog.close();
-  return ret;
+  return _Log_Result( ret, "returned" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -331,7 +331,45 @@ int PathInfo::clean_dir( const Pathname & path )
     DBG << "  " << output;
   }
   int ret = prog.close();
-  return ret;
+  return _Log_Result( ret, "returned" );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::copy_dir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::copy_dir( const Pathname & srcpath, const Pathname & destpath )
+{
+  DBG << "copy_dir " << srcpath << " -> " << destpath << ' ';
+
+  PathInfo sp( srcpath );
+  if ( !sp.isDir() ) {
+    return _Log_Result( ENOTDIR );
+  }
+
+  PathInfo dp( destpath );
+  if ( !dp.isDir() ) {
+    return _Log_Result( ENOTDIR );
+  }
+
+  PathInfo tp( destpath + srcpath.basename() );
+  if ( !tp.isExist() ) {
+    _Log_Result( EEXIST );
+  }
+
+  string cmd( stringutil::form( "cp -a '%s' '%s'",
+				srcpath.asString().c_str(),
+				destpath.asString().c_str() ) );
+  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
+    DBG << "  " << output;
+  }
+  int ret = prog.close();
+  return _Log_Result( ret, "returned" );
 }
 
 ///////////////////////////////////////////////////////////////////
