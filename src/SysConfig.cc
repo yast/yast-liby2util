@@ -21,6 +21,7 @@
 
 #include <y2util/Y2SLog.h>
 #include <y2util/stringutil.h>
+#include <y2util/PathInfo.h>
 
 #include <fstream>
 
@@ -29,21 +30,25 @@
 using namespace std;
 
 SysConfig::SysConfig( const char *path )
-  : _path( path )
+  : _path( path ), mDirty( false )
 {
   load();
 }
 
 SysConfig::SysConfig( const string &path )
-  : _path( path )
+  : _path( path ), mDirty( false )
 {
   load();
 }
 
 SysConfig::SysConfig( const Pathname &path )
-  : _path( path )
+  : _path( path ), mDirty( false )
 {
   load();
+}
+
+SysConfig::~SysConfig()
+{
 }
 
 bool SysConfig::load()
@@ -81,7 +86,81 @@ bool SysConfig::load()
     }
   }
 
+  mDirty = false;
+
   return true;
+}
+
+bool SysConfig::save()
+{
+  if ( !mDirty ) {
+    D__ << "not dirty" << endl;
+    return true;
+  } else {
+    D__ << "dirty, saving..." << endl;
+  }
+
+  string newPath = _path.asString() + ".yast.new";
+  ofstream out( newPath.c_str() );
+  if ( out.fail() ) {
+    ERR << "Unable to save '" << _path << "'" << endl;
+    return false;
+  }
+  
+  map<string,bool> written;
+
+  EntryMap::iterator it;
+
+  ifstream in( _path.asString().c_str() );
+  if ( in.fail() ) {
+    WAR << "Unable to load '" << _path << "'" << endl;
+  } else {
+    string line;  
+    while( getline( in, line ) ) {
+      if ( *line.begin() != '#' ) {
+        string::size_type pos = line.find( '=', 0 );
+        if ( pos != string::npos ) {
+          string key = stringutil::trim( line.substr( 0, pos ) );
+
+          it = _entryMap.find( key );
+          if ( it != _entryMap.end() ) {
+            line = createLine( key, it->second );
+            written[ key ] = true;
+          }
+        }
+      }
+
+      out << line << endl;
+    }
+    
+    in.close();
+  }
+  
+  map<string,bool>::const_iterator it2;
+  for ( it = _entryMap.begin(); it != _entryMap.end(); ++it ) {
+    it2 = written.find( it->first );
+    if ( it2 == written.end() ) {
+      out << createLine( it->first, it->second ) << endl;
+    }
+  }
+
+  out.close();
+
+  int error = PathInfo::rename( newPath, _path );
+  if ( error ) {
+    ERR << "Error " << error << " moving " << _path << " to " << newPath
+        << endl; 
+    return false;
+  }
+  
+  mDirty = false;
+  
+  return true;
+}
+
+string SysConfig::createLine( const string &key, const string &value )
+{
+  return key + "=\"" + value + "\"";
 }
 
 string SysConfig::readEntry( const string &key, const string &defaultValue )
@@ -109,4 +188,34 @@ int SysConfig::readIntEntry( const string &key, int defaultValue )
   if ( it == _entryMap.end() ) return defaultValue;
   
   return atoi( it->second.c_str() );  
+}
+
+void SysConfig::writeEntry( const string &key, const char *value )
+{
+  _entryMap[ key ] = value;
+
+  mDirty = true;
+}
+
+void SysConfig::writeEntry( const string &key, const string &value )
+{
+  _entryMap[ key ] = value;
+
+  mDirty = true;
+}
+
+void SysConfig::writeEntry( const string &key, bool value )
+{
+  string v = value ? "true" : "false";
+  
+  _entryMap[ key ] = v;
+
+  mDirty = true;
+}
+
+void SysConfig::writeEntry( const string &key, int value )
+{
+  _entryMap[ key ] = stringutil::numstring( value );
+
+  mDirty = true;
 }

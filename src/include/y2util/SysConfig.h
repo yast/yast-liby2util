@@ -38,33 +38,42 @@ class SysConfig
 {
   public:
     /**
-      Construct a sysconfig object.
+      Construct a sysconfig object. Reads the given file.
       
       @path Path to sysconfig file. This can either be an absolute path or a
             path relative to /etc/sysconfig.
     */
     SysConfig( const char *path );
     /**
-      Construct a sysconfig object.
+      Construct a sysconfig object. Reads the given file.
       
       @path Path to sysconfig file. This can either be an absolute path or a
             path relative to /etc/sysconfig.
     */
     SysConfig( const std::string &path );
     /**
-      Construct a sysconfig object.
+      Construct a sysconfig object. Reads the given file.
       
       @path Path to sysconfig file. This can either be an absolute path or a
             path relative to /etc/sysconfig.
     */
     SysConfig( const Pathname &path );
 
+    ~SysConfig();
+
     /**
       Load sysconfig file into memory. This function is automatically called
       from the constructor.
     */    
     bool load();
+
+    /**
+      Save file to disk.
     
+      @return  true on success, false on error.
+    */
+    bool save();
+        
     /**
       Return string entry.
 
@@ -91,11 +100,48 @@ class SysConfig
       @param defaultValue Default return value, if key doesn't exit.
     */
     int readIntEntry( const std::string &key, int defaultValue = 0 );
-    
+
+    /**
+      Write string entry.
+      
+      @param key    Key of entry
+      @param value  Value of entry.
+    */
+    void writeEntry( const std::string &key, const char *value );
+
+    /**
+      Write string entry.
+      
+      @param key    Key of entry
+      @param value  Value of entry.
+    */
+    void writeEntry( const std::string &key, const std::string &value );
+
+    /**
+      Write string entry.
+      
+      @param key    Key of entry
+      @param value  Value of entry.
+    */
+    void writeEntry( const std::string &key, bool value );
+
+    /**
+      Write string entry.
+      
+      @param key    Key of entry
+      @param value  Value of entry.
+    */
+    void writeEntry( const std::string &key, int value );
+
+  protected:
+    std::string SysConfig::createLine( const std::string &key,
+                                       const std::string &value );
+ 
   private:
     Pathname _path;
     typedef std::map<std::string, std::string> EntryMap; 
     EntryMap _entryMap;
+    bool mDirty;
 };
 
 #endif

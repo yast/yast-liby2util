@@ -33,8 +33,10 @@ int main( int argc, char **argv )
   value = cfg.readEntry( "TWO", "mydefault" );
   cout << value << endl;
   
-  value = cfg.readEntry( "TWO" );
+  value = cfg.readBoolEntry( "TWO" );
   cout << value << endl;
+
+  value = cfg.readIntEntry( "FOUR" );
 
   bool b;
   
@@ -59,6 +61,13 @@ int main( int argc, char **argv )
   cout << i << endl;
 
 #endif
+
+  cfg.writeEntry( "ONE", "Eins" );
+  cfg.writeEntry( "TWO", true );
+  cfg.writeEntry( "THREE", false );
+  cfg.writeEntry( "FOUR", 4 );
+
+  cfg.save();
 
   return 0;
 }
