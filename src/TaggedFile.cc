@@ -45,7 +45,7 @@ Tag::Tag (const std::string& name, datatype dtype, tagtype ttype)
     , _datatype(dtype)
     , _tagtype(ttype)
 {
-    if (_datatype == MULTIOLD)
+    if (_datatype == MULTIOLD || _datatype == MULTIYOU)
     {
 	unsigned int namepos = _name.size();
 	if (namepos == 0)
@@ -133,6 +133,13 @@ Tag::assign (const std::string& locale, TaggedParser& parser, std::istream& istr
 		return REJECTED_NOENDTAG;
 	    }
 	break;
+	case MULTIYOU:
+	    if (parser.lookupYouEndTag (istr, _end, locale) != TaggedParser::OLDMULTI)
+	    {
+		D__ << "Endtag not found" << std::endl;
+		return REJECTED_NOENDTAG;
+	    }
+	break;
     }
     // remember positions
     _pos[locale] = TagRetrievalPos (parser.dataStartPos (), parser.dataEndPos ());
@@ -182,6 +189,7 @@ std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj )
 	case TaggedFile::SINGLEPOS: str << "SINGLEPOS"; break;
 	case TaggedFile::MULTI: str << "MULTI"; break;
 	case TaggedFile::MULTIOLD: str << "MULTIOLD"; break;
+	case TaggedFile::MULTIYOU: str << "MULTIYOU"; break;
     }
     str << std::endl;
     return str;

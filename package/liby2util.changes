@@ -1,3 +1,21 @@
+Mon Oct 14 13:42:52 CEST 2002 - ma@suse.de
+
+- Fixed TagRetrievalPos. Failed to read multiline entries containing
+  lines longer than 1024 byte.
+- 2.6.21
+
+-------------------------------------------------------------------
+Wed Oct  9 11:47:38 CEST 2002 - ma@suse.de
+
+- Fixed pathInfo::copy_dir. Check for existing target dir didn't work.
+- 2.6.20
+
+-------------------------------------------------------------------
+Wed Oct  2 15:14:33 CEST 2002 - cschum@suse.de
+
+- Added support for YOU-style localized multiline tags.
+- 2.6.19
+
 -------------------------------------------------------------------
 Wed Sep 11 11:32:16 CEST 2002 - kkaempf@suse.de
 

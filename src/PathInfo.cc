@@ -340,8 +340,8 @@ int PathInfo::copy_dir( const Pathname & srcpath, const Pathname & destpath )
   }
 
   PathInfo tp( destpath + srcpath.basename() );
-  if ( !tp.isExist() ) {
-    _Log_Result( EEXIST );
+  if ( tp.isExist() ) {
+    return _Log_Result( EEXIST );
   }
 
   string cmd( stringutil::form( "cp -a '%s' '%s'",

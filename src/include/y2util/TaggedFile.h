@@ -54,7 +54,7 @@ namespace TaggedFile
 	 *		end tag is start tag reversed
 	 */
 	enum datatype {
-	    SINGLE, SINGLEPOS, MULTI, MULTIOLD
+	    SINGLE, SINGLEPOS, MULTI, MULTIOLD, MULTIYOU
 	};
 
 	/**

@@ -82,7 +82,7 @@ class TaggedParser {
     streampos _endPos;		// end position of data
 
     int _bufferPos;		// position of data in buffer
-    int _bufferLen;		// length of data in buffer
+    unsigned int _bufferLen;	// length of data in buffer (unsigned for string::npos comparison)
 
     int _lineNumber;
 
@@ -145,6 +145,8 @@ class TaggedParser {
      * set start and end retrieval positions
      */ 
     TagType lookupEndTag ( istream & stream_fr, const std::string & etag_tr, const std::string & elang_tr = "");
+
+    TagType lookupYouEndTag( istream & strem_fr, const std::string & etag_tr, const std::string & elang_tr = "");
 
     // helper functions
     static std::string data2string( const std::list<std::string> & data_Vtr );

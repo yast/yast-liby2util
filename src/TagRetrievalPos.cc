@@ -23,6 +23,7 @@
 
 #include <y2util/Y2SLog.h>
 #include <y2util/TagRetrievalPos.h>
+#include <y2util/stringutil.h>
 
 using namespace std;
 
@@ -132,11 +133,15 @@ TagRetrievalPos::retrieveData (istream & stream_fr, list<string>& data_Vtr ) con
 
     while (stream_fr.tellg() < _end)
     {
-	stream_fr.getline (buffer_ac, bufferLen_i); // always writes '\0' terminated
-	if (!stream_fr.good())
+        string ln = stringutil::getline( stream_fr );
+	if ( ! ( stream_fr.fail() || stream_fr.bad() ) ) 
+	{
+	    data_Vtr.push_back( ln );
+	} 
+	else 
+	{
 	    break;
-
-	data_Vtr.push_back (buffer_ac);
+	}
     }
 
     return true;
