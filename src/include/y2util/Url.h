@@ -20,19 +20,23 @@
 #ifndef _Url_h_
 #define _Url_h_
 
+#include "Pathname.h"
+
 #include <iosfwd>
 
 #include <string>
 #include <map>
 
 
-/** URL class that handles URLs of the form
- * protocol://[[username[:password]]@hostname[:port]]/path[;options]
- * <p>
- * TODO: (un)escaping special characters like space -> %20
- * TODO: check if url is still valid when using set* functions
- * */
-class Url {
+/**
+  URL class that handles URLs of the form
+  protocol://[[username[:password]]@hostname[:port]]/path[;options]
+
+  TODO: (un)escaping special characters like space -> %20
+  TODO: check if url is still valid when using set* functions
+*/
+class Url
+{
     public:
 
 	typedef std::map<std::string,std::string> OptionMapType;
@@ -43,8 +47,8 @@ class Url {
 	std::string _username;
 	std::string _password;
 	std::string _host;
-	std::string _port;
-	std::string _path;
+	int _port;
+	Pathname _path;
 	OptionMapType _options;
 
 	bool _valid;
@@ -67,24 +71,24 @@ class Url {
 	 * */
 	Url( const std::string & url );
 
-	~Url(){}
+	~Url() {}
 
         bool operator==( const Url & ) const;
 
-        void setProtocol( const std::string &str ) { _protocol = str; }
-        void setUsername( const std::string &str ) { _username = str; }
-        void setPassword( const std::string &str ) { _password = str; }
-	void setHost( const std::string &str ) { _host = str; }
-	void setPort( const std::string &str ) { _port = str; }
-	void setPath( const std::string &str ) { _path = str; }
+        void setProtocol( const std::string &str );
+        void setUsername( const std::string &str );
+        void setPassword( const std::string &str );
+	void setHost( const std::string &str );
+	void setPort( int );
+	void setPath( const Pathname &path );
 
-	const std::string & getProtocol() const { return _protocol; }
-	const std::string & getUsername() const { return _username; }
-	const std::string & getPassword() const { return _password; }
-	const std::string & getHost() const { return _host; }
-	const std::string & getPort() const { return _port; }
-	const std::string & getPath() const { return _path; }
-	const OptionMapType & getOptions() const { return _options; }
+	const std::string & protocol() const { return _protocol; }
+	const std::string & username() const { return _username; }
+	const std::string & password() const { return _password; }
+	const std::string & host() const { return _host; }
+	int port() const { return _port; }
+	const Pathname & path() const { return _path; }
+	const OptionMapType & options() const { return _options; }
 
 	/** return Option
 	 *
@@ -92,7 +96,7 @@ class Url {
 	 *
 	 * @return option value, emtpy string if not found
 	 * */
-	std::string getOption(const std::string& key) const;
+	std::string option(const std::string& key) const;
 
 	bool isLocal()   const { return _host.empty(); }
 
@@ -124,6 +128,9 @@ class Url {
 	 * */
 	std::string saveAsString() const { return asString(true,true,true); }
 
+	friend std::ostream & operator<<( std::ostream & str, const Url & obj );
+
+    private:
 
 	/** split url into tokens
 	 *
@@ -131,16 +138,14 @@ class Url {
 	 *
 	 * @return true if valid url, false otherwise
 	 * */
-	static bool split( const std::string& url,
-		      std::string& protocol,
-		      std::string& username,
-		      std::string& password,
-		      std::string& hostname,
-		      std::string& port,
-		      std::string& path,
-		      OptionMapType& options );
-
-	friend std::ostream & operator<<( std::ostream & str, const Url & obj );
+	static bool split( const std::string &url,
+		           std::string &protocol,
+		           std::string &username,
+		           std::string &password,
+		           std::string &hostname,
+		           int &port,
+		           Pathname &path,
+		           OptionMapType &options );
 };
 
-#endif // _Url_h_
+#endif

@@ -1,7 +1,9 @@
 Input: ftp://user:pw@host:21/pub;type=b;typo;password=nix
 asString: ://
 isValid: false
+isLocal: true
 protocol: 
 host: 
-port: 
+port: -1
 path: 
+options: 

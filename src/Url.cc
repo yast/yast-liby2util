@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include <y2util/Y2SLog.h>
+#include <y2util/stringutil.h>
 #include <y2util/Url.h>
 
 using namespace std;
@@ -40,12 +41,14 @@ bool Url::operator==( const Url &url ) const
   return ( saveAsString() == url.saveAsString() );
 }
 
-void Url::clearifinvalid(bool valid)
+void Url::clearifinvalid( bool valid )
 {
-    if(valid) return;
+    if ( valid) return;
 
-    _protocol = _username = _password = _host = _port = _path.erase();
-    _options.erase(_options.begin(),_options.end());
+    _protocol = _username = _password = _host.erase();
+    _port = -1;
+    _path = Pathname();
+    _options.erase( _options.begin(), _options.end() );
 }
 
 bool Url::set( const string url )
@@ -54,6 +57,36 @@ bool Url::set( const string url )
     clearifinvalid(_valid);
 
     return _valid;
+}
+
+void Url::setProtocol( const std::string &str )
+{
+  _protocol = str;
+}
+
+void Url::setUsername( const std::string &str )
+{
+  _username = str;
+}
+
+void Url::setPassword( const std::string &str )
+{
+  _password = str;
+}
+
+void Url::setHost( const std::string &str )
+{
+  _host = str;
+}
+
+void Url::setPort( int port )
+{
+  _port = port;
+}
+
+void Url::setPath( const Pathname &path )
+{
+  _path = path;
 }
 
 string Url::asString( bool path, bool options, bool plainpassword )   const
@@ -73,15 +106,15 @@ string Url::asString( bool path, bool options, bool plainpassword )   const
 	url+='@';
     }
     url+=_host;
-    if(!_port.empty())
+    if( _port >= 0 )
     {
-	url+=':';
-	url+=_port;
+	url += ':';
+	url += stringutil::numstring( _port );
     }
 
     if(path)
     {
-	url+=_path;
+	url += _path.asString();
 	if(options)
 	{
 	    for(OptionMapType::const_iterator i = _options.begin();
@@ -99,7 +132,7 @@ string Url::asString( bool path, bool options, bool plainpassword )   const
     return url;
 }
 
-string Url::getOption(const string& key) const
+string Url::option(const string& key) const
 {
     OptionMapType::const_iterator it;
     string value;
@@ -110,21 +143,21 @@ string Url::getOption(const string& key) const
     return value;
 }
 
-bool Url::split( const string& url,
-	      string& protocol,
-	      string& username,
-	      string& password,
-	      string& hostname,
-	      string& port,
-	      string& path,
-	      OptionMapType& options )
+bool Url::split( const string &url,
+	         string &protocol,
+	         string &username,
+	         string &password,
+	         string &hostname,
+	         int &port,
+	         Pathname &path,
+	         OptionMapType &options )
 {
     string::size_type pos;
     string::size_type lastpos = 0;
 
-    protocol = username = password
-	= hostname = port = path
-	= string();
+    protocol = username = password = hostname = string();
+    port = -1;
+    path = Pathname();
 
     // protocol
     pos = url.find(':');
@@ -182,9 +215,13 @@ bool Url::split( const string& url,
 		// no hostname?
 		if(pos==0) return false;
 
-		port = hostandport.substr(pos+1);
-		D__ << "port " << port << endl;
-	    }
+                string portStr = hostandport.substr(pos+1);
+                if ( !portStr.empty() ) {
+                    port = strtol( portStr.c_str(), 0, 10 );
+                    if ( errno == ERANGE || errno == EINVAL ) port = 0;
+                    D__ << "port " << port << endl;
+	        }
+            }
 	    hostname = hostandport.substr(0,pos);
 	    D__ << "hostname " << hostname << endl;
 	}

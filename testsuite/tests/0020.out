@@ -1,7 +1,9 @@
 Input: http://www.suse.de/
 asString: http://www.suse.de/
 isValid: true
+isLocal: false
 protocol: http
 host: www.suse.de
-port: 
+port: -1
 path: /
+options: 

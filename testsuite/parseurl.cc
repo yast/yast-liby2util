@@ -20,10 +20,19 @@ int main( int argc, char *argv[] )
 
   cout << "asString: " << url.asString() << endl;
   cout << "isValid: " << ( url.isValid() ? "true" : "false" ) << endl;
-  cout << "protocol: " << url.getProtocol() << endl;
-  cout << "host: " << url.getHost() << endl;
-  cout << "port: " << url.getPort() << endl;
-  cout << "path: " << url.getPath() << endl;
+  cout << "isLocal: " << ( url.isLocal() ? "true" : "false" ) << endl;
+  cout << "protocol: " << url.protocol() << endl;
+  cout << "host: " << url.host() << endl;
+  cout << "port: " << url.port() << endl;
+  cout << "path: " << url.path() << endl;
+
+  cout << "options: ";
+  Url::OptionMapType options = url.options();
+  Url::OptionMapType::const_iterator it;
+  for( it = options.begin(); it != options.end(); ++it ) {
+    cout << it->first << "=" << it->second << ";";
+  }
+  cout << endl;
 
   return 0;
 }

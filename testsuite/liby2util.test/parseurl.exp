@@ -32,9 +32,9 @@ for {} { [ eof $in ] == 0 } { set line [ gets $in ] } {
       continue
     }
 
-    if { [ diff $refoutfile $outfile ] == 0 } {
+    if { [ diff $refoutfile $outfile ] != 1 } {
       puts "Output doesn't match expected data:"
-      exec diff $refoutfile $outfile
+      puts [ exec sh -c "diff -u $refoutfile $outfile || true" ]
       fail $testname
       continue
     }
