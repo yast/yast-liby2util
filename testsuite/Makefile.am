@@ -17,7 +17,6 @@ noinst_PROGRAMS = parser.prg	\
 	test_Y2SLog.prg		\
 	test_Rep.prg		\
 	test_strutil.prg	\
-	test_BitField.prg	\
 	test_mkdir.prg		\
 	test_chroot.prg		\
 	test_url.prg            \
@@ -35,9 +34,6 @@ test_Rep_prg_SOURCES = test_Rep.cc
 
 test_strutil_prg_SOURCES = test_strutil.cc
 #test_strutil_prg_LDFLAGS = -static
-
-test_BitField_prg_SOURCES = test_BitField.cc
-#test_BitField_prg_LDFLAGS = -static
 
 test_mkdir_prg_SOURCES = test_mkdir.cc
 
