@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Mar 14 20:24:08 CET 2004 - kkaempf@suse.de
+
+- enable MemUsage with -DD_MEMUSAGE
+- add size tracking
+
+-------------------------------------------------------------------
 Tue Mar  2 10:11:29 CET 2004 - lnussel@suse.de
 
 - add access functions to internal debug variable 
