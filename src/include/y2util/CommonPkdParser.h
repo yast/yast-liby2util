@@ -76,8 +76,8 @@ class Tag
 	{
 	    return comparebeforedot(t2._name);
 	}
-	// if type == ACCEPTLOCALEONLY then _defaultlocale is set to "default",
-	// use setDefaultLocale to change that
+	/** if type == ACCEPTLOCALEONLY then _defaultlocale is set to "default",
+	 use setDefaultLocale to change that */
 	void setType(assigntype type)
 	{
 	    _type = type;
@@ -90,25 +90,38 @@ class Tag
 	{
 	    _encodingtype = etype;
 	}
-	// _ is not considered here so use two letter locales or "default"/"C" only
+	/** _ is not considered here so use two letter locales or "default"/"C"
+	 * only
+	 */
 	void setDefaultLocale(const std::string& defaultlocale)
 	{
 	    _defaultlocale = defaultlocale;
 	}
-	// set the preferred tag locale e.g de_DE
+	/** set the preferred tag locale e.g de_DE */
 	void setPreferredLocale(const std::string& preflocale);
-	// pass empty string undefine the endtag
+	/** define an end tag
+	 * @param endtag which end tag to set or an empty string to undefine it
+	 * @param etype type of endtag, default is normal which means reversed plus probably added locale
+	 */
 	void setEndTag(const std::string& endtag, endtagtype etype = ENDTAG_NORMAL );
-	// clears only data, not behavior nor tag names
+	/**
+	 * clears only data, not behavior nor tag names
+	 */
 	void clear()
 	{
 	    _startpos = 0;
 	    _endpos = 0;
 	    _lastmainlocale = _lastsublocale = _extdata = _data.erase();
 	}
-	// if REJECTED_NOENDTAG is returned, stream and parser are in an undefined state
+	/** if REJECTED_NOENDTAG is returned, stream and parser are in an undefined state */
 	assignstatus assign(const std::string& starttag, TagParser& parser, std::istream& istr);
+	/**
+	 * return start position of data in stream
+	 */
 	std::streampos posDataStart() { return _startpos; }
+	/**
+	 * return end position of data in stream
+	 */
 	std::streampos posDataEnd() { return _endpos; }
 	void print(std::ostream& os)
 	{
@@ -119,7 +132,7 @@ class Tag
 	}
 };
 
-// redirects assignments to the proper Tag
+/** redirects assignments to the proper Tag */
 class TagSet : protected QAsciiDict<Tag>
 {
     protected:
