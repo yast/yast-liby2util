@@ -1,12 +1,9 @@
 -------------------------------------------------------------------
-Wed Jun 23 13:45:42 CEST 2004 - lnussel@suse.de
+Thu Jun 24 15:04:58 CEST 2004 - lnussel@suse.de
 
 - link against openssl so that the dependencies are added to liby2util.la
-
--------------------------------------------------------------------
-Fri Jun 18 14:38:59 CEST 2004 - lnussel@suse.de
-
 - new class for message digests (MD5, SHA1 etc) 
+- 2.10.1
 
 -------------------------------------------------------------------
 Thu Jun 17 15:15:30 CEST 2004 - lnussel@suse.de
