@@ -354,8 +354,6 @@ ExternalProgram::running()
     int p = waitpid( pid, &status, WNOHANG );
     if ( p < 0 ) return false;
 
-    INT << "Status: " << status << endl;
-
     status = checkStatus( status );
 
     if ( status == 0 )
