@@ -21,11 +21,4 @@
 
 #include <iosfwd>
 
-#ifdef DEBUG
-#  include<iostream>
-#  define debug(expr)	do { std::cout << __PRETTY_FUNCTION__ << ": " << expr << std::endl; } while(0)
-#else
-#  define debug(expr)
-#endif
-
 #endif // Y2UTIL_h

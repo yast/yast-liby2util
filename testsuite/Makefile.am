@@ -1,24 +1,28 @@
 #
-# Makefile.am for liby2/testsuite
+# Makefile.am for liby2util/testsuite
 #
 
 AUTOMAKE_OPTIONS = dejagnu
 
-INCLUDES= -I../src/include -I$(includedir)
+INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)
 
-CPPFLAGS = -DDEBUG
+CPPFLAGS =
 
-noinst_PROGRAMS = runy2util refptrtest
-
-runy2util_SOURCES = runy2util.cc
-runy2util_LDADD = -ly2util
-runy2util_LDFLAGS = -L$(libdir)	\
+LDFLAGS = -L$(libdir)	\
 	-Xlinker --whole-archive	\
 	../src/liby2util.la	\
 	-Xlinker --no-whole-archive
 
-refptrtest_SOURCES = refptrtest.cc
-refptrtest_LDADD = ../src/liby2util.a
+
+noinst_PROGRAMS = runy2util test_Y2SLog.exe
+
+
+runy2util_SOURCES = runy2util.cc
+
+
+test_Y2SLog_exe_SOURCES = test_Y2SLog.cc
+test_Y2SLog_exe_LDFLAGS = -static
+
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \

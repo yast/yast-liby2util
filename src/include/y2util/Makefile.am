@@ -12,6 +12,7 @@ pkginclude_HEADERS = \
 	Pathname.h	\
 	PathInfo.h	\
 	RefObject.h	\
+	Y2SLog.h	\
 	timeclass.h
 
 #<INSTALL-HEADER-TARGET>
