@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 19 13:55:37 CET 2003 - cschum@suse.de
+
+- GPGCheck: Don't prompt user, when destination file can't be removed.
+
+-------------------------------------------------------------------
 Tue Feb 18 14:32:24 CET 2003 - ma@suse.de
 
 - Added PathInfo::userMay methods, evaluating file permissions according
