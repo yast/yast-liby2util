@@ -9,7 +9,7 @@ int main(void)
 {
 	string directory="bla/blub/zonk";
 	int ret=0;
-	if((ret=PathInfo::mkdir(directory)))
+	if((ret=PathInfo::assert_dir(directory)))
 	{
 		cerr << strerror(ret) << endl;
 		return 1;

@@ -288,9 +288,7 @@ bool Pathname::equal( const Pathname & l, const Pathname & r )
 **
 **	DESCRIPTION :
 */
-/*
 ostream & operator<<( ostream & str, const Pathname & obj )
 {
   return str << obj.asString();
 }
-*/

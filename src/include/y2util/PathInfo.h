@@ -74,23 +74,6 @@ class PathInfo {
     bool stat()   { setMode( STAT );  return operator()(); }
     bool lstat()  { setMode( LSTAT ); return operator()(); }
     bool operator()();
-    
-    /** Create directory. works only if path is a directory, of course.
-     *
-     * @param mode specifies  the  permissions to use
-     *
-     * @return 0 on success, errno number on failure
-     * */
-    int mkdir(unsigned mode = 0755 ) { return mkdir(path_t,mode); }
-
-    /** Create directory. Works only if path is a directory, of course.
-     *
-     * @param path name of directory to create
-     * @param mode specifies  the  permissions to use
-     *
-     * @return 0 on success, errno number on failure
-     * */
-    static int mkdir(Pathname path, unsigned mode = 0755 );
 
   public:
 
@@ -154,6 +137,33 @@ class PathInfo {
     time_t atime()   const { return isExist() ? statbuf_C.st_atime : 0; } /* time of last access */
     time_t mtime()   const { return isExist() ? statbuf_C.st_mtime : 0; } /* time of last modification */
     time_t ctime()   const { return isExist() ? statbuf_C.st_ctime : 0; }
+
+  public:
+
+    ///////////////////////////////////////////////////////////////////
+    // convenience stuff
+    ///////////////////////////////////////////////////////////////////
+    // static functions as they may or may not invalidate any stat info
+    // stored by a PathiInfo.
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Like 'mkdir'. Attempt to create a new directory named path. mode
+     * specifies the permissions to use. It is modified by the process's
+     * umask in the usual way.
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int mkdir( const Pathname & path, unsigned mode = 0755 );
+
+    /**
+     * Like 'mkdir -p'. No error if directory exists. Make parent directories
+     * as needed. mode specifies the permissions to use, if directories have to
+     * be created. It is modified by the process's umask in the usual way.
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int assert_dir( const Pathname & path, unsigned mode = 0755 );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -116,42 +116,6 @@ bool PathInfo::operator()()
   return !error_i;
 }
 
-// create directory
-int PathInfo::mkdir(Pathname path, unsigned mode)
-{
-    string::size_type pos, lastpos = 0;
-    string spath = path.asString()+"/";
-    int ret = 0;
-
-    if(path.empty())
-	return 0;
-
-    // skip ./
-    if(path.relative())
-	lastpos=2;
-    // skip /
-    else
-	lastpos=1;
-
-    DBG << "about to create " << spath << endl;
-    while((pos = spath.find('/',lastpos)) != string::npos )
-    {
-	string dir = spath.substr(0,pos);
-	ret = ::mkdir(dir.c_str(), mode);
-	if(ret == -1)
-	{
-	    // ignore errors about already existing directorys
-	    if(errno == EEXIST)
-		ret=0;
-	    else
-		ret=errno;
-	}
-	DBG << "creating directory " << dir << (ret?" failed":" succeeded") << endl;
-	lastpos = pos+1;
-    }
-    return ret;
-}
-
 /******************************************************************
 **
 **
@@ -195,3 +159,63 @@ ostream & operator<<( ostream & str, const PathInfo & obj )
   str.flags( state_ii );
   return str;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::mkdir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::mkdir( const Pathname & path, unsigned mode )
+{
+  if ( ::mkdir( path.asString().c_str(), mode ) == -1 ) {
+    return errno;
+  }
+  return 0;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::assert_dir()
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::assert_dir( const Pathname & path, unsigned mode )
+{
+    string::size_type pos, lastpos = 0;
+    string spath = path.asString()+"/";
+    int ret = 0;
+
+    if(path.empty())
+	return ENOENT;
+
+    // skip ./
+    if(path.relative())
+	lastpos=2;
+    // skip /
+    else
+	lastpos=1;
+
+    DBG << "about to create " << spath << endl;
+    while((pos = spath.find('/',lastpos)) != string::npos )
+    {
+	string dir = spath.substr(0,pos);
+	ret = ::mkdir(dir.c_str(), mode);
+	if(ret == -1)
+	{
+	    // ignore errors about already existing directorys
+	    if(errno == EEXIST)
+		ret=0;
+	    else
+		ret=errno;
+	}
+	DBG << "creating directory " << dir << (ret?" failed":" succeeded") << endl;
+	lastpos = pos+1;
+    }
+    return ret;
+}
+
