@@ -69,7 +69,7 @@ public:
      *  	"local"
      *			"bin"
      **/
-    YStringTreeItem * addBranch( std::string		content,
+    YStringTreeItem * addBranch( const std::string &	content,
 				 char 			delimiter = 0,
 				 YStringTreeItem *	parent 	  = 0 );
 

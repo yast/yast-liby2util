@@ -36,7 +36,7 @@ YStringTree::~YStringTree()
 
 
 YStringTreeItem *
-YStringTree::addBranch( std::string 		content,
+YStringTree::addBranch( const std::string &	content,
 			char 			delimiter,
 			YStringTreeItem * 	parent )
 {
