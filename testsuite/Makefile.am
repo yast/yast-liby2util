@@ -28,6 +28,7 @@ noinst_PROGRAMS = parser.prg	\
         test_gpgcheck.prg	\
         test_df.prg		\
 	test_oldsel             \
+	test_timer             \
         test_sysconfig
 
 test_oldsel_SOURCES = test_oldsel.cc
@@ -60,6 +61,8 @@ test_chroot_prg_LDFLAGS = -static
 test_gpgcheck_prg_SOURCES = test_gpgcheck.cc
 
 test_sysconfig_SOURCES = test_sysconfig.cc
+
+test_timer_SOURCES = test_timer.cc
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* y2util.log y2util.sum site.exp site.bak

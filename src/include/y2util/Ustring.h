@@ -22,7 +22,7 @@
 #include <iostream>
 #include <string>
 
-#include <y2util/hash.h>
+#include <set>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -38,54 +38,15 @@ class UstringHash {
 
   protected:
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    //	CLASS NAME : UstringHash_el
-    /**
-     * @short Content type of the UstringHash hash.
-     *
-     * Content type of the UstringHash hash. Comparinson is done by
-     * comparing strings. That way existing strings can be found
-     * by hash functions.
-     *
-     * @see UstringHash
-     **/
-    struct UstringHash_el {
+    typedef std::set<std::string> UstringHash_type;
 
-	const std::string _str;
-
-	explicit UstringHash_el( const std::string & str_r ) : _str( str_r ) {}
-
-        bool operator == ( const UstringHash_el & rhs ) const { return( _str == rhs._str ); }
-        bool operator != ( const UstringHash_el & rhs ) const { return( _str != rhs._str ); }
-    };
-
-    /**
-     * Hash function for UstringHash_el
-     **/
-    friend size_t hashfun( const UstringHash_el & ustr_r ){
-      return hashfun( ustr_r._str.c_str() );
-    }
-    //
-    ///////////////////////////////////////////////////////////////////
-
-    typedef noval_hash<UstringHash_el> UstringHash_type;
-
-    /**
-     * The hash of UstringHash_el
-     **/
     UstringHash_type _UstringHash;
 
   public:
 
-    /**
-     * Store the passed std::string in the hash, if it does not already
-     * contain a string with the same value. Return the unique string from
-     * the hash.
-     **/
-    const std::string & add( const std::string & nstr_r ) {
-      UstringHash_type::list_type * el = _UstringHash.insert( UstringHash_el( nstr_r ) );
-      return el->key._str;
+    const std::string & add( const std::string & nstr_r )
+    {
+	return *(_UstringHash.insert( nstr_r ).first);
     }
 
     /**
@@ -268,13 +229,5 @@ class Ustring {
       return str << (const std::string &)obj;
     }
 };
-
-///////////////////////////////////////////////////////////////////
-
-inline size_t hashfun( const Ustring & ustr_r ) {
-  return hashfun( (const std::string &)ustr_r );
-}
-
-///////////////////////////////////////////////////////////////////
 
 #endif // Ustring_h

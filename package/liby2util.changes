@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 27 11:35:26 CET 2003 - lnussel@suse.de
+
+- use std::set instead of hash in Ustring.h for speed reasons
+- increase library version number to reflect binary incompatible changes
+
+-------------------------------------------------------------------
 Tue Feb 25 10:44:39 CET 2003 - cschum@suse.de
 
 - GPGCheck now also works for non-root users.

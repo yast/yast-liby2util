@@ -40,16 +40,10 @@ liby2util_la_SOURCES = \
         SysConfig.cc
 
 
-liby2util_la_LDFLAGS = -version-info 2:0
+liby2util_la_LDFLAGS = -version-info 3:0:0
 
 #liby2util_la_LDFLAGS = -version-info 2:0 \
 # 	-L$(QTLIBDIR)
 
 liby2util_la_LIBADD = \
 	-lutil
-
-# for debug
-
-noinst_LIBRARIES = liby2util.a
-
-liby2util_a_SOURCES = $(liby2util_la_SOURCES)
