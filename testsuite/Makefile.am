@@ -14,7 +14,9 @@ LDFLAGS = -L$(libdir)	\
 	-Xlinker --no-whole-archive
 
 
-noinst_PROGRAMS = runy2util test_Y2SLog.exe parser
+noinst_PROGRAMS = runy2util parser \
+	test_Y2SLog.prg \
+	test_Rep.prg
 
 
 runy2util_SOURCES = runy2util.cc
@@ -22,9 +24,11 @@ runy2util_SOURCES = runy2util.cc
 parser_SOURCES = parser.cc
 
 
-test_Y2SLog_exe_SOURCES = test_Y2SLog.cc
-test_Y2SLog_exe_LDFLAGS = -static
+test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
+#test_Y2SLog_prg_LDFLAGS = -static
 
+test_Rep_prg_SOURCES = test_Rep.cc
+#test_Rep_prg_LDFLAGS = -static
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \

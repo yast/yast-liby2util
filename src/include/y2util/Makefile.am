@@ -11,6 +11,8 @@ pkginclude_HEADERS = \
 	UniqStr.h	\
 	Pathname.h	\
 	PathInfo.h	\
+	Rep.h	\
+	RepDef.h	\
 	RefObject.h	\
 	Y2SLog.h	\
 	TagParser.h	\

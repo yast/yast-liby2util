@@ -10,6 +10,7 @@ lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES = \
 	hash.cc \
+	Rep.cc \
 	Pathname.cc \
 	PathInfo.cc \
 	TagParser.cc \

@@ -45,6 +45,19 @@ bool dbg_enabled_bm = init();
 /******************************************************************
 **
 **
+**	FUNCTION NAME : setLogfileName
+**	FUNCTION TYPE : void
+**
+**	DESCRIPTION :
+*/
+void setLogfileName( const char * logto_tr ) {
+  if ( logto_tr && *logto_tr ) {
+    y2setLogfileName( logto_tr );
+  }
+}
+/******************************************************************
+**
+**
 **	FUNCTION NAME : init
 **	FUNCTION TYPE : QAsciiDict<Y2Loglinestreamset>
 **
@@ -53,10 +66,7 @@ bool dbg_enabled_bm = init();
 static bool init() {
   streamset_VpCm.setAutoDelete( true );
 
-  const char * logto_ti = getenv( "Y2SLOG_FILE" );
-  if ( logto_ti && *logto_ti ) {
-    y2setLogfileName( logto_ti );
-  }
+  setLogfileName( getenv( "Y2SLOG_FILE" ) );
 
   return (getenv( "Y2SLOG_DEBUG" ) != NULL);
 }

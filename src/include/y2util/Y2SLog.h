@@ -28,6 +28,7 @@ namespace Y2SLog {
 ///////////////////////////////////////////////////////////////////
 
 extern bool dbg_enabled_bm;
+extern void setLogfileName( const char * logto_tr );
 
 extern std::ostream & get( const char * which, const unsigned level,
 			   const char * fil, const char * fnc, const int lne );
