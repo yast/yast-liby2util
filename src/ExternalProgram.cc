@@ -24,6 +24,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <pty.h> // openpty
+#include <stdlib.h> // setenv
 
 #include <y2util/Y2SLog.h>
 #include <y2util/ExternalProgram.h>
@@ -32,7 +33,7 @@ using namespace std;
 
 ExternalProgram::ExternalProgram (string commandline,
 				  Stderr_Disposition stderr_disp, bool use_pty,
-				  int stderr_fd)
+				  int stderr_fd, bool default_locale)
     : use_pty (use_pty)
 {
     const char *argv[4];
@@ -40,16 +41,16 @@ ExternalProgram::ExternalProgram (string commandline,
     argv[1] = "-c";
     argv[2] = commandline.c_str();
     argv[3] = 0;
-    start_program (argv, stderr_disp, stderr_fd);
+    start_program (argv, stderr_disp, stderr_fd, default_locale);
 }
 
 
 ExternalProgram::ExternalProgram (const char *const *argv,
 				  Stderr_Disposition stderr_disp, bool use_pty,
-				  int stderr_fd)
+				  int stderr_fd, bool default_locale)
     : use_pty (use_pty)
 {
-    start_program (argv, stderr_disp, stderr_fd);
+    start_program (argv, stderr_disp, stderr_fd, default_locale);
 }
 
 
@@ -97,7 +98,7 @@ ExternalProgram::~ExternalProgram()
 
 void
 ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
-				stderr_disp, int stderr_fd)
+				stderr_disp, int stderr_fd, bool default_locale)
 {
     pid = -1;
     int to_external[2], from_external[2];  // fds for pair of pipes
@@ -172,6 +173,9 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	}
 
 	DBG << "Going to execute" << argv[0] << endl;
+
+	if(default_locale)
+		setenv("LC_ALL","C",1);
 
 	execvp(argv[0], const_cast<char *const *>(argv));
 	ERR << "Cannot execute external program "

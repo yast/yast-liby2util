@@ -77,6 +77,14 @@ class Url {
 	const std::string & getPath() const { return _path; }
 	const OptionMapType & getOptions() const { return _options; }
 
+	/** return Option
+	 *
+	 * @param key name of option
+	 *
+	 * @return option value, emtpy string if not found
+	 * */
+	std::string getOption(const std::string& key) const;
+
 	bool isLocal()   const { return _host.empty(); }
 
 	bool isValid() const { return _valid; }

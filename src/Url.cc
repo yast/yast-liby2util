@@ -84,6 +84,16 @@ string Url::asString( bool path, bool options )   const
     return url;
 }
 
+string Url::getOption(const string& key) const
+{
+    OptionMapType::const_iterator it;
+    string value;
+
+    if((it=_options.find(key)) != _options.end())
+	value=it->second;
+
+    return value;
+}
 
 bool Url::split( const string& url,
 	      string& protocol,

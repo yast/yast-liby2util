@@ -49,17 +49,18 @@ public:
      * with the option <tt>-c</tt>. You can use io direction symbols < and >.
      * @param commandline a shell commandline that is appended to
      * <tt>/bin/sh -c</tt>.
+     * @param default_locale whether to set LC_ALL=C before starting
      */
     ExternalProgram (std::string commandline,
 		     Stderr_Disposition stderr_disp = Normal_Stderr,
-		     bool use_pty = false, int stderr_fd = -1);
+		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false);
 
     /**
      * Start an external program by giving the arguments as an arry of char *pointers.
      */
     ExternalProgram (const char *const *argv,
 		     Stderr_Disposition stderr_disp = Normal_Stderr,
-		     bool use_pty = false, int stderr_fd = -1);
+		     bool use_pty = false, int stderr_fd = -1, bool default_locale = false);
 
     ExternalProgram (const char *binpath, const char *const *argv_1,
 		     bool use_pty = false);
@@ -96,7 +97,7 @@ private:
 
     void start_program (const char *const *argv,
 			Stderr_Disposition stderr_disp = Normal_Stderr,
-			int stderr_fd = -1);
+			int stderr_fd = -1, bool default_locale = false);
 
 };
 
