@@ -94,7 +94,7 @@ class Rep {
     /**
      * Constructor. Initial reference count is zero.
      **/
-    Rep() : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
+    Rep() : rep_cnt_i( 0 ), rep_id_i( ++rep_IDs ) {
       ++rep_Total;
       _dbg( 'c' );
     }
@@ -102,7 +102,7 @@ class Rep {
     /**
      * CopyConstructor. Initial reference count is zero.
      **/
-    Rep( const Rep & rhs ) : rep_cnt_i( 0 ), rep_id( ++rep_IDs ) {
+    Rep( const Rep & rhs ) : rep_cnt_i( 0 ), rep_id_i( ++rep_IDs ) {
       // do not copy refcount
       ++rep_Total;
       _dbg( 'C' );
@@ -138,7 +138,7 @@ class Rep {
     /**
      * This objects numerical id.
      **/
-    const unsigned rep_id;
+    const unsigned rep_id_i;
     /**
      * Write debug lines if liby2util was compiled with REP_DEBUG
      * or REP_DEBUG_REF. See Rep.cc for details.
@@ -146,6 +146,11 @@ class Rep {
     void _dbg( const char f ) const;
 
   public:
+
+    /**
+     * This objects numerical id. Might be interesting for debug.
+     **/
+    unsigned rep_id() const { return  rep_id_i; }
 
     /**
      * The reference counter. Might be interesting for copy on write.

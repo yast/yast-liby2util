@@ -96,7 +96,7 @@ void Rep::_dbg( const char f ) const
 //
 std::ostream & Rep::dumpOn( std::ostream & str ) const
 {
-  str << rep_name() << "(id:" << rep_id << " ref:" << rep_cnt_i << " [" << rep_Total << "])";
+  str << rep_name() << "(id:" << rep_id_i << " ref:" << rep_cnt_i << " [" << rep_Total << "])";
   return str;
 }
 
