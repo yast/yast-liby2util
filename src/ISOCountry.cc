@@ -246,7 +246,7 @@ ISOCountry::_D::CodeMap ISOCountry:: _D::defaultCodeMap()
   cm["CA"] = _( "Canada" ); 				// :CAN:124:
   cm["CC"] = _( "Cocos (Keeling) Islands" ); 		// :CCK:166:
   cm["CD"] = _( "Congo" ); 				// :COD:180:
-  cm["CF"] = _( "Centruual African Republic" ); 	// :CAF:140:
+  cm["CF"] = _( "Central African Republic" ); 		// :CAF:140:
   cm["CG"] = _( "Congo" ); 				// :COG:178:
   cm["CH"] = _( "Switzerland" ); 			// :CHE:756:
   cm["CI"] = _( "Cote D'Ivoire" ); 			// :CIV:384:
