@@ -431,6 +431,39 @@ int PathInfo::rename( const Pathname & oldpath, const Pathname & newpath )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::copy
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::copy( const Pathname & file, const Pathname & dest )
+{
+  DBG << "copy " << file << " -> " << dest << ' ';
+
+  PathInfo sp( file );
+  if ( !sp.isFile() ) {
+    return _Log_Result( EINVAL );
+  }
+
+  PathInfo dp( dest );
+  if ( dp.isDir() ) {
+    return _Log_Result( EISDIR );
+  }
+
+  string cmd( stringutil::form( "cp '%s' '%s'",
+				file.asString().c_str(),
+				dest.asString().c_str() ) );
+  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
+    DBG << "  " << output;
+  }
+  int ret = prog.close();
+  return _Log_Result( ret, "returned" );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::copy_file2dir
 //	METHOD TYPE : int
 //

@@ -231,6 +231,14 @@ class PathInfo {
     static int rename( const Pathname & oldpath, const Pathname & newpath  );
 
     /**
+     * Like 'cp file dest'. Copy file to destination file.
+     *
+     * @return 0 on success, EINVAL if file is not a file, EISDIR if
+     * destiantion is a directory, otherwise the commands return value.
+     **/
+    static int copy( const Pathname & file, const Pathname & dest );
+
+    /**
      * Like 'cp file dest'. Copy file to dest dir.
      *
      * @return 0 on success, EINVAL if file is not a file, ENOTDIR if dest
