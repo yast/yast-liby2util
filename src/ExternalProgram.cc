@@ -246,10 +246,10 @@ ExternalProgram::close()
 		status = WTERMSIG (status) + 128;
 	    else if (WCOREDUMP (status)) {
 		ERR << "external program exited with core dump" << endl;
-		abort ();
+//		abort ();
 	    } else {
 		ERR << "external program exited with unknown error" << endl;
-		abort ();
+//		abort ();
 	    }
 	}
     }
