@@ -59,20 +59,20 @@ TagCacheRetrieval::~TagCacheRetrieval()
 //	METHOD NAME : TagCacheRetrieval::retrieveData
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION : retrieves data at retrieval_t pos and fills
+//	DESCRIPTION : retrieves data at TagCacheRetrievalPos pos and fills
 //			data_r appropriately
 //
 bool
-TagCacheRetrieval::retrieveData(const retrieval_t& pos, std::list<std::string> &data_r)
+TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::string> &data_r)
 {
-    return (_parser.retrieveData (_packages, pos.begin, pos.end, data_r));
+    return (_parser.retrieveData (_packages, pos.begin(), pos.end(), data_r));
 }
 
 bool
-TagCacheRetrieval::retrieveData(const retrieval_t& pos, std::string &data_r)
+TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::string &data_r)
 {
     std::list<std::string> listdata;
-    if (_parser.retrieveData (_packages, pos.begin, pos.end, listdata)
+    if (_parser.retrieveData (_packages, pos.begin(), pos.end(), listdata)
 	&& !listdata.empty())
     {
 	data_r = listdata.front();
