@@ -105,6 +105,7 @@ void Digest::P::cleanup()
     if(initialized)
     {
 	EVP_MD_CTX_cleanup(&mdctx);
+	initialized = false;
     }
 }
 
@@ -193,9 +194,11 @@ std::string Digest::digest(const std::string& name, std::istream& is, size_t buf
     if(!digest.create(name))
 	return string();
 
-    while((num = is.readsome(buf, bufsize)))
+    while(is.good())
     {
-	if(!digest.update(buf, num))
+	for(num = 0; num < bufsize && is.get(buf[num]).good(); ++num);
+
+	if(num && !digest.update(buf, num))
 	    return string();
     }
 

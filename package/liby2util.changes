@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Aug 30 11:47:59 CEST 2004 - lnussel@suse.de
+
+- use pkgconfig macro to check for OpenSSL
+- use get() instead of readsome() as readsome() seems to be non-blocking and
+  returns zero in the middle of a file
+- add Makefile target to test Digest class
+- 2.10.4
+
+-------------------------------------------------------------------
 Thu Aug 12 11:31:51 CEST 2004 - jsrain@suse.cz
 
 - added libpng to neededforbuild
