@@ -25,7 +25,7 @@
 
 using namespace std;
 
-DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal)
+DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal, bool filter_pseudo)
 {
     DfVec infovec;
     const char* argv[] =
@@ -58,7 +58,10 @@ DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal)
 	if( pos != string::npos)
 	    info.mountpoint = info.mountpoint.substr(0,pos);
 
-	if(filter_nonlocal && info.device.substr(0,1) == "/")
+	if(filter_nonlocal && info.device.substr(0,1) != "/")
+	    continue;
+	
+	if(filter_pseudo && info.fstype == "none")
 	    continue;
 
 	infovec.push_back(info);

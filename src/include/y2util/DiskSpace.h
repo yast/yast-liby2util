@@ -44,7 +44,8 @@ class DiskSpace
 	 * call df
 	 *
 	 * @param filter_nonlocal filter devices that do not begin with /
+	 * @param filter_pseudo filter "none" filesystem types
 	 * */
-	static DfVec df(bool filter_nonlocal = false);
+	static DfVec df(bool filter_nonlocal = false, bool filter_pseudo = false);
 };
 

@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     DiskSpace::DfVec df;
-    df = DiskSpace::df();
+    df = DiskSpace::df(true,true);
 
     for(DiskSpace::DfVec::iterator it = df.begin();
 	it != df.end(); ++it)
