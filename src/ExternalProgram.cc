@@ -217,6 +217,11 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    }
 	}
 
+	// close all filedesctiptors above stderr
+	for ( int i = ::getdtablesize() - 1; i > 2; --i ) {
+	  ::close( i );
+	}
+
 	execvp(argv[0], const_cast<char *const *>(argv));
 	ERR << "Cannot execute external program "
 		 << argv[0] << ":" << strerror(errno) << endl;
