@@ -216,13 +216,10 @@ class TagSet
     	TagSet()
 	{
 	}
-	virtual ~TagSet()
-	{
-	    //TODO: delete all tags in map
-	}
+	virtual ~TagSet();
 	/** add Tag to TagSet
 	 *
-	 * @param tag Tag to manage
+	 * @param tag Tag to manage, will be free'd in destructor
 	 * */
 	void addTag(Tag* tag)
 	{

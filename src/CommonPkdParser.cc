@@ -228,6 +228,14 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 ///////////////////////////////////////////////////////////////////////
 // TagSet
 
+TagSet::~TagSet()
+{
+    for(tagmaptype::iterator it= _tags.begin(); it != _tags.end(); ++it)
+    {
+	delete it->second;
+    }
+}
+
 Tag::assignstatus TagSet::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
     tagmaptype::iterator t = _tags.find(starttag);
