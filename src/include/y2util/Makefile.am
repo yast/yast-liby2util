@@ -28,7 +28,11 @@ pkginclude_HEADERS = \
 	ExternalProgram.h	\
 	Url.h			\
 	Date.h			\
-	FSize.h
+	FSize.h			\
+	TreeItem.h		\
+	YRpmGroupsTree.h	\
+	YStringTree.h		\
+	YTransText.h
 
 
 #<INSTALL-HEADER-TARGET>

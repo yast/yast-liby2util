@@ -28,18 +28,20 @@ liby2util_la_SOURCES = \
 	Url.cc			\
 	Date.cc			\
 	FSize.cc		\
+	YStringTree.cc		\
+	YRpmGroupsTree.cc	\
 	qt/qbitarray.cpp	\
-	qt/qcstring.cpp	\
+	qt/qcstring.cpp		\
 	qt/qdatastream.cpp	\
-	qt/qgarray.cpp	\
-	qt/qgdict.cpp	\
-	qt/qglist.cpp	\
-	qt/qglobal.cpp	\
-	qt/qgvector.cpp	\
+	qt/qgarray.cpp		\
+	qt/qgdict.cpp		\
+	qt/qglist.cpp		\
+	qt/qglobal.cpp		\
+	qt/qgvector.cpp		\
 	qt/qiodevice.cpp	\
 	qt/qptrcollection.cpp	\
-	qt/qregexp.cpp	\
-	qt/qstring.cpp	\
+	qt/qregexp.cpp		\
+	qt/qstring.cpp		\
 	qt/qstringlist.cpp	\
 	qt/qtextstream.cpp
 
