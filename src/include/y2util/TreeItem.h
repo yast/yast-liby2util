@@ -276,19 +276,19 @@ public:
      * Returns this item's parent or 0 if there is none.
      **/
     SortedTreeItem<PAYLOAD> * 	parent() 	const
-	{ return (SortedTreeItem<PAYLOAD> *) _parent; 	}
+	{ return (SortedTreeItem<PAYLOAD> *) this->_parent; 	}
 
     /**
      * Returns this item's next sibling or 0 if there is none.
      **/
     SortedTreeItem<PAYLOAD> * 	next() 		const
-	{ return (SortedTreeItem<PAYLOAD> *) _next; 	}
+	{ return (SortedTreeItem<PAYLOAD> *) this->_next; 	}
 
     /**
      * Returns this item's first child or 0 if there is none.
      **/
     SortedTreeItem<PAYLOAD> * 	firstChild()	const
-	{ return (SortedTreeItem<PAYLOAD> *) _firstChild; }
+	{ return (SortedTreeItem<PAYLOAD> *) this->_firstChild; }
     
     
 private:
