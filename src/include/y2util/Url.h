@@ -22,10 +22,12 @@
 
 #include <string>
 #include <map>
-#include <y2util/Y2SLog.h>
+
 
 /** URL class that handles URLs of the form
  * protocol://[[username[:password]]@hostname[:port]]/path[;options]
+ * <p>
+ * TODO: (un)escaping special characters like space -> %20
  * */
 class Url {
     public:
@@ -44,12 +46,11 @@ class Url {
 
 	bool _valid;
 
-	void clearifinvalid(bool valid)
-	{
-	    if(valid) return;
-
-	    _protocol = _username = _password = _host = _port = _path.erase();
-	}
+	/** clear all variables
+	 *
+	 * @param valid clear if this parameter is false, do nothing if true
+	 * */
+	void clearifinvalid(bool valid);
 
     public:
 
@@ -59,11 +60,7 @@ class Url {
 	 *
 	 * @param url string of the form protocol://[[username[:password]]@hostname[:port]]/path[;options]
 	 * */
-	Url( const std::string & url )
-	{
-	    _valid = split( url, _protocol, _username, _password, _host, _port, _path, _options );
-	    clearifinvalid(_valid);
-	}
+	Url( const std::string & url );
 
 	~Url(){}
 
@@ -79,42 +76,19 @@ class Url {
 
 	bool isValid() const { return _valid; }
 	
-	bool set( const std::string url )
-	{
-	    _valid = split( url, _protocol, _username, _password, _host, _port, _path , _options);
-	    clearifinvalid(_valid);
-
-	    return _valid;
-	}
+	/** set url
+	 *
+	 * @param url string of the form protocol://[[username[:password]]@hostname[:port]]/path[;options]
+	 *
+	 * @return true if url is valid, false otherwise
+	 * */
+	bool set( const std::string url );
 
 	/** join tokens to a valid url
 	 *
 	 * @return the url
 	 * */
-	std::string asString()   const
-	{
-	    std::string url(_protocol+"://");
-	    if(!_username.empty())
-	    {
-		url+=_username;
-		if(!_password.empty())
-		{
-		    url+=':';
-		    url+=_password;
-		}
-		url+='@';
-	    }
-	    url+=_host;
-	    if(!_port.empty())
-	    {
-		url+=':';
-		url+=_port;
-	    }
-	    url+=_path;
-	    // TODO add options
-	    
-	    return url;
-	}
+	std::string asString() const;
 
 	
 	/** split url into tokens
@@ -130,97 +104,7 @@ class Url {
 		      std::string& hostname,
 		      std::string& port,
 		      std::string& path,
-		      OptionMapType& options )
-	{
-	    std::string::size_type pos;
-	    std::string::size_type lastpos = 0;
-
-	    protocol = username = password
-		= hostname = port = path
-		= std::string();
-
-	    // protocol
-	    pos = url.find(':');
-	    if ( pos != std::string::npos && pos != 0 )
-		protocol = url.substr(0,pos);
-	    else
-		return false;
-	    
-	    D__ << "protocol " << protocol << std::endl;
-
-	    lastpos = pos+1;
-
-	    // check for hierarchical url
-	    if( url.substr(lastpos,2) != "//" )
-		return false;
-
-	    lastpos = pos = lastpos + 2;
-	    
-	    // check if non local url
-	    if( url[lastpos] != '/' )
-	    {
-		D__ << "nonlocal url " << url.substr(lastpos) << std::endl;
-		// optional username&password
-		pos = url.find('@',lastpos);
-		if ( pos != std::string::npos )
-		{
-		    std::string userandpass = url.substr(lastpos,pos-lastpos);
-		    // set marker behind @
-		    lastpos=pos+1;
-		    // optional password
-		    pos = userandpass.find(':');
-		    if ( pos != std::string::npos )
-		    {
-			// no username?
-			if(pos==0) return false;
-
-			password = userandpass.substr(pos+1);
-			D__ << "password " << password << std::endl;
-		    }
-		    username = userandpass.substr(0,pos);
-		    D__ << "username " << username << std::endl;
-		}
-
-		// hostname&port
-		pos = url.find('/',lastpos);
-		if ( pos != std::string::npos && pos != lastpos )
-		{
-		    std::string hostandport = url.substr(lastpos,pos-lastpos);
-		    // set marker on /
-		    lastpos=pos;
-		    // optional port
-		    pos = hostandport.find(':');
-		    if ( pos != std::string::npos )
-		    {
-			// no hostname?
-			if(pos==0) return false;
-
-			port = hostandport.substr(pos+1);
-			D__ << "port " << port << std::endl;
-		    }
-		    hostname = hostandport.substr(0,pos);
-		    D__ << "hostname " << hostname << std::endl;
-		}
-		// url must have path behind hostname
-		else
-		    return false;
-	    }
-
-	    // locate options
-	    pos = url.find(';',lastpos);
-
-	    path = url.substr(lastpos,pos-lastpos);
-	    D__ << "path " << path << std::endl;
-
-	    if(pos != std::string::npos )
-	    {
-		// TODO parse options
-	    }
-	    else
-		options = OptionMapType();
-
-	    return true;
-	}
+		      OptionMapType& options );
 };
 
 #endif // _Url_h_

@@ -21,7 +21,8 @@ liby2util_la_SOURCES = \
 	CommonPkdParser.cc \
 	Y2SLog.cc \
 	ExternalDataSource.cc \
-		ExternalProgram.cc
+		ExternalProgram.cc \
+	Url.cc
 
 
 liby2util_la_LDFLAGS = -version-info 2:0
