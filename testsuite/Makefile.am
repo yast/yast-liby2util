@@ -20,6 +20,7 @@ noinst_PROGRAMS = parser.prg	\
 	test_taggedparser.prg	\
 	test_Y2SLog.prg		\
 	test_Rep.prg		\
+        test_CallBack.prg	\
 	test_strutil.prg	\
 	test_mkdir.prg		\
 	test_chroot.prg		\
@@ -49,6 +50,8 @@ test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
 
 test_Rep_prg_SOURCES = test_Rep.cc
 #test_Rep_prg_LDFLAGS = -static
+
+test_CallBack_prg_SOURCES = test_CallBack.cc
 
 test_strutil_prg_SOURCES = test_strutil.cc
 #test_strutil_prg_LDFLAGS = -static

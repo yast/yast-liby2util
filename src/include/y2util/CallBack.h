@@ -23,312 +23,283 @@
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : CallBackData<typename Func>
+//	CLASS NAME : ReportCallback
 /**
- * @short Template class storing callback function and userdata pointer.
+ * @short Basic interface definition for callback reports.
  *
- * <CODE>CallBackData&lt;typename Func></CODE> stores a pointer to
- * function of type <CODE>Func</CODE> (passed as template argument),
- * and a <CODE>void*</CODE> which may serve as hook for user data
- * that shall be passed to the callback function.
+ * For a callback recipient it might be helpfull to know begin
+ * and end of a report. I.e. a trigger before the 1st actual
+ * callback function is invoked, and after the last one.
  *
- * The default constructor asserts both pointer being initialized
- * to <CODE>0</CODE>.
- *
- * Serves as base class for some more convenient CallBack classes.
- * @see CallBack
+ * Functions sending a report are encouraged to invoke callback
+ * functions through an instance of @ref Report::Send, which
+ * triggers @ref reportbegin at its construction, and @ref reportend
+ * at destruction.
  **/
-template <typename Func> class CallBackData {
+struct ReportCallback {
+  /**
+   * virtual destructor
+   **/
+  virtual ~ReportCallback()  {}
+  /**
+   * See @ref Report::Send
+   **/
+  virtual void reportbegin() {}
+  /**
+   * See @ref Report::Send
+   **/
+  virtual void reportend()   {}
+};
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : RedirectCallback<class CB>
+/**
+ * @short Base class for callback interfaces which allow redirection.
+ *
+ * The common way we define a callback interface:
+ * <PRE>
+ * struct InstCallback : public RedirectCallback&lt;InstCallback> {
+ *   virtual void start()    = 0;
+ *   virtual void progress() = 0;
+ *   virtual void stop()     = 0;
+ * };
+ *
+ * void InstCallback::start()    { ... }
+ * void InstCallback::progress() { ... }
+ * void InstCallback::stop()     { ... }
+ * </PRE>
+ * The callback class defines an <B>abstract interface</B> of all functions
+ * the sender of the callback may invoke. A <B>default implementation</B>
+ * for every function is <B>required</B>, and must provide reasonable
+ * defaults for retrurn values and reference arguments passed back to the
+ * sender.
+ *
+ * In other terms, the default implementaion is invoked if there
+ * is currently no recipient for a callback. The same way a recipient may
+ * invoke the default implementation, if it's got no idea what else to do.
+ *
+ * The inherited @ref RedirectCallback defines @ref operator-> which per
+ * default refers to this, but may be redirected to some other instance.
+ * The @ref redirectTo method used to set or clear any redirection is
+ * protected per default. A callback recipient (derived from the inteface class)
+ * may adjust its scope as desired, or even overload the @ref operator->.
+ *
+ * <B>NOTE:</B> Assume there is an instance <CODE>InstCallback cbvar</CODE>.
+ * There's a sigificant difference between <CODE>cbvar<B>.</B>start()</CODE>
+ * and <CODE>cbvar<B>-></B>start()</CODE>. Invokation via '<B>-></B>' follows
+ * any redirection applied, and invokes start() on the final recipient.
+ * This is, what a calback sender should do. Invokation via .<B>.</B>'
+ * always addresses the current instance ignoring any redirection.
+ *
+ * See: @ref Report and @ref Report::Send
+ **/
+template <class CB> class RedirectCallback : public ReportCallback {
+
+  private:
+
+    /**
+     * Target of redirection. NULL if not redirected.
+     **/
+    CB * _redirectTo;
+
+    /**
+     * Expecting to be inherited by CB: dynamic_cast<CB*>(this)
+     **/
+    CB * self() { return dynamic_cast<CB*>(this); }
 
   protected:
 
     /**
-     * Pointer to callback function.
+     * Set redirection to another CB instance. Clear redirection if NULL.
+     * @return The previois redirection, or NULL if not redirected
      **/
-    Func   _func;
-
-    /**
-     * Hook for user data.
-     **/
-    const void * _data;
-
-  public:
-
-    /**
-     * Returns the current callback function pointer.
-     **/
-    Func   func() const { return _func; }
-
-    /**
-     * Returns the current user data.
-     **/
-    const void * data() const { return _data; }
-
-  public:
-
-    /**
-     * Set a new callback function and user data pointer.
-     **/
-    void set( Func func_r, const void * data_r = 0 ) {
-      _func = func_r;
-      _data = data_r;
+    CB * redirectTo( CB * to_r ) {
+      CB * ret = _redirectTo;
+      _redirectTo = ( to_r == self() ? 0 : to_r );
+      return ret;
     }
     /**
-     * Set callback function pointer and user data pointer to 0.
+     * Set redirection to another CB instance.
+     * @return The previois redirection, or NULL if not redirected
      **/
-    void unset() { set( 0 ); }
+    CB * redirectTo( CB & to_r ) {
+      return redirectTo( &to_r );
+    }
+
+  public:
+
+    /**
+     * Forward access if redirected, otherwise refer to this.
+     **/
+    virtual CB * operator->() {
+      return( _redirectTo ? _redirectTo->operator->() : self() );
+    }
 
   public:
 
     /**
      * Constructor.
      **/
-    CallBackData( Func func_r = 0, const void * data_r = 0 ) { set( func_r, data_r ); }
-};
-
-///////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : CallBack
-/**
- * @short Template class to store and invoke a calback.
- *
- * The template classes <CODE>CallBack<B>[1-9]</B></CODE> follow the
- * same rules as <CODE>CallBack</CODE>. The only difference is their
- * callback functions may take <B>[1-9]</B> additional arguments
- * (passed as template argument).
- *
- * Common rule for all callback functions is that they return <CODE>void</CODE>
- * and take a <CODE>const void*</CODE> as last argument.
- *
- * Common to all <CODE>CallBack</CODE> classes is that they define
- * <CODE>bool operator() const</CODE> that takes the same arguments as the
- * callback function, except for the trailing <CODE>const void*</CODE>, which is automaticaly
- * provided.<CODE>operator()</CODE> returns <CODE>false</CODE>, if no callback function
- * is set. Otherwise the callback function is executed and it returns <CODE>true</CODE>.
- *
- * <B>NOTE:</B> CallBack constness means you can't change callback function and userdata,
- * but it's ok to invoce it.
- *
- * Assume a callback function that should return a <CODE>bool</CODE> (via reference argument):
- * <PRE>
- * <B>void mycallback( bool & ret, const void * data )</B> {
- *   ret = true;
- * }
- *
- * <B>typedef CallBack1&lt;bool&> TestCB;</B>
- *
- * int somewhere()
- * {
- *   bool cbret = false;
- *
- *   <B>TestCB callback; // Per default no callback is set.</B>
- *
- *   <B>if ( callback( cbret ) )</B> {
- *     ;
- *   } else {
- *     <B>// No callback is set. cbret remained unchanged.</B>
- *   }
- *
- *   <B>callback = mycallback; // Set callback to mycallback.</B>
- *   // same as e.g.: callback.set( mycallback )
- *
- *   <B>if ( callback( cbret ) )</B> {
- *     <B>// This time mycallback was executed, setting cbret true.</B>
- *   } else {
- *     ;
- *   }
- *
- *   return 0;
- * }
- * </PRE>
- * For a callback function that takes two arguments:
- * <PRE>
- * <B>void two_arg_callback( int a1, const std::string & a2, const void * data )</B> {
- *   ....;
- * }
- *
- * <B>typedef CallBack2&lt;int,const std::string&> TwoArgCB;</B>
- *
- * int somewhereelse()
- * {
- *   <B>TwoArgCB callback( two_arg_callback );</B>
- *
- *   <B>if ( callback( 1, "some string" ) )</B> {
- *     ...
- * }
- * </PRE>
- **/
-class CallBack : public CallBackData<void(*)(const void*)> {
-  public:
-    typedef void(*Func)(const void*);
-    CallBack( Func func_r = 0, const void * data_r = 0 )
-      : CallBackData<void(*)(const void*)>( func_r, data_r )
+    RedirectCallback()
+      : _redirectTo( 0 )
     {}
-  public:
-    bool operator()() const {
-      if ( !_func )
-	return false;
-      (*_func)( _data );
-      return true;
-    }
+    /**
+     * Destructor.
+     **/
+    virtual ~RedirectCallback() {}
 };
 
 ///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : CallBackN<..>
-//
-///////////////////////////////////////////////////////////////////
-#define DEF_CBCLASS(N,TAL,FAL,CAL) \
-template < TAL > class CallBack##N : public CallBackData<void(*)(FAL,const void*)> { \
-  public: \
-    typedef void(*Func)(FAL,const void*); \
-    CallBack##N( Func func_r = 0, const void * data_r = 0 ) \
-      : CallBackData<void(*)(FAL,const void*)>( func_r, data_r ) \
-    {} \
-  public: \
-    bool operator()( FAL ) const { if ( !_func ) return false; (*_func)( CAL, _data ); return true; } \
-}
-
-#define DEF_CBTAL(N) , typename _arg##N
-#define DEF_CBFAL(N) , _arg##N a##N
-#define DEF_CBCAL(N) , a##N
-
-DEF_CBCLASS( 1
-	     , typename _arg1
-	     , _arg1 a1
-	     , a1
-	     );
-DEF_CBCLASS( 2
-	     , typename _arg1 DEF_CBTAL(2)
-	     , _arg1 a1       DEF_CBFAL(2)
-	     , a1             DEF_CBCAL(2)
-	     );
-DEF_CBCLASS( 3
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3)
-	     );
-DEF_CBCLASS( 4
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4)
-	     );
-DEF_CBCLASS( 5
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4) DEF_CBTAL(5)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4) DEF_CBFAL(5)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4) DEF_CBCAL(5)
-	     );
-DEF_CBCLASS( 6
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4) DEF_CBTAL(5) DEF_CBTAL(6)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4) DEF_CBFAL(5) DEF_CBFAL(6)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4) DEF_CBCAL(5) DEF_CBCAL(6)
-	     );
-DEF_CBCLASS( 7
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4) DEF_CBTAL(5) DEF_CBTAL(6) DEF_CBTAL(7)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4) DEF_CBFAL(5) DEF_CBFAL(6) DEF_CBFAL(7)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4) DEF_CBCAL(5) DEF_CBCAL(6) DEF_CBCAL(7)
-	     );
-DEF_CBCLASS( 8
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4) DEF_CBTAL(5) DEF_CBTAL(6) DEF_CBTAL(7) DEF_CBTAL(8)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4) DEF_CBFAL(5) DEF_CBFAL(6) DEF_CBFAL(7) DEF_CBFAL(8)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4) DEF_CBCAL(5) DEF_CBCAL(6) DEF_CBCAL(7) DEF_CBCAL(8)
-	     );
-DEF_CBCLASS( 9
-	     , typename _arg1 DEF_CBTAL(2) DEF_CBTAL(3) DEF_CBTAL(4) DEF_CBTAL(5) DEF_CBTAL(6) DEF_CBTAL(7) DEF_CBTAL(8) DEF_CBTAL(9)
-	     , _arg1 a1       DEF_CBFAL(2) DEF_CBFAL(3) DEF_CBFAL(4) DEF_CBFAL(5) DEF_CBFAL(6) DEF_CBFAL(7) DEF_CBFAL(8) DEF_CBFAL(9)
-	     , a1             DEF_CBCAL(2) DEF_CBCAL(3) DEF_CBCAL(4) DEF_CBCAL(5) DEF_CBCAL(6) DEF_CBCAL(7) DEF_CBCAL(8) DEF_CBCAL(9)
-	     );
-
-#undef DEF_CBCLASS
-#undef DEF_CBTAL
-#undef DEF_CBFAL
-#undef DEF_CBCAL
-
-///////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : BasicSettings<..>
+//	CLASS NAME : Report<class CB>
 /**
- * @short Template base class managing e.g. callback settings
+ * @short Hook managing callback sending and recieving.
  *
- * This class maintains static default settings and a pointer to
- * redirect the settings to use to a different location. The
- * concrete type of settings is passed as template argument.
+ * See @ref RedirectCallback for how to define a callback interface class.
+ *
+ * A Report is the instance of a callback interface, the sender addresses.
+ * Usg. a Report will define all interface methods to use the provided default
+ * implementation. The inherited callback interface itself is inaccessible from
+ * outside Report (and deived classes are encourgaged tokeep it that way). But it
+ * may be redirected to any real recipient using @ref redirectTo.
+ *
+ * A sender may invoke the callbacks by creating an instance of @ref Report::Send.
+ * Report::Send provides the callback inteface via operator->. Additionally it
+ * triggers reportbegin and reportend (see @ref ReportCallback).
+ *
+ * What's to be done is, define the abstract callback interface and provide
+ * a reasonable default implementation:
  * <PRE>
- * class RpmDb {
- *   public:
- *     class Callbacks : protected BasicSettings&lt;Callbacks> {
- *       friend class RpmDb; // may set _defaults
- *       public:
- *         BasicSettings&lt;Callbacks>::inUse;     // adjusted to public scope
- *         BasicSettings&lt;Callbacks>::use;       // adjusted to public scope
- *         //BasicSettings&lt;Callbacks>::provide; // stays protected
- *       public:
- *         ProgressCounter::Callback _convertDb;
- *         ProgressCounter::Callback _rebuildDb;
- *         ProgressCounter::Callback _installPkg;
- *     };
- *     ...
+ * struct InstCallback : public RedirectCallback&lt;InstCallback> {
+ *   virtual void start()    = 0;
+ *   virtual void progress() = 0;
+ *   virtual void stop()     = 0;
  * };
  *
- * {
- *   RpmDb rpmdb;
- *   RpmDb::Callbacks my_cb;
- *
- *   my_cb._convertDb.set( my_convertDb );
- *   my_cb._rebuildDb.set( my_rebuildDb );
- *   my_cb._installPkg.set( my_installPkg );
- *
- *   RpmDb::Callbacks::use( &my_cb );
- *   // using my callbacks
- *   ...
- *
- *   RpmDb::Callbacks::use( 0 );
- *   // using defaults
- *   ...
- * }
+ * void InstCallback::start()    { ... }
+ * void InstCallback::progress() { ... }
+ * void InstCallback::stop()     { ... }
  * </PRE>
+ *
+ * Create a Report class:
+ * <PRE>
+ * class InstReport : public Report&lt;InstCallback> {
+ *   virtual void reportbegin() { InstCallback::reportbegin(); }
+ *   virtual void reportend()   { InstCallback::reportend(); }
+ *   virtual void start()       { InstCallback::start(); }
+ *   virtual void progress()    { InstCallback::progress(); }
+ *   virtual void stop()        { InstCallback::stop(); }
+ * };
+ *
+ * InstReport instReport;
+ * </PRE>
+ *
+ * Send reports to instReport:
+ * <PRE>
+ * void inst() {
+ *   InstReport::Send report( instReport ); <B>1</B> // construction of report
+ *   report->start();                       <B>2</B>
+ *   ...
+ *   report->progress();                    <B>3</B>
+ *   ...
+ *   report->stop();                        <B>4</B>
+ * }                                        <B>5</B> // destruction of report
+ * </PRE>
+ *
+ * Create a recipient:
+ * <PRE>
+ * class InstRecieve : public InstCallback {
+ *   virtual void reportbegin() { ... }
+ *   virtual void reportend()   { ... }
+ *   virtual void start()       { ... }
+ *   virtual void progress()    { ... }
+ *   virtual void stop()        { ... }
+ * };
+ *
+ * InstRecieve instRecieve;
+ * </PRE>
+ *
+ * Let it recieve reports to instReport:
+ * <PRE>
+ * instReport.redirectTo( instRecieve );
+ * </PRE>
+ *
+ * Invocation of inst() now triggers:
+ * <PRE>
+ * <B>1</B> instRecieve->reportbegin();
+ * <B>2</B> instRecieve->start();
+ * <B>3</B> instRecieve->progress();
+ * <B>4</B> instRecieve->stop();
+ * <B>5</B> instRecieve->reportend();
+ * </PRE>
+ *
  **/
-template <typename T> class BasicSettings {
-
-  protected:
-
-    /**
-     * Default settings.
-     **/
-    static T _default;
-
-    /**
-     * Settings in use.
-     **/
-    static const T * _inuse;
+template <class CB> class Report : protected CB {
 
   public:
 
     /**
-     * @return Settings in use, NULL if defaults are used.
+     * Constructor.
      **/
-    static const T * inUse() { return _inuse; }
+    Report() {}
+    /**
+     * Destructor.
+     **/
+    virtual ~Report() {}
+
+  public:
 
     /**
-     * Assign settings to use, NULL for using defaults.
-     * @return Previously used settigns.
+     * Adjust to public scope to allow redirection.
      **/
-    static const T * use( const T * ncb_r ) {
-      const T * ret = _inuse;
-      _inuse = ncb_r;
-      return ret;
-    }
+    CB::redirectTo;
 
+  public:
+
+    ///////////////////////////////////////////////////////////////////
+    //
+    //	CLASS NAME : Report<CB>::Send
     /**
-     * @return Current settings (either settings in use, or defaults).
+     * @short Interface to send reports.
+     *
+     * See @ref Report
      **/
-    static const T & provide() { return( _inuse ? *_inuse : _default ); }
+    class Send {
+
+      private:
+
+	/**
+	 * The @ref Report in use.
+	 **/
+	Report<CB> & _report;
+
+      public:
+
+	/**
+	 * Constructor. Triggers Report->reportbegin().
+	 **/
+	Send( Report<CB> & report_r )
+	  : _report( report_r )
+	{ operator->()->reportbegin(); }
+	/**
+	 * Destructor. Triggers Report->reportend().
+	 **/
+	~Send() {
+	  operator->()->reportend();
+	}
+
+	/**
+	 * Access to callback interface.
+	 **/
+	CB * operator->() { return _report.operator->(); }
+    };
+
+    ///////////////////////////////////////////////////////////////////
 };
 
 ///////////////////////////////////////////////////////////////////

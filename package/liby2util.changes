@@ -1,10 +1,16 @@
 -------------------------------------------------------------------
+Fri Aug 29 01:11:39 CEST 2003 - ma@suse.de
+
+- Adapt CallBack and ProgressCounter to packagemanager needs.
+- 2.8.10
+
+-------------------------------------------------------------------
 Mon Aug 25 14:31:26 CEST 2003 - sh@suse.de
 
 - Second part of fix for bug #19603: RPM groups not translated
   Moved gettext initialization out to from Y2PM.cc (in packagemanager)
   to YRpmGroupsTree.cc
- 
+
 
 -------------------------------------------------------------------
 Tue Aug 12 15:30:14 CEST 2003 - ma@suse.de

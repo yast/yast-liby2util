@@ -11,9 +11,10 @@ AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"$
 lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES = \
+	y2logging.cc		\
+	Y2SLog.cc		\
 	stringutil.cc		\
 	hash.cc			\
-	y2logging.cc		\
 	LangCode.cc		\
 	Vendor.cc		\
 	Rep.cc			\
@@ -25,7 +26,7 @@ liby2util_la_SOURCES = \
 	TagCacheRetrieval.cc	\
 	CommonPkdParser.cc	\
 	TaggedFile.cc		\
-	Y2SLog.cc		\
+	ProgressCounter.cc	\
 	ExternalDataSource.cc	\
 	ExternalProgram.cc	\
 	Url.cc			\
@@ -36,7 +37,7 @@ liby2util_la_SOURCES = \
 	diff.cc			\
 	DiskSpace.cc		\
         GPGCheck.cc             \
-        timeclass.cc             \
+        timeclass.cc            \
         SysConfig.cc
 
 
