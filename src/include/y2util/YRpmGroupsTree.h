@@ -62,11 +62,8 @@ public:
     std::string translatedRpmGroup( const YStringTreeItem * node )
 	{ return translatedPath( node, '/', false ); }
     
-    
-protected:
-    
     /**
-     * Add a predefined set of fallback RPM groups
+     * Add a predefined set of RPM groups
      **/
     void addFallbackRpmGroups();
 };

@@ -102,13 +102,13 @@ public:
      * complete path should start with the delimiter character.
      *
      * Note: origPath() or translatedPath() are much cheaper if only one
-     * version (original or translated) is required. 
+     * version (original or translated) is required.
      **/
     YTransText path( const YStringTreeItem * item,
 		     char delimiter,
 		     bool startWithDelimiter = true );
-    
-    
+
+
     /**
      * Debugging - dump the tree into the log file.
      **/
@@ -122,25 +122,25 @@ public:
      * data element.
      **/
     YStringTreeItem * root() const { return _root; }
-    
+
 protected:
 
     /**
-     * Construct a complete original or translated path for the specified tree item.
-     * 'startWithDelimiter' specifies whether or not the complete path should
-     * start with the delimiter character.
+     * Construct a complete original or translated path for the specified tree
+     * item.  'startWithDelimiter' specifies whether or not the complete path
+     * should start with the delimiter character.
      **/
     std::string completePath( const YStringTreeItem * item,
 			      bool translated,
 			      char delimiter,
 			      bool startWithDelimiter );
-    
+
     /**
      * Debugging - dump one branch of the tree into the log file.
      **/
     void logBranch( YStringTreeItem * branch, std::string indentation );
 
-    
+
     // Data members
 
     YStringTreeItem * _root;
