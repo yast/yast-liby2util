@@ -24,7 +24,8 @@ liby2util_la_SOURCES = \
 	Y2SLog.cc		\
 	ExternalDataSource.cc	\
 	ExternalProgram.cc	\
-	Url.cc
+	Url.cc			\
+	Date.cc
 
 
 liby2util_la_LDFLAGS = -version-info 2:0
