@@ -19,10 +19,15 @@
 #ifndef RefObject_h
 #define RefObject_h
 
-#include <unistd.h> // size_t
 #include <iosfwd>
 
-#include <Y2UTIL.h>
+#define RefObjectDEBUG
+
+#ifdef RefObjectDEBUG
+#include <iostream>
+extern unsigned RefObject_total_i;
+extern unsigned RefObject_ids_i;
+#endif // RefObjectDEBUG
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -32,7 +37,6 @@
 //
 template <class ObjT> class RefObject {
 
-//  void * operator new( size_t ); // no new
   protected:
 
     ///////////////////////////////////////////////////////////////////
@@ -45,7 +49,14 @@ template <class ObjT> class RefObject {
       Ref & operator=( const Ref & ); // no assign
       Ref * operator&();              // no address
 
+#ifdef RefObjectDEBUG
+      public:
+	unsigned id_i;
+#endif //RefObjectDEBUG
+
       private:
+
+	friend class RefObject;
 
 	ObjT &   obj_p;
 	unsigned cnt_i;
@@ -53,17 +64,23 @@ template <class ObjT> class RefObject {
 	Ref( ObjT & obj_pr )
 	  : obj_p( obj_pr )
 	  , cnt_i( 0 )
-	{}
+	{
+#ifdef RefObjectDEBUG
+	  ++RefObject_total_i;
+	  id_i = ++RefObject_ids_i;
+	  std::cerr << "+++Ref(" << id_i << "/" << RefObject_total_i << ")" << std::endl;
+#endif // RefObjectDEBUG
+	}
 
 	~Ref() {
 	  if ( cnt_i )
 	    throw( this );
 	  delete &obj_p;
+#ifdef RefObjectDEBUG
+	  --RefObject_total_i;
+	  std::cerr << "---Ref(" << id_i << "/" << RefObject_total_i << ")" << std::endl;
+#endif // RefObjectDEBUG
 	}
-
-      private:
-
-	friend class RefObject;
 
       public:
 
@@ -99,44 +116,46 @@ template <class ObjT> class RefObject {
 
   public:
 
-    RefObject * operator&()
-    {
-#warning "RefObject::operator&()";
-      return this;
-    }
-
     RefObject( ObjT * obj_pr = 0 ) {
-      debug( "default constructor" );
       body_p = 0;
       body_assign( obj_pr ? new Ref( *obj_pr ) : 0 );
     }
 
     RefObject( const RefObject & handle_v ) {
-      debug ( "copy constructor" );
       body_p = 0;
       body_assign( handle_v.body_p );
     }
 
     RefObject & operator=( const RefObject & handle_v ) {
-      debug ( "assignment" );
       body_assign( handle_v.body_p );
       return *this;
-    }
-
-    bool null()
-    {
-	    return body_p?false:true;
     }
 
     virtual ~RefObject() { body_assign( 0 ); }
 
   public:
 
-    operator void *()  const { return ( body_p != (void*)NULL ? (void*)*body_p : (void*)NULL ); }
+    //RefObject * operator&();              // no address
+
+    void * null()  const { return ( body_p != (void*)0 ? *body_p : (void*)0 ); }
+    operator void *()  const { return ( body_p != (void*)0 ? *body_p : (void*)0 ); }
+
     Ref & operator->() const { return assert_body(); }
 
     ObjT & operator*() const { return *assert_body(); }
 
+    friend std::ostream & operator<<( std::ostream & str, RefObject & obj ) {
+#ifdef RefObjectDEBUG
+      str << "(";
+      if ( obj )
+	str << "   Ref(" << (*obj.body_p).id_i << "/" << RefObject_total_i << ")";
+      else
+	str << "NULL";
+      return str << ")";
+#else
+      return str;
+#endif // RefObjectDEBUG
+    }
 };
 ///////////////////////////////////////////////////////////////////
 
