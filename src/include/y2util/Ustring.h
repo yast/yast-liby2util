@@ -152,22 +152,44 @@ class Ustring
     /**
      * Conversion to const std::string &
      **/
-    operator const std::string & () const { return _name; }
+    const std::string & asString() const { return _name; }
 
     /**
      * Conversion to const std::string &
      **/
-    const std::string & asString() const { return _name; }
+    operator const std::string & () const { return asString(); }
 
     /**
-     * ustr->size(); // short for ((const std::string &)ustr).size();
+     * short for ((const std::string &)ustr).size();
      **/
-    const std::string * operator->() const { return & _name; }
+    std::string::size_type size() const { return asString().size(); }
+
+    /**
+     * short for ((const std::string &)ustr).empty();
+     **/
+    bool empty() const { return asString().empty(); }
+
+
+    int compare( const std::string & rhs ) const {
+      return asString().compare( rhs );
+    }
+
+    int compare( const Ustring & rhs ) const {
+      if ( *this == rhs )
+	return 0;
+      return( *this < rhs ? -1 : 1 );
+    }
+
+    /**
+     * ustr->???(); // short for ((const std::string &)ustr).???();
+     **/
+    const std::string * operator->() const { return & asString(); }
 
     // operator ==
 
     friend bool operator==( const Ustring & lhs, const Ustring & rhs ) {
-      return ( (const std::string &)lhs == (const std::string &)rhs );
+      // Ustrings share their string representation
+      return ( lhs->c_str() == rhs->c_str() );
     }
 
     friend bool operator==( const Ustring & lhs, const std::string & rhs ) {
