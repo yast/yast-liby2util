@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 17 13:48:25 CET 2004 - mvidner@suse.cz
+
+- include MemUsage.h unconditionally, let *it* (un)define D_MEMUSAGE
+- 2.9.16
+
+-------------------------------------------------------------------
 Tue Mar 16 17:09:45 CET 2004 - lnussel@suse.de
 
 - disable -DD_MEMUSAGE otherwise all depending packages need to enable it too

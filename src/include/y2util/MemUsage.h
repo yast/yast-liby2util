@@ -22,6 +22,12 @@ $Id$
 
 #include <set>
 
+
+/**
+ * This is the master switch for MemUsage
+ */
+#undef D_MEMUSAGE
+
 /**
  * Counts instances of classes
  * If you want to count a class, derive it form this one.
