@@ -10,6 +10,7 @@ pkginclude_HEADERS = \
 	stringutil.h	\
 	hash.h		\
 	Ustring.h	\
+		LangCode.h	\
 	Pathname.h	\
 	PathInfo.h	\
 	Rep.h	\

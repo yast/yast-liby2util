@@ -12,6 +12,7 @@ lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES = \
 	hash.cc \
+	LangCode.cc	\
 	Rep.cc \
 	BitField.cc \
 	Pathname.cc \
