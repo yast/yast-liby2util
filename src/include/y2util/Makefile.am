@@ -43,6 +43,7 @@ pkginclude_HEADERS =		\
 	setutil.h		\
 	stringutil.h		\
 	timeclass.h		\
+	Digest.h		\
 	y2log.h
 
 

@@ -40,6 +40,7 @@ liby2util_la_SOURCES =		\
 	miniini.cc		\
 	stringutil.cc		\
 	timeclass.cc		\
+	Digest.cc		\
 	y2log.cc
 
 
