@@ -34,6 +34,7 @@
 
 #define Y2LOG_DATE	"%Y-%m-%d %H:%M:%S"	/* The date format */
 #define Y2LOG_FORMAT	"%s <%d> %s(%d)%s %s%s:%d %s%s"
+#define Y2LOG_SIMPLE	"%s %s%s:%d %s%s"
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
 #define Y2LOG_MAXSIZE	1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
@@ -70,6 +71,7 @@ static bool log_to_syslog = false;
 
 static bool log_all_variable = false;
 static bool log_debug_variable = false;
+static bool log_simple = false;
 
 static FILE *Y2LOG_STDERR = stderr;		/* Default output */
 
@@ -190,7 +192,7 @@ void y2_vlogger_function(loglevel_t level, const char *component, const char *fi
     FILE *logfile = Y2LOG_STDERR;
     if (*logname != '-') {
 	logfile = fopen (logname, "a");
-	if (!logfile) {
+	if (!logfile && !log_simple) {
 	    fprintf (Y2LOG_STDERR, "y2log: Error opening logfile '%s': %s (%s:%d).\n",
 		     logname, strerror (errno), file, line);
 	    return;
@@ -227,8 +229,12 @@ void y2_vlogger_function(loglevel_t level, const char *component, const char *fi
 #endif
 
     /* Do the log */
-    fprintf (logfile, Y2LOG_FORMAT, date, level, hostname, pid, comp.c_str (),
-	    file, func.c_str (), line, logtext, eol?"\n":"");
+    if(log_simple)
+	fprintf (logfile, Y2LOG_SIMPLE, comp.c_str (),
+		file, func.c_str (), line, logtext, eol?"\n":"");
+    else
+	fprintf (logfile, Y2LOG_FORMAT, date, level, hostname, pid, comp.c_str (),
+		file, func.c_str (), line, logtext, eol?"\n":"");
 
     /* Clean everything */
     if (logfile && logfile != Y2LOG_STDERR)
@@ -375,6 +381,8 @@ void set_log_conf(string confname) {
  */
 bool should_be_logged (int loglevel, string componentname) {
 
+    if(log_simple) return loglevel > 1;
+
     /* Only debug level is controllable */
     if(loglevel > 0) return true;
 
@@ -398,6 +406,13 @@ bool should_be_logged (int loglevel, string componentname) {
 
     /* Config setting */
     return log_debug;
+}
+
+/**
+ * Set (or reset) the simple mode
+ */
+void set_simple(bool simple) {
+    log_simple = simple;
 }
 
 /* EOF */

@@ -121,4 +121,6 @@ string get_log_filename();
  */
 void set_log_conf(string confname);
 
+void set_simple(bool simple);
+
 #endif /* _y2log_h */
