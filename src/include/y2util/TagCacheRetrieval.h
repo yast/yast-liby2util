@@ -65,22 +65,26 @@ class TagCacheRetrievalPos {
 class TagCacheRetrieval : virtual public Rep {
     REP_BODY(TagCacheRetrieval);
     private:
+	// the name of the file
+	std::string _name;
+
 	// the stream to read data from
-	std::ifstream _packages;
+	std::ifstream _stream;
 
 	// the parser to interprete data from the stream
 	TagParser _parser;
 
     public:
 
-	TagCacheRetrieval (const Pathname& packagesname);
+	TagCacheRetrieval (const Pathname& filename);
 	~TagCacheRetrieval();
 
 	/**
 	 * access to stream and parser
 	 * these are non-const because the caller might clobber the values
 	 */
-	std::ifstream& getStream (void) { return _packages; }
+	std::ifstream& getStream (void) { return _stream; }
+	std::string& getName (void) { return _name; }
 	TagParser& getParser (void) { return _parser; }
 
 	/**

@@ -40,11 +40,12 @@ IMPL_BASE_POINTER(TagCacheRetrieval);
 //	METHOD NAME : TagCacheRetrieval::TagCacheRetrieval
 //	METHOD TYPE : Constructor
 //
-//	DESCRIPTION : open packages stream and keep pointer to tag parser
+//	DESCRIPTION : open file stream and keep pointer to tag parser
 //		      for later value retrieval on-demand
 //
-TagCacheRetrieval::TagCacheRetrieval(const Pathname& packagesname)
-    : _packages (packagesname.asString().c_str())
+TagCacheRetrieval::TagCacheRetrieval(const Pathname& name)
+    : _name (name.asString())
+    , _stream (name.asString().c_str())
 {
 }
 
@@ -73,14 +74,14 @@ TagCacheRetrieval::~TagCacheRetrieval()
 bool
 TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::list<std::string> &data_r)
 {
-    return (_parser.retrieveData (_packages, pos.begin(), pos.end(), data_r));
+    return (_parser.retrieveData (_stream, pos.begin(), pos.end(), data_r));
 }
 
 bool
 TagCacheRetrieval::retrieveData(const TagCacheRetrievalPos& pos, std::string &data_r)
 {
     std::list<std::string> listdata;
-    if (_parser.retrieveData (_packages, pos.begin(), pos.end(), listdata)
+    if (_parser.retrieveData (_stream, pos.begin(), pos.end(), listdata)
 	&& !listdata.empty())
     {
 	data_r = listdata.front();
