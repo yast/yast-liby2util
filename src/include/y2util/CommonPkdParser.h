@@ -41,7 +41,6 @@ class Tag
 	std::streampos _startpos;
 	std::streampos _endpos;
 	std::string _data;
-	std::string _extdata;
 	// which locale is to be preferred
 	std::string _prefmainlocale;
 	std::string _prefsublocale;
@@ -70,6 +69,10 @@ class Tag
 	const std::string& Name() const
 	{
 	    return _name;
+	}
+	const std::string& Data() const
+	{
+	    return _data;
 	}
 	bool operator==(const Tag& t2 )
 	{
@@ -110,7 +113,7 @@ class Tag
 	{
 	    _startpos = 0;
 	    _endpos = 0;
-	    _lastmainlocale = _lastsublocale = _extdata = _data.erase();
+	    _lastmainlocale = _lastsublocale = _data.erase();
 	}
 	/** if REJECTED_NOENDTAG is returned, stream and parser are in an undefined state */
 	assignstatus assign(const std::string& starttag, TagParser& parser, std::istream& istr);

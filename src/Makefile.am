@@ -6,7 +6,7 @@ SUBDIRS = include
 
 INCLUDES = -I$(QTDIR)/include -I$(srcdir)/include -I$(includedir)
 
-AM_CPPFLAGS = -DREP_DEBUG
+#AM_CPPFLAGS = -DREP_DEBUG
 
 lib_LTLIBRARIES = liby2util.la
 
