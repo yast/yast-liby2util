@@ -80,7 +80,7 @@ bool Digest::P::maybeInit()
 	OpenSSL_add_all_digests();
 	openssl_digests_added = true;
     }
-    
+
     if(!initialized)
     {
 	md = EVP_get_digestbyname(name.c_str());
@@ -193,7 +193,7 @@ std::string Digest::digest(const std::string& name, std::istream& is, size_t buf
     if(!digest.create(name))
 	return string();
 
-    while((num = is.readsome(buf, sizeof(bufsize))))
+    while((num = is.readsome(buf, bufsize)))
     {
 	if(!digest.update(buf, num))
 	    return string();
@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 	openssl = true;
 	++argpos;
     }
-	
+
     if(argc - argpos < 2)
     {
 	cerr << "Usage: " << argv[0] << " <DIGESTNAME> <FILE>" << endl;
