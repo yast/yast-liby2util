@@ -19,8 +19,7 @@
 
 #include <cstdlib>
 #include <string>
-
-#include <qasciidict.h>
+#include <map>
 
 #include <y2util/Y2SLog.h>
 
@@ -32,10 +31,11 @@ namespace Y2SLog {
 //
 ///////////////////////////////////////////////////////////////////
 
-class Y2Loglinestreamset;
+static ostream no_stream_Fm( 0 );
 
-static ostream                        no_stream_Fm( 0 );
-static QAsciiDict<Y2Loglinestreamset> streamset_VpCm( 17, true, false );
+class Y2Loglinestreamset;
+typedef map<string,Y2Loglinestreamset> Streamset;
+static Streamset streamset_VCm;
 
 static bool init();
 
@@ -50,7 +50,6 @@ bool dbg_enabled_bm( init() );
 **	DESCRIPTION :
 */
 static bool init() {
-  streamset_VpCm.setAutoDelete( true );
   Y2Logging::setLogfileName (getenv( "Y2SLOG_FILE" ));
   return (getenv( "Y2SLOG_DEBUG" ) != NULL);
 }
@@ -179,13 +178,21 @@ class Y2Loglinestreamset {
       }
     }
 
+    Y2Loglinestreamset( const Y2Loglinestreamset & rhs )
+      : class_t( rhs.class_t )
+    {
+      for ( unsigned i = 0; i < maxSet_i; ++i ) {
+	set_VpC[i] = 0;
+      }
+    }
+
     ~Y2Loglinestreamset() {
       for ( unsigned i = 0; i < maxSet_i; ++i ) {
 	delete set_VpC[i];
       }
     }
 
-    const char * key() const { return class_t.c_str(); }
+    const string & key() const { return class_t; }
 
     ostream & getStream( const unsigned level, const char * fil, const char * fnc, int lne ) {
       if ( level >= maxSet_i ) {
@@ -211,12 +218,12 @@ class Y2Loglinestreamset {
 ostream & get( const char * which, const unsigned level,
 	       const char * fil, const char * fnc, const int lne )
 {
-  Y2Loglinestreamset * set_pCi = streamset_VpCm.find( which );
-  if ( !set_pCi ) {
-    set_pCi = new Y2Loglinestreamset( which );
-    streamset_VpCm.insert( set_pCi->key(), set_pCi );
+  Streamset::iterator iter = streamset_VCm.find( which );
+  if ( iter == streamset_VCm.end() ) {
+    Y2Loglinestreamset nv( which );
+    iter = streamset_VCm.insert( Streamset::value_type( nv.key(), nv ) ).first;
   }
-  return set_pCi->getStream( level, fil, fnc, lne );
+  return iter->second.getStream( level, fil, fnc, lne );
 }
 
 /******************************************************************

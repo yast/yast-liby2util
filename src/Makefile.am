@@ -16,7 +16,6 @@ liby2util_la_SOURCES = \
 	y2logging.cc		\
 	LangCode.cc		\
 	Rep.cc			\
-	BitField.cc		\
 	Pathname.cc		\
 	PathInfo.cc		\
 	TagParser.cc		\
