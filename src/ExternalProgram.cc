@@ -122,7 +122,7 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
     if (use_pty)
     {
 	// Create pair of ttys
-	DBG << "Using ttys for communication with " << argv[0] << endl;;
+	DBG << "Using ttys for communication with " << argv[0] << endl;
 	if (openpty (&master_tty, &slave_tty, 0, 0, 0) != 0)
 	{
 	    ERR << "openpty failed" << endl;
@@ -138,18 +138,18 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    return;
 	}
     }
-   
+
     // do not remove the single quotes around every argument, copy&paste of
     // command to shell will not work otherwise!
-    MIL << "Executing ";
-    for(int i=0; argv[i]; i++)
+    DBG << "Executing ";
+    for (int i = 0; argv[i]; i++)
     {
-	if(i>0) MIL << ' ';
-	MIL << '\'';
-	MIL << argv[i];
-	MIL << '\'';
+	if (i>0) DBG << ' ';
+	DBG << '\'';
+	DBG << argv[i];
+	DBG << '\'';
     }
-    MIL << endl;
+    DBG << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
@@ -201,7 +201,7 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 
 	if(default_locale)
 		setenv("LC_ALL","C",1);
-	
+
 	if(root)
 	{
 	    if(chroot(root) == -1)
