@@ -54,6 +54,10 @@ DiskSpace::DfVec DiskSpace::df(bool filter_nonlocal)
 	info.percent    = atoi(vec[5].c_str());
 	info.mountpoint = vec[6];
 
+	string::size_type pos = info.mountpoint.find("\n");
+	if( pos != string::npos)
+	    info.mountpoint = info.mountpoint.substr(0,pos);
+
 	if(filter_nonlocal && info.device.substr(0,1) == "/")
 	    continue;
 

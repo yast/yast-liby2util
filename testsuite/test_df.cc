@@ -13,7 +13,13 @@ int main(int argc, char* argv[])
     for(DiskSpace::DfVec::iterator it = df.begin();
 	it != df.end(); ++it)
     {
-	cout << it->device << " " << it->percent << endl;
+	cout << it->device << " "
+	<< it->fstype << " "
+	<< it->total << " "
+	<< it->used << " "
+	<< it->available << " "
+	<< it->percent << "% "
+	<< it->mountpoint << endl;
     }
     return 0;
 }
