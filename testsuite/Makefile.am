@@ -6,8 +6,6 @@ AUTOMAKE_OPTIONS = dejagnu
 
 INCLUDES= -I$(QTDIR)/include -I../src/include -I$(includedir)
 
-CPPFLAGS = -DY2LOG=__FILE__
-
 LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive	\
 	../src/liby2util.la		\

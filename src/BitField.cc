@@ -301,65 +301,65 @@ BitField & BitField::append( const BitField & rhs )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : BitField::clipto
+//	METHOD NAME : BitField::at
+//	METHOD TYPE : BitField
+//
+//	DESCRIPTION :
+//
+BitField BitField::at( size_type pos, size_type len ) const
+{
+  if ( ! len )
+    return BitField();
+
+  if ( len == npos ) {
+    if ( pos < _rep.size() )
+      len = _rep.size() - pos;
+    else
+      return BitField();
+  }
+
+  BitField ret( len );
+  for ( unsigned i = next( pos - 1 ); i != npos && i - pos < len; i = next( i ) ) {
+    ret.set( i - pos );
+  }
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : BitField::delat
 //	METHOD TYPE : BitField &
 //
 //	DESCRIPTION :
 //
-BitField & BitField::clipto( size_type pos, size_type len )
+BitField & BitField::delat( size_type pos, size_type len )
 {
-  if ( pos == 0 || !len ) {
-    // simply resize to probabely empty field
-    if ( len != _rep.size() ) {
-      _rep.detach();
-      _rep.resize( len );
-    }
+  if ( ! ( _valid( pos ) && len ) )
     return *this;
-  }
 
-  QBitArray newrep( len );
-  newrep.fill( false );
+  if ( len == npos )
+    len = _rep.size() - pos;
 
-  if ( _valid( pos ) ) {
-    // copy all 1's to nrep
-    if ( pos + len > _rep.size() ) {
-      len = _rep.size() - pos;
-    }
-    for ( size_type newpos = 0; len; ++newpos, ++pos, --len ) {
-      if ( _rep.testBit( pos ) ) {
-	newrep.setBit( newpos );
-      }
-    }
-  }
-
-  _rep = newrep;
-  return *this;
+  return operator=( concat( before( pos ), from( pos + len ) ) );
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : BitField::first
-//	METHOD TYPE : BitField::size_type
+//	METHOD NAME : BitField::resize
+//	METHOD TYPE : BitField &
 //
 //	DESCRIPTION :
 //
-BitField::size_type BitField::first( bool val ) const
+BitField & BitField::resize( size_type len )
 {
-  return next( npos, val );
-}
+  if ( len == npos || len == _rep.size() )
+    return *this;
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : BitField::last
-//	METHOD TYPE : BitField::size_type
-//
-//	DESCRIPTION :
-//
-BitField::size_type BitField::last( bool val ) const
-{
-  return prev( _rep.size(), val );
+  _assert_range( 0, len );
+  return delfrom( len );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -390,6 +390,9 @@ BitField::size_type BitField::next( size_type pos, bool val ) const
 //
 BitField::size_type BitField::prev( size_type pos, bool val ) const
 {
+  if ( pos > _rep.size() )
+    pos = _rep.size();
+
   while( pos && --pos < _rep.size() ) {
     if ( _rep.testBit( pos ) == val ) {
       return pos;
@@ -526,6 +529,13 @@ void BitField::assign( size_type pos, size_type len, bool val )
     return;
   }
 
+  if ( len == npos ) {
+    if ( pos < _rep.size() )
+      len = _rep.size() - pos;
+    else
+      return;
+  }
+
   _assert_range( pos, len );
   for ( ; len; ++pos, --len ) {
     _doassign( pos, val );
@@ -580,6 +590,13 @@ void BitField::invert( size_type pos, size_type len )
     return;
   }
 
+  if ( len == npos ) {
+    if ( pos < _rep.size() )
+      len = _rep.size() - pos;
+    else
+      return;
+  }
+
   _assert_range( pos, len );
   for ( ; len; ++pos, --len ) {
     _doinvert( pos );
@@ -623,15 +640,3 @@ string BitField::asString( char t, char f ) const
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : BitField::dumpOn
-//	METHOD TYPE : std::ostream &
-//
-//	DESCRIPTION :
-//
-std::ostream & BitField::dumpOn( std::ostream & str ) const
-{
-  return str << '"' << asString() << '"' << '(' << size() << ')';
-}

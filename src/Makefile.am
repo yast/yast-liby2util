@@ -6,8 +6,8 @@ SUBDIRS = include
 
 INCLUDES = -I$(QTDIR)/include -I$(srcdir)/include -I$(includedir)
 
-#AM_CPPFLAGS = -DREP_DEBUG
-AM_CPPFLAGS = -DY2LOG=\"liby2util\"
+DEBUG_FLAGS = -DREP_DEBUG
+AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 
 lib_LTLIBRARIES = liby2util.la
 

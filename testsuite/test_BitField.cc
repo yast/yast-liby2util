@@ -127,16 +127,33 @@ int main ()
   TO( concat(a,b) );
   TO( a.append(b) );
   DBG << "===================================" << endl;
-  TO( range(a,0,0) );
-  TO( range(a,0,1) );
-  TO( range(a,0,5) );
-  TO( range(a,1,4) );
-  TO( range(a,4,4) );
+  TO( a.at(0,0) );
+  TO( a.at(0,1) );
+  TO( a.at(0,5) );
+  TO( a.at(1,4) );
+  TO( a.at(4,4) );
+  TO( a.at(0,BitField::npos) );
+  TO( a.at(3,BitField::npos) );
+  TO( a.at(4,BitField::npos) );
+  DBG << "===================================" << endl;
+  TO( a.delat(0,0) );
+  TO( a.delat(0,1) );
+  TO( a.delat(0,5) );
+  TO( a.delat(1,4) );
+  TO( a.delat(4,4) );
+  TO( a.delat(0,BitField::npos) );
+  TO( a.delat(3,BitField::npos) );
+  TO( a.delat(4,BitField::npos) );
+  DBG << "===================================" << endl;
   TO( a.clipto(0,0) );
   TO( a.clipto(0,1) );
   TO( a.clipto(0,5) );
   TO( a.clipto(1,4) );
   TO( a.clipto(4,4) );
+  TO( a.clipto(0,BitField::npos) );
+  TO( a.clipto(3,BitField::npos) );
+  TO( a.clipto(4,BitField::npos) );
+  DBG << "===================================" << endl;
   DBG << "===================================" << endl;
 
   iter( "" );
@@ -145,6 +162,8 @@ int main ()
   iter( "0000" );
   iter( "101010" );
   iter( "110011" );
+#if 0
+#endif
 
   return 0;
 }
