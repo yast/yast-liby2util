@@ -11,7 +11,9 @@ int main(int argc, char* argv[])
 	cout << "must specify directory to chroot to" << endl;
 	return 1;
     }
-    ExternalProgram* prog = new ExternalProgram("ls", ExternalProgram::Stderr_To_Stdout,
+    char* aa[] = { "ls" , "-al", NULL };
+//    string aa = "ls";
+    ExternalProgram* prog = new ExternalProgram(aa, ExternalProgram::Stderr_To_Stdout,
 	false, -1, true, argv[1]);
     if(!prog) return 1;
     string line;
