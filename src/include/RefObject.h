@@ -1,6 +1,9 @@
 /* $Header$
 //
 // $Log$
+// Revision 1.4  2002/05/27 13:30:06  lnussel
+// made void* operator work
+//
 // Revision 1.3  2002/05/27 10:56:41  lnussel
 // - testfunction for refobjects stored in a list
 // - removed private operator new and implemented operator& in RefObject.h
@@ -130,7 +133,7 @@ template <class ObjT> class RefObject {
 
   public:
 
-    operator void *()  const { return ( body_p != NULL ? *body_p : NULL ); }
+    operator void *()  const { return ( body_p != (void*)NULL ? (void*)*body_p : (void*)NULL ); }
     Ref & operator->() const { return assert_body(); }
 
     ObjT & operator*() const { return *assert_body(); }

@@ -20,12 +20,25 @@ strptr createone()
 void testlist(strptr a, strptr b)
 {
 	std::list<strptr> strlist;
+	strptr c(new std::string("teststring 3"));
 	strlist.push_front(a);
+	strlist.push_front(b);
+	strlist.push_front(c);
 	strlist.push_front(b);
 
 	for ( std::list<strptr>::iterator it=strlist.begin(); it != strlist.end(); it++ )
 	{
-		std::cout << it.operator->()->operator->()->c_str() << std::endl;
+		//std::cout << it.operator->()->operator->()->c_str() << std::endl;
+		std::cout << **it << std::endl;
+	}
+	
+	strlist.remove(b);
+
+	std::cout << "-***" << std::endl;
+
+	for ( std::list<strptr>::iterator it=strlist.begin(); it != strlist.end(); it++ )
+	{
+		std::cout << **it << std::endl;
 	}
 }
 
