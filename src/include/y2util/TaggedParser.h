@@ -89,7 +89,7 @@ class TaggedParser {
     std::string _currentLocale;
     std::string _currentData;		// substr of currentLine, set by data()
 
-    bool _allow_oldstyle;
+    bool _oldstyle;
 
     // set from start of line to start of tag
     int _offset;
@@ -111,7 +111,7 @@ class TaggedParser {
     TaggedParser();
     virtual ~TaggedParser();
 
-    void allowOldstyle (bool allow_oldstyle) { _allow_oldstyle = allow_oldstyle; _offset = 0; }
+    void asOldstyle (bool oldstyle) { _oldstyle = oldstyle; _offset = (oldstyle?0:1); }
     static const streampos nopos;
 
     int lineNumber () const { return _lineNumber; }

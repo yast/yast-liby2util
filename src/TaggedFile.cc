@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------\
+ /*---------------------------------------------------------------------\
 |                                                                      |
 |                      __   __    ____ _____ ____                      |
 |                      \ \ / /_ _/ ___|_   _|___ \                     |
@@ -16,7 +16,6 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-
 #include <ctype.h> // for toupper
 
 #include <y2util/TaggedFile.h>
@@ -52,19 +51,17 @@ Tag::Tag (const std::string& name, datatype dtype, tagtype ttype)
 	if (namepos == 0)
 	    return;
 	_end.reserve (namepos);
-	unsigned int endpos = 0;
-	do
+	_end += toupper (_name[--namepos]);
+	for (;;)
 	{
 	    namepos--;
 
 	    if (namepos == 0)
-		_end[endpos] = tolower (_name[namepos]);
-	    else if (endpos == 0)
-		_end[endpos] = toupper (_name[namepos]);
-	    else
-		_end[endpos] = _name[namepos];
-
-	    endpos++;
+	    {
+		_end += tolower (_name[namepos]);
+		break;
+	    }
+	    _end += _name[namepos];
 	}
 	while (namepos > 0);
     }
@@ -130,7 +127,7 @@ Tag::assign (const std::string& locale, TaggedParser& parser, std::istream& istr
 	    }
 	break;
 	case MULTIOLD:
-	    if (parser.lookupEndTag (istr, _end, locale) != TaggedParser::END)
+	    if (parser.lookupEndTag (istr, _end, locale) != TaggedParser::OLDMULTI)
 	    {
 		D__ << "Endtag not found" << std::endl;
 		return REJECTED_NOENDTAG;
@@ -197,7 +194,6 @@ std::ostream & operator<<( std::ostream & str, const TaggedFile::Tag & obj )
 TagSet::TagSet()
     : _allow_multiple_sets (false)
     , _allow_unknown_tags (true)
-    , _allow_oldstyle_tags (true)
     , _reuse_previous_tag (false)
 {
 }
@@ -252,7 +248,6 @@ assignstatus
 TagSet::assignSet (TaggedParser& parser, std::istream& istr)
 {
 //std::cerr << "TagSet::assignSet(-------------------)@" << parser.lineNumber() << std::endl;
-
 
     // reset tag set
 
@@ -319,6 +314,7 @@ TagSet::assignSet (TaggedParser& parser, std::istream& istr)
     }
     return ret;
 }
+
 
 
 /******************************************************************

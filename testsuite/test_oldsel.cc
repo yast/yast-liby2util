@@ -44,7 +44,7 @@ main (int argc, char **argv)
     tagset.addTag ("Todelete",	TODELETE,  TaggedFile::MULTIOLD, TaggedFile::ALLOWLOCALE);
 
     TaggedParser parser;
-    parser.allowOldstyle (true);
+    parser.asOldstyle (true);
 
     std::ifstream input(argv[1]);
     if(!input)
@@ -57,7 +57,10 @@ main (int argc, char **argv)
     {
 	TaggedFile::assignstatus status = tagset.assignSet (parser, input);
 	if (status == TaggedFile::REJECTED_EOF)
+	{
+	    cout << "EOF" << endl;
 	    break;
+	}
 	else if (status == TaggedFile::ACCEPTED_FULL)
 	{
 	    cout << "parse complete" << endl;

@@ -10,7 +10,7 @@ Label.cs: Systém s kancelářským balíkem
 Label.de_AT: Standard-System mit Office de_AT
 Label.de: Standard-System mit Office de
 Label.de_DE: Standard-System mit Office de_DE
-Label.de: Standard-System mit Office de2
+#Label.de: Standard-System mit Office de2
 Label.en: Default system with Office
 Label.es: Sistema predeterminado con Oficina
 Label.fr: Système standard avec Office

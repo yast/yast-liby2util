@@ -78,7 +78,7 @@ inline void TaggedParser::_reset()
 //
 TaggedParser::TaggedParser()
     : _lineNumber (0)
-    , _allow_oldstyle (false)
+    , _oldstyle (false)
     , _offset (1)
 {
     _reset();
@@ -154,7 +154,7 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
 	    case '-':
 		type = END; break;
 	    default:
-		if ((_allow_oldstyle)
+		if (_oldstyle
 		    && isupper (cline_tr[0]))				// check oldstyle
 		{
 		    string::size_type colonpos = cline_tr.find (":");	// ":" + blank
@@ -306,7 +306,6 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 TaggedParser::TagType
 TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const string & elang_tr)
 {
-//if (!etag_tr.empty()) cerr << "lookupEndTag(" << etag_tr << "." << elang_tr << ")" << endl;
     _datareset();
     if ( stream_fr.good() )
     {
@@ -327,8 +326,17 @@ TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const s
 	    type = tagOnLine( currentLine, maybe_ti, delim_ii, lang_ti);
 
 	    // check tag
-	    if ((type == END)			// end tag found
-		&& (maybe_ti == etag_tr)	// the one we're expecting
+	    if (_oldstyle)
+	    {
+		if (type != OLDMULTI)
+		    continue;
+	    }
+	    else if (type != END)
+	    {
+		continue;
+	    }
+
+	    if ((maybe_ti == etag_tr)		// the one we're expecting
 		&& ((elang_tr.size() == 0)	// no lang given
 		    || lang_ti == elang_tr))	// correct lang found
 	    {

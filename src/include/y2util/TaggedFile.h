@@ -76,14 +76,14 @@ namespace TaggedFile
 	 * <br>
 	 */
 	enum assignstatus {
-	    ACCEPTED,
-	    ACCEPTED_FULL,
-	    REJECTED_EOF,
-	    REJECTED_NOMATCH,
-	    REJECTED_LOCALE,
-	    REJECTED_NOLOCALE,
-	    REJECTED_FULL,
-	    REJECTED_NOENDTAG
+	    ACCEPTED,		// 0
+	    ACCEPTED_FULL,	// 1
+	    REJECTED_EOF,	// 2
+	    REJECTED_NOMATCH,	// 3
+	    REJECTED_LOCALE,	// 4
+	    REJECTED_NOLOCALE,	// 5
+	    REJECTED_FULL,	// 6
+	    REJECTED_NOENDTAG	// 7
 	};
 
 	static const streampos nopos = streampos(-1);
@@ -132,6 +132,14 @@ class Tag
 	 * @param type how to handle multiple assignments of the same tag
 	 * */
 	Tag (const std::string& name, datatype dtype, tagtype ttype = REJECTLOCALE);
+
+	/**
+	 * override old-style end tag
+	 * (needed e.g. for update.inf parsing which reversed
+	 * DefaultInstsrcFTP to PTFCrstsniTluafed
+	 * which can _not_ be handle automagically :-}
+	 */
+	void setEndTag (std::string end) { _end = end; }
 
 	/**
 	 * assign data from stream to tag
@@ -206,9 +214,6 @@ class TagSet
 	/** allow unknown tags */
 	bool _allow_unknown_tags;
 
-	/** allow oldstyle tags */
-	bool _allow_oldstyle_tags;
-
 	/** language dependant tags, needed for setting the encoding */	
 	typedef std::map<std::string, Tag *> tagmaptype;
 
@@ -268,11 +273,6 @@ class TagSet
 	 * allow unknown tags
 	 */
 	void setAllowUnknownTags (bool flag) { _allow_unknown_tags = flag; }
-
-	/**
-	 * allow oldstyle tags
-	 */
-	void setAllowOldstyleTags (bool flag) { _allow_oldstyle_tags = flag; }
 
 	/** add Tag to TagSet
 	 *
