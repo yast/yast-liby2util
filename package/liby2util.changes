@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 23 19:59:52 CEST 2003 - ma@suse.de
+
+- Added PathInfo::symlink
+- 2.8.15
+
+-------------------------------------------------------------------
 Thu Sep 18 22:10:00 CEST 2003 - ma@suse.de
 
 - Provide virtual methods Rep::ref_to and Rep::unref_to triggered

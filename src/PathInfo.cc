@@ -491,6 +491,23 @@ int PathInfo::copy( const Pathname & file, const Pathname & dest )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::symlink
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::symlink( const Pathname & oldpath, const Pathname & newpath )
+{
+  DBG << "symlink " << newpath << " -> " << oldpath;
+  if ( ::symlink( oldpath.asString().c_str(), newpath.asString().c_str() ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::copy_file2dir
 //	METHOD TYPE : int
 //

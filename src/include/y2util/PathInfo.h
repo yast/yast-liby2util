@@ -258,7 +258,7 @@ class PathInfo {
      *
      * @return 0 on success, errno on failure
      **/
-    static int rename( const Pathname & oldpath, const Pathname & newpath  );
+    static int rename( const Pathname & oldpath, const Pathname & newpath );
 
     /**
      * Like 'cp file dest'. Copy file to destination file.
@@ -267,6 +267,14 @@ class PathInfo {
      * destiantion is a directory, otherwise the commands return value.
      **/
     static int copy( const Pathname & file, const Pathname & dest );
+
+    /**
+     * Like '::symlink'. Creates a symbolic link named newpath which contains
+     * the string oldpath. If newpath exists it will not be overwritten.
+     *
+     * @return 0 on success, errno on failure.
+     **/
+    static int symlink( const Pathname & oldpath, const Pathname & newpath );
 
     /**
      * Like 'cp file dest'. Copy file to dest dir.
