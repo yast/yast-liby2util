@@ -17,6 +17,8 @@ pkginclude_HEADERS =		\
 	GPGCheck.h		\
 	KVMap.h			\
 	LangCode.h		\
+	ISOLanguage.h		\
+	ISOCountry.h		\
 	MemUsage.h		\
 	PathInfo.h		\
 	Pathname.h		\
@@ -45,7 +47,8 @@ pkginclude_HEADERS =		\
 	stringutil.h		\
 	timeclass.h		\
 	Digest.h		\
-	y2log.h
+	y2log.h			\
+	_Handle.h _Body.h
 
 
 #<INSTALL-HEADER-TARGET>

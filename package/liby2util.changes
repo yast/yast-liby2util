@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 20 10:05:31 CET 2005 - ma@suse.de
+
+- New classes for language and country code handling.
+- 2.11.2
+
+-------------------------------------------------------------------
 Wed Dec  1 13:40:36 CET 2004 - ma@suse.de
 
 - Keep vendor attributes inside the packagemanager library. (#47528)

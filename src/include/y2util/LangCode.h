@@ -21,37 +21,92 @@
 
 #include <iosfwd>
 
-#include <y2util/Ustring.h>
+#include <y2util/ISOLanguage.h>
+#include <y2util/ISOCountry.h>
 
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : LangCode
 /**
- * Ustrings to contain ISO <code>language</code> or <code>language_country</code> codes.
+ * Store ISO <code>language[_country]</code> codes.
  **/
-class LangCode : public Ustring {
+class LangCode {
 
   private:
 
-    static UstringHash * _nameHash;
+    ISOLanguage _language;
+    ISOCountry  _country;
 
   public:
 
-    explicit LangCode( const std::string & n = "" ) :
-	Ustring( *(_nameHash? _nameHash: (_nameHash = new UstringHash)), n ) {}
+    LangCode() {}
+
+    explicit LangCode( const std::string & code_r );
+
+    LangCode( const ISOLanguage & language_r,
+	      const ISOCountry & country_r = ISOCountry() )
+      : _language( language_r )
+      , _country( country_r )
+    {}
+
+    ~LangCode() {}
+
+    bool isSet() const { return( _language.isSet() || _country.isSet() ); }
+
+    bool hasLanguage() const { return _language.isSet(); }
+    bool hasCountry() const { return _country.isSet(); }
+
+    std::string code() const;
+    std::string languageCode() const { return _language.code(); }
+    std::string countryCode() const { return _country.code(); }
+
+    std::string name() const;
+    std::string languageName() const { return _language.name(); }
+    std::string countryName() const { return _country.name(); }
 
   public:
 
-    /**
-     * True if this contains an <code>_country</code> code.
-     **/
-    bool hasCountry() const;
-
-    /**
-     * Returns the <code>language</code> part only.
-     **/
-    LangCode languageOnly() const;
+    ISOLanguage language() const { return _language; }
+    ISOCountry country() const { return _country; }
 };
+
+///////////////////////////////////////////////////////////////////
+
+std::ostream & operator<<( std::ostream & str, const LangCode & obj );
+
+///////////////////////////////////////////////////////////////////
+
+inline bool operator==( const LangCode & lhs, const LangCode & rhs ) {
+  return( lhs.code() == rhs.code() );
+}
+inline bool operator==( const std::string & lhs, const LangCode & rhs ) {
+  return( lhs == rhs.code() );
+}
+inline bool operator==( const LangCode & lhs, const std::string & rhs ) {
+  return( lhs.code() == rhs );
+}
+
+inline bool operator!=( const LangCode & lhs, const LangCode & rhs ) {
+  return( ! operator==( lhs, rhs ) );
+}
+inline bool operator!=( const std::string & lhs, const LangCode & rhs ) {
+  return( ! operator==( lhs, rhs ) );
+}
+inline bool operator!=( const LangCode & lhs, const std::string & rhs ) {
+  return( ! operator==( lhs, rhs ) );
+}
+
+///////////////////////////////////////////////////////////////////
+
+inline bool std::less<LangCode>::operator()( const LangCode & lhs,
+					     const LangCode & rhs ) const
+{
+  if ( std::less<ISOLanguage>()( lhs.language(), rhs.language() ) )
+    return true;
+  if ( std::less<ISOLanguage>()( rhs.language(), lhs.language() ) )
+    return false;
+  return std::less<ISOCountry>()( lhs.country(), rhs.country() );
+}
 
 ///////////////////////////////////////////////////////////////////
 

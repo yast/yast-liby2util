@@ -19,6 +19,8 @@ liby2util_la_SOURCES =		\
 	FSize.cc		\
 	GPGCheck.cc		\
 	LangCode.cc		\
+	ISOLanguage.cc		\
+	ISOCountry.cc		\
 	MemUsage.cc		\
 	PathInfo.cc		\
 	Pathname.cc		\
@@ -41,7 +43,8 @@ liby2util_la_SOURCES =		\
 	stringutil.cc		\
 	timeclass.cc		\
 	Digest.cc		\
-	y2log.cc
+	y2log.cc		\
+	_Handle.cc _Body.cc
 
 
 liby2util_la_LDFLAGS = -version-info 3:0:0

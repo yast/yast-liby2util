@@ -24,37 +24,66 @@
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
-
-UstringHash * LangCode::_nameHash = 0;
-
-///////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : LangCode::hasCountry
-//	METHOD TYPE : bool
+//	METHOD NAME : LangCode::LangCode
+//	METHOD TYPE : Constructor
 //
-//	DESCRIPTION :
-//
-bool LangCode::hasCountry() const
+LangCode::LangCode( const std::string & code_r )
 {
-  return( asString().size() > 2 );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : LangCode::languageOnly
-//	METHOD TYPE : LangCode
-//
-//	DESCRIPTION :
-//
-LangCode LangCode::languageOnly() const
-{
-  if ( asString().size() > 2 ) {
-    return LangCode( asString().substr( 0, 2 ) );
+  string t;
+  string::size_type sep = code_r.find_first_of( "@." );
+  if ( sep == string::npos ) {
+    t = code_r;
+  } else {
+    t = code_r.substr( 0, sep );
   }
-  return *this;
+
+  sep = t.find( '_' );
+  if ( sep == string::npos ) {
+    _language = ISOLanguage( t );
+  } else {
+    _language = ISOLanguage( t.substr( 0, sep ) );
+    _country = ISOCountry( t.substr( sep+1 ) );
+  }
+
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : LangCode::code
+//	METHOD TYPE : std::string
+//
+std::string LangCode::code() const
+{
+  string ret( languageCode() );
+  if ( hasCountry() )
+    ret += "_" + countryCode();
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : LangCode::name
+//	METHOD TYPE : std::string
+//
+std::string LangCode::name() const
+{
+  string ret( languageName() );
+  if ( hasCountry() )
+    ret += " (" + countryName() + ")";
+  return ret;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : std::ostream &
+*/
+std::ostream & operator<<( std::ostream & str, const LangCode & obj )
+{
+  return str << obj.code();
+}

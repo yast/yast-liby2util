@@ -37,9 +37,9 @@ bool includes( const std::set<_T> & lhs, const std::set<_T> & rhs )
   typename std::set<_T>::const_iterator li = lhs.begin();
   typename std::set<_T>::const_iterator ri = rhs.begin();
   while ( li != lhs.end() && ri != rhs.end() ) {
-    if ( *ri < *li ) {
+    if ( std::less<_T>()( *ri, *li ) ) {
       return false;
-    } else if ( *li < *ri ){
+    } else if ( std::less<_T>()( *li, *ri ) ) {
       ++li;
     } else {
       ++li;
@@ -76,9 +76,9 @@ std::set<_T> set_intersection( const std::set<_T> & lhs, const std::set<_T> & rh
   typename std::set<_T>::const_iterator li = lhs.begin();
   typename std::set<_T>::const_iterator ri = rhs.begin();
   while ( li != lhs.end() && ri != rhs.end() ) {
-    if ( *li < *ri ) {
+    if ( std::less<_T>()( *li, *ri ) ) {
       ++li;
-    } else if ( *ri < *li ) {
+    } else if ( std::less<_T>()( *ri, *li ) ) {
       ++ri;
     } else {
       res.insert( res.end(), *li );
@@ -102,10 +102,10 @@ std::set<_T> set_difference( const std::set<_T> & lhs, const std::set<_T> & rhs 
   typename std::set<_T>::const_iterator li = lhs.begin();
   typename std::set<_T>::const_iterator ri = rhs.begin();
   while ( li != lhs.end() && ri != rhs.end() ) {
-    if ( *li < *ri ) {
+    if ( std::less<_T>()( *li, *ri ) ) {
       res.insert( res.end(), *li );
       ++li;
-    } else if ( *ri < *li ) {
+    } else if ( std::less<_T>()( *ri, *li ) ) {
       ++ri;
     } else {
       ++li;
@@ -132,10 +132,10 @@ std::set<_T> set_symmetric_difference( const std::set<_T> & lhs, const std::set<
   typename std::set<_T>::const_iterator li = lhs.begin();
   typename std::set<_T>::const_iterator ri = rhs.begin();
   while ( li != lhs.end() && ri != rhs.end() ) {
-    if ( *li < *ri ) {
+    if ( std::less<_T>()( *li, *ri ) ) {
       res.insert( res.end(), *li );
       ++li;
-    } else if ( *ri < *li ) {
+    } else if ( std::less<_T>()( *ri, *li ) ) {
       res.insert( res.end(), *ri );
       ++ri;
     } else {
