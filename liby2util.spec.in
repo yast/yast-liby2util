@@ -32,6 +32,8 @@ Summary:	-
 %{_libdir}/lib*.la
 %{_bindir}/validate_tagged
 %{_bindir}/validate_packages
+%{_bindir}/validate_packages_lang
+%{_bindir}/validate_selection
 @includedir@/Y2UTIL.h
 @includedir@/y2util
 %doc @docdir@
