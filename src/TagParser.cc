@@ -96,7 +96,8 @@ TagParser::~TagParser()
 //	METHOD NAME : TagParser::readLine
 //	METHOD TYPE : streampos
 //
-//	DESCRIPTION :
+//	DESCRIPTION : read a line from an istream to a string
+//		      return streampos of start of line
 //
 inline streampos TagParser::readLine( istream & stream_fr, string & cline_tr )
 {
@@ -118,7 +119,10 @@ inline streampos TagParser::readLine( istream & stream_fr, string & cline_tr )
 //	METHOD NAME : TagParser::tagOnLine
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION : check if a tag exists on the line
+//		      return true (tag exists) or false
+//		      O: string tag_tr		tag found
+//		      O: size_type delim_ir	position following tag
 //
 inline bool TagParser::tagOnLine( const string & cline_tr, string & tag_tr, string::size_type & delim_ir )
 {
@@ -147,7 +151,9 @@ inline bool TagParser::tagOnLine( const string & cline_tr, string & tag_tr, stri
 //	METHOD NAME : TagParser::lookupTag
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION : read from istream until known tag is found
+//			return true/false
+//			O: string stag_tr	tag found
 //
 bool TagParser::lookupTag( istream & stream_fr, const string & stag_tr )
 {
@@ -200,7 +206,7 @@ bool TagParser::lookupTag( istream & stream_fr, const string & stag_tr )
 //	METHOD NAME : TagParser::parseData
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION : read all data from istream until endtag
 //
 bool TagParser::parseData( istream & stream_fr, const string & etag_tr )
 {
@@ -244,7 +250,7 @@ bool TagParser::parseData( istream & stream_fr, const string & etag_tr )
 //	METHOD NAME : TagParser::retrieveData
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION :	retrieve data from istream between two offsets
 //
 bool TagParser::retrieveData( istream & stream_fr,
 			      streampos startData_ir, streampos endData_ir,
@@ -295,7 +301,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 //	METHOD NAME : TagParser::retrieveData
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION :	retrieve data from istream between two offsets
 //
 bool TagParser::retrieveData( istream & stream_fr,
 			      streampos startData_ir, streampos endData_ir,
@@ -324,7 +330,7 @@ bool TagParser::retrieveData( istream & stream_fr,
 //	METHOD NAME : TagParser::data2string
 //	METHOD TYPE : string
 //
-//	DESCRIPTION :
+//	DESCRIPTION : concatenate vector of strings to single string
 //
 string TagParser::data2string( const vector<string> & data_Vtr )
 {
