@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 30 12:49:53 CEST 2004 - ma@suse.de
+
+- Added class KVMap
+- 2.10.6
+
+-------------------------------------------------------------------
 Tue Sep 21 20:33:56 CEST 2004 - ma@suse.de
 
 - Allow passing environment varaibles to ExternalProgram. (#38261)

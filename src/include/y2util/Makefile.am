@@ -15,6 +15,7 @@ pkginclude_HEADERS =		\
 	ExternalProgram.h	\
 	FSize.h			\
 	GPGCheck.h		\
+	KVMap.h			\
 	LangCode.h		\
 	MemUsage.h		\
 	PathInfo.h		\
