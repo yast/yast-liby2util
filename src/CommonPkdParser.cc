@@ -17,8 +17,6 @@
 
 /-*/
 
-#define Y2LOG __FILE__
-
 #include <ctype.h> // for toupper
 
 #include <y2util/CommonPkdParser.h>
@@ -99,7 +97,7 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 
 	if ( _type == ACCEPTLOCALEONLY && _defaultlocale.empty() )
 	    return REJECTED_NOMATCH;
-	
+
 	// +1 to skip dot
 	std::string locale;
 	std::string::size_type dotpos = starttag.find('.');
@@ -225,7 +223,7 @@ Tag::assignstatus Tag::assign(const std::string& starttag, TagParser& parser, st
 }
 
 ///////////////////////////////////////////////////////////////////////
-// TagSet 
+// TagSet
 
 Tag::assignstatus TagSet::assign(const std::string& starttag, TagParser& parser, std::istream& istr)
 {
