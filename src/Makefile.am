@@ -36,6 +36,7 @@ liby2util_la_SOURCES = \
 	diff.cc			\
 	DiskSpace.cc		\
         GPGCheck.cc             \
+        timeclass.cc             \
         SysConfig.cc
 
 

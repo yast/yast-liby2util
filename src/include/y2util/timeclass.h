@@ -11,65 +11,58 @@
 \----------------------------------------------------------------------/
 
    File:       timeclass.h
-   Purpose:    declare class for handling time and timers
+   Purpose:    A timer
    Author:     Ludwig Nussel <lnussel@suse.de>
    Maintainer: Ludwig Nussel <lnussel@suse.de>
 
 /-*/
 
-#ifndef timeclasse_h
-#define timeclasse_h
-#include <time.h>
+#ifndef timeclass_h
+#define timeclass_h
 
-/** common class for handling of time and timers
+#include <ostream>
+
+class TimeClass_private;
+
+/** A Timer
  * */
 class TimeClass
 {
     private:
-	time_t _time;
-	bool _running;
+	TimeClass_private* _time;
+
     public:
-	TimeClass() : _time(0), _running(false) {};
+	TimeClass();
+	TimeClass(const TimeClass&);
+	~TimeClass();
+
 	/** start a timer
 	 * */
-	void startTimer()
-	{
-	    _time = time(NULL);
-	    _running = true;
-	};
+	void startTimer();
 
-	/** reset timer to zero
+	/** reset timer to zero but don't stop it
 	 * */
-	void resetTimer()
-	{
-	    _time=0;
-	};
+	void resetTimer();
 
 	/** stop the timer
 	 *
 	 * @return elapsed time since start
 	 * */
-	time_t stopTimer()
-	{
-	    if(_running)
-	    {
-		_time = time(NULL) - _time;
-		_running = false;
-	    }
-	    return _time;
-	};
+	TimeClass& stopTimer();
 
-	/** get the time since timer start without stopping the timer
-	 *
-	 * @return elapsed time since start
-	 * */
-	time_t getTimer() const
-	{
-	    if(_running)
-		return (time(NULL) - _time);
-	    return _time;
-	};
+
+	/** how many seconds have passed since start */
+	long seconds();
+
+	/** how many micro seconds have passed since start */
+	long useconds();
+
+	/** print timer as seconds.useconds */
+	void dumpOn( std::ostream& os ) const;
 };
+
+/** print timer as seconds.useconds */
+std::ostream& operator<<(std::ostream& os, const TimeClass& t);
 
 #endif
 
