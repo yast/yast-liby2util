@@ -33,7 +33,8 @@ pkginclude_HEADERS = \
 	YRpmGroupsTree.h	\
 	diff.h			\
 	YStringTree.h		\
-	YTransText.h
+	YTransText.h            \
+        GPGCheck.h
 
 
 #<INSTALL-HEADER-TARGET>

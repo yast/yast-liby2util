@@ -44,7 +44,8 @@ liby2util_la_SOURCES = \
 	qt/qregexp.cpp		\
 	qt/qstring.cpp		\
 	qt/qstringlist.cpp	\
-	qt/qtextstream.cpp
+	qt/qtextstream.cpp      \
+        GPGCheck.cc
 
 
 liby2util_la_LDFLAGS = -version-info 2:0

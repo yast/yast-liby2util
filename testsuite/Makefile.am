@@ -20,7 +20,8 @@ noinst_PROGRAMS = parser.prg	\
 	test_BitField.prg	\
 	test_mkdir.prg		\
 	test_chroot.prg		\
-	test_url.prg
+	test_url.prg            \
+        test_gpgcheck.prg
 
 
 parser_prg_SOURCES = parser.cc
@@ -44,6 +45,8 @@ test_url_prg_SOURCES = test_url.cc
 
 test_chroot_prg_SOURCES = test_chroot.cc
 test_chroot_prg_LDFLAGS = -static
+
+test_gpgcheck_prg_SOURCES = test_gpgcheck.cc
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* y2util.log y2util.sum site.exp site.bak
