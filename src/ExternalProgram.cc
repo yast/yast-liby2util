@@ -142,15 +142,15 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 
     // do not remove the single quotes around every argument, copy&paste of
     // command to shell will not work otherwise!
-    D__ << "Executing ";
+    DBG << "Executing ";
     for (int i = 0; argv[i]; i++)
     {
-	if (i>0) D__ << ' ';
-	D__ << '\'';
-	D__ << argv[i];
-	D__ << '\'';
+	if (i>0) DBG << ' ';
+	DBG << '\'';
+	DBG << argv[i];
+	DBG << '\'';
     }
-    D__ << endl;
+    DBG << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
@@ -305,7 +305,7 @@ int ExternalProgram::checkStatus( int status )
 	status = WEXITSTATUS (status);
 	if(status)
 	{
-	    D__ << "pid " << pid << " exited with status " << status << endl;
+	    DBG << "pid " << pid << " exited with status " << status << endl;
 	}
 	else
 	{
