@@ -13,4 +13,4 @@ doxygen.css @RPMNAME@.tag: index.html
 header_dir = $(srcdir)/../../src/include
 
 index.html: $(header_dir)/*.h $(header_dir)/y2util/*.h
-	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@ TAGFILES=
+	${YDOXYGEN} PROJECT_NAME=@RPMNAME@ TAGFILES= INPUT=$(header_dir)

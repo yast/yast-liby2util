@@ -32,4 +32,5 @@ Requires: openssl-devel pkgconfig
 %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 @includedir@
+@pkgconfigdir@/@RPMNAME@.pc
 %doc @docdir@

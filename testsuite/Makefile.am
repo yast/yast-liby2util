@@ -9,7 +9,7 @@ INCLUDES= -I$(top_srcdir)/src/include
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util-testsuite\"
 
-AM_LDFLAGS = -L$(libdir)			\
+AM_LDFLAGS = \
 	-Xlinker --whole-archive	\
 	$(top_builddir)/src/liby2util.la	\
 	-Xlinker --no-whole-archive

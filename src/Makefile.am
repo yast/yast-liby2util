@@ -4,7 +4,7 @@
 
 SUBDIRS = include
 
-INCLUDES = -I$(srcdir)/include -I$(includedir)
+INCLUDES = -I$(srcdir)/include
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"${localedir}\"
 
