@@ -15,7 +15,7 @@
   Author:     Klaus Kaempf <kkaempf@suse.de>
   Maintainer: Klaus Kaempf <kkaempf@suse.de>
 
-  Purpose: Realize PMCacheRetrieval 
+  Purpose: Realize PMCacheRetrieval
 
 /-*/
 
@@ -74,7 +74,8 @@ TagCacheRetrieval::~TagCacheRetrieval()
 bool
 TagCacheRetrieval::retrieveData(const TagRetrievalPos& pos, std::list<std::string> &data_r)
 {
-//MIL << "TagCacheRetrieval::retrieveData(multi)" << endl;
+    data_r.clear();
+
     if (!_stream.is_open())
     {
 	_stream.open (_name.c_str());
@@ -95,10 +96,10 @@ TagCacheRetrieval::retrieveData(const TagRetrievalPos& pos, std::list<std::strin
 bool
 TagCacheRetrieval::retrieveData(const TagRetrievalPos& pos, std::string &data_r)
 {
-//MIL << "TagCacheRetrieval::retrieveData(single)" << endl;
+    data_r.erase();
+
     if (pos.empty())
     {
-	data_r.erase();
 	return true;
     }
     if (!_stream.is_open())
