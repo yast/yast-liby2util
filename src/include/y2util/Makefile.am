@@ -12,6 +12,7 @@ pkginclude_HEADERS = \
 	y2logging.h		\
 	Ustring.h		\
 	LangCode.h		\
+	Vendor.h		\
 	Pathname.h		\
 	PathInfo.h		\
 	Rep.h			\

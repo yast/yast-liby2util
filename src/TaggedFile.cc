@@ -234,7 +234,7 @@ TagSet::assign (const std::string& starttag, const std::string& startlocale, Tag
 	return REJECTED_NOMATCH;
     }
 
-//MIL << "TagSet::assign(" << starttag << "." << startlocale << ")@" << parser.lineNumber() << std::endl;
+std::cerr << "TagSet::assign(" << starttag << "." << startlocale << ")@" << parser.lineNumber() << std::endl;
     // assign to found tag
     return t->second->assign (startlocale, parser, istr);
 }
@@ -251,7 +251,7 @@ TagSet::assign (const std::string& starttag, const std::string& startlocale, Tag
 assignstatus
 TagSet::assignSet (TaggedParser& parser, std::istream& istr)
 {
-//std::cerr << "TagSet::assignSet(-------------------)@" << parser.lineNumber() << std::endl;
+std::cerr << "TagSet::assignSet(-------------------)@" << parser.lineNumber() << std::endl;
 
 
     // reset tag set

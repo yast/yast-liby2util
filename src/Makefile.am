@@ -15,6 +15,7 @@ liby2util_la_SOURCES = \
 	hash.cc			\
 	y2logging.cc		\
 	LangCode.cc		\
+	Vendor.cc		\
 	Rep.cc			\
 	Pathname.cc		\
 	PathInfo.cc		\

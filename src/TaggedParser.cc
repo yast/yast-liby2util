@@ -306,6 +306,7 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 TaggedParser::TagType
 TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const string & elang_tr)
 {
+if (!etag_tr.empty()) cerr << "lookupEndTag(" << etag_tr << "." << elang_tr << ")" << endl;
     _datareset();
     if ( stream_fr.good() )
     {

@@ -25,7 +25,10 @@ noinst_PROGRAMS = parser.prg	\
 	test_mkdir.prg		\
 	test_chroot.prg		\
 	test_url.prg            \
-        test_gpgcheck.prg
+        test_gpgcheck.prg	\
+	test_oldsel
+
+test_oldsel_SOURCES = test_oldsel.cc
 
 validate_tagged_SOURCES = validate_tagged.cc
 validate_packages_SOURCES = validate_packages.cc
