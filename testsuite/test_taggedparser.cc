@@ -23,7 +23,7 @@ main (int argc, char **argv)
     }
 
     TaggedParser parser;
-    parser.allowOldstyle (true);
+    parser.asOldstyle (true);
     TaggedParser::TagType type;
     std::string tagstr;
 
