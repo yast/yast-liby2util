@@ -34,7 +34,7 @@
 
 #define Y2LOG_DATE	"%Y-%m-%d %H:%M:%S"	/* The date format */
 #define Y2LOG_FORMAT	"%s <%d> %s(%d)%s %s%s:%d %s%s"
-#define Y2LOG_SIMPLE	"%s %s%s:%d %s%s"
+#define Y2LOG_SIMPLE	"%s %s%s:%d %s: %s%s"
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
 #define Y2LOG_MAXSIZE	1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
@@ -77,6 +77,16 @@ static FILE *Y2LOG_STDERR = stderr;		/* Default output */
 
 /* static prototypes */
 static void shift_log_files(string filename);
+
+static const char *log_messages[] = {
+    "debug",
+    "milestone",
+    "warning",
+    "error",
+    "error",
+    "error",
+    "error",
+};
 
 /**
  * y2log must use a private copy of stderr, esp. in case we're always logging
@@ -231,7 +241,7 @@ void y2_vlogger_function(loglevel_t level, const char *component, const char *fi
     /* Do the log */
     if(log_simple)
 	fprintf (logfile, Y2LOG_SIMPLE, comp.c_str (),
-		file, func.c_str (), line, logtext, eol?"\n":"");
+		file, func.c_str (), line, log_messages[level], logtext, eol?"\n":"");
     else
 	fprintf (logfile, Y2LOG_FORMAT, date, level, hostname, pid, comp.c_str (),
 		file, func.c_str (), line, logtext, eol?"\n":"");
