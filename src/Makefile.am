@@ -13,6 +13,7 @@ lib_LTLIBRARIES = liby2util.la
 liby2util_la_SOURCES = \
 	stringutil.cc		\
 	hash.cc			\
+	y2logging.cc		\
 	LangCode.cc		\
 	Rep.cc			\
 	BitField.cc		\
@@ -29,12 +30,15 @@ liby2util_la_SOURCES = \
 	FSize.cc
 
 
-liby2util_la_LDFLAGS = -version-info 2:0
+#liby2util_la_LDFLAGS = -version-info 2:0 \
+# 	-Bstatic -L$(QTLIBDIR) -lqt-mt -Bdynamic
+
+liby2util_la_LDFLAGS = -version-info 2:0 \
+ 	-L$(QTLIBDIR)
 
 liby2util_la_LIBADD = \
-	-L$(QTLIBDIR) -lqt-mt \
-	-lutil \
-	-lycp
+	-lqt-mt	\
+	-lutil
 
 # for debug
 

@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////
 int main()
 {
-  Y2SLog::setLogfileName("-");
+  Y2Logging::setLogfileName("-");
   DBG << "START=================================" << endl;
   ForPtr F( new For );
   BsePtr B( new Bse );

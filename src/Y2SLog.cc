@@ -23,7 +23,6 @@
 #include <qasciidict.h>
 
 #include <y2util/Y2SLog.h>
-#include <ycp/y2log.h>
 
 using namespace std;
 
@@ -40,21 +39,8 @@ static QAsciiDict<Y2Loglinestreamset> streamset_VpCm( 17, true, false );
 
 static bool init();
 
-bool dbg_enabled_bm = init();
+Y2Logging::DbgEnableBm dbg_enabled_bm (init()) __attribute__((init_priority (201)));
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : setLogfileName
-**	FUNCTION TYPE : void
-**
-**	DESCRIPTION :
-*/
-void setLogfileName( const char * logto_tr ) {
-  if ( logto_tr && *logto_tr ) {
-    y2setLogfileName( logto_tr );
-  }
-}
 /******************************************************************
 **
 **
@@ -65,9 +51,7 @@ void setLogfileName( const char * logto_tr ) {
 */
 static bool init() {
   streamset_VpCm.setAutoDelete( true );
-
-  setLogfileName( getenv( "Y2SLOG_FILE" ) );
-
+  Y2Logging::setLogfileName (getenv( "Y2SLOG_FILE" ));
   return (getenv( "Y2SLOG_DEBUG" ) != NULL);
 }
 
@@ -86,7 +70,7 @@ class Y2Loglinebuf : public streambuf {
     friend class Y2Loglinestream;
 
     const char *const name;
-    const loglevel_t  level;
+    const Y2Logging::loglevel_t  level;
 
     const char *      file;
     const char *      func;
@@ -111,7 +95,7 @@ class Y2Loglinebuf : public streambuf {
 	for ( int i = 0; i < n; ++i, ++c ) {
 	  if ( *c == '\n' ) {
 	    buffer += string( s, c-s );
-	    y2_logger( level, name, file, line, func, "%s", buffer.c_str() );
+	    Y2Logging::y2_logger( level, name, file, line, func, "%s", buffer.c_str() );
 	    buffer = "";
 	    s = c+1;
 	  }
@@ -125,7 +109,7 @@ class Y2Loglinebuf : public streambuf {
 
     Y2Loglinebuf(  const char * myname, const unsigned mylevel )
       : name( myname )
-      , level( (loglevel_t)mylevel )
+      , level( (Y2Logging::loglevel_t)mylevel )
     {
       file = func = "";
       line = -1;
@@ -246,7 +230,7 @@ ostream & get( const char * which, const unsigned level,
 ostream & getdbg( const char * which, const unsigned level,
 		  const char * fil, const char * fnc, const int lne )
 {
-  if ( dbg_enabled_bm ) {
+  if ( dbg_enabled_bm.isEnabled() ) {
     return get( which, level, fil, fnc, lne );
   }
   return no_stream_Fm;

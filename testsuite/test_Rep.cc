@@ -6,7 +6,7 @@
 
 int main()
 {
-  Y2SLog::setLogfileName("-");
+  Y2Logging::setLogfileName("-");
   DBG << "START" << endl;
 
   PkgPtr p;

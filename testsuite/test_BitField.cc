@@ -43,7 +43,7 @@ DBG << " a = " << setw( 20 ) << a << " | b = " << setw( 20 ) << b << " | " \
 
 int main ()
 {
-  Y2SLog::setLogfileName("-");
+  Y2Logging::setLogfileName("-");
   DBG << "START" << endl;
 
   int fw = 6;

@@ -15,7 +15,7 @@ void rfncc_CP( const constForPtr & c_CP ) { ERR << c_CP << endl; }
 
 int main()
 {
-  Y2SLog::setLogfileName("-");
+  Y2Logging::setLogfileName("-");
   DBG << "START=================================" << endl;
 
   ForPtr            P   ( new For );

@@ -36,7 +36,7 @@ void chkul( const std::string & line_r ) {
 
 int main()
 {
-  Y2SLog::setLogfileName("-");
+  Y2Logging::setLogfileName("-");
   DBG << "START" << endl;
 
   chkul( "" );
