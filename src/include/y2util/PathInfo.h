@@ -29,6 +29,7 @@ extern "C"
 
 #include <cerrno>
 #include <iosfwd>
+#include <list>
 
 #include <y2util/Pathname.h>
 
@@ -173,12 +174,29 @@ class PathInfo {
     static int rmdir( const Pathname & path );
 
     /**
+     * Like '::unlink'. Delete a file (symbolic link, socket, fifo or device).
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int unlink( const Pathname & path );
+
+    /**
      * Like 'rm -r DIR'. Delete a directory, recursively removing its contents.
      *
      * @return 0 on success, ENOTDIR if path is not a directory, otherwise the
      * commands return value.
      **/
     static int recursive_rmdir( const Pathname & path );
+
+    /**
+     * Return content of directory via retlist. If dots is false
+     * entries starting with '.' are not reported. "." and ".."
+     * are never reported.
+     *
+     * @return 0 on success, errno on failure.
+     **/
+    static int readdir( std::list<std::string> & retlist,
+			const Pathname & path, bool dots = true );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -260,6 +260,23 @@ int PathInfo::rmdir( const Pathname & path )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::unlink
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::unlink( const Pathname & path )
+{
+  DBG << "unlink " << path;
+  if ( ::unlink( path.asString().c_str() ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::recursive_rmdir
 //	METHOD TYPE : int
 //
@@ -285,5 +302,44 @@ int PathInfo::recursive_rmdir( const Pathname & path )
   }
   int ret = prog.close();
   return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PathInfo::readdir
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::readdir( std::list<std::string> & retlist,
+		       const Pathname & path, bool dots )
+{
+  retlist.clear();
+
+  DBG << "readdir " << path << ' ';
+
+  DIR * dir = ::opendir( path.asString().c_str() );
+  if ( ! dir ) {
+    return _Log_Result( errno );
+  }
+
+  struct dirent *entry;
+  while ( (entry = ::readdir( dir )) != 0 ) {
+
+    if ( entry->d_name[0] == '.' ) {
+      if ( !dots )
+	continue;
+      if ( entry->d_name[1] == '\0'
+	   || (    entry->d_name[1] == '.'
+		&& entry->d_name[1] == '\0' ) )
+	continue;
+    }
+    retlist.push_back( entry->d_name );
+  }
+
+  ::closedir( dir );
+
+  return _Log_Result( 0 );
 }
 
