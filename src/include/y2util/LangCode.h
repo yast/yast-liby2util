@@ -33,11 +33,12 @@ class LangCode : public Ustring {
 
   private:
 
-    static UstringHash _nameHash;
+    static UstringHash * _nameHash;
 
   public:
 
-    explicit LangCode( const std::string & n = "" ) : Ustring( _nameHash, n ) {}
+    explicit LangCode( const std::string & n = "" ) :
+	Ustring( *(_nameHash? _nameHash: (_nameHash = new UstringHash)), n ) {}
 
   public:
 
