@@ -72,6 +72,7 @@ class Rep {
     void rep_ref() const {
       ++rep_cnt_i;
       _dbg( 'r' );
+      ref_to( rep_cnt_i ); // trigger derived classes
     }
 
     /**
@@ -85,9 +86,24 @@ class Rep {
 	throw( this );
       --rep_cnt_i;
       _dbg( 'u' );
-      if ( !rep_cnt_i )
+      if ( rep_cnt_i )
+	unref_to( rep_cnt_i ); // trigger derived classes
+      else
 	delete this;
     }
+
+  protected:
+
+    /**
+     * Trigger derived classes after rep_cnt was increased.
+     **/
+    virtual void ref_to( unsigned rep_cnt_r ) const {}
+
+    /**
+     * Trigger derived classes after rep_cnt was decreased.
+     * No trigger is sent, if rep_cnt got zero
+     **/
+    virtual void unref_to( unsigned rep_cnt_r ) const {}
 
   protected:
 

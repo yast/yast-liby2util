@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 18 22:10:00 CEST 2003 - ma@suse.de
+
+- Provide virtual methods Rep::ref_to and Rep::unref_to triggered
+  whenever the reference counter changes.
+- 2.8.12
+
+-------------------------------------------------------------------
 Thu Sep 11 09:51:14 CEST 2003 - ma@suse.de
 
 - ExternalProgram: Close excess file descriptors on exec. (#30410)
