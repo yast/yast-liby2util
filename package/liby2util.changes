@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul  9 10:24:13 CEST 2004 - lnussel@suse.de
+
+- don't use system() for calling gpg (#42776)
+- always log executed external programs and their status if they fail
+
+-------------------------------------------------------------------
 Thu Jul  1 18:39:01 CEST 2004 - ma@suse.de
 
 - New PathInfo::md5sum
