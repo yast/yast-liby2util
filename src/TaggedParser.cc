@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <ctype.h>
+#include <string.h>		// for strcasecmp
 #include <y2util/Y2SLog.h>
 #include <y2util/TaggedParser.h>
 
@@ -255,11 +256,17 @@ TaggedParser::lookupTag( istream & stream_fr, const string & stag_tr, const stri
 	    if (type == NONE )
 		continue; // no tag on cline
 
-	    if ( !stag_tr.empty() && maybe_ti != stag_tr )
+	    if (!stag_tr.empty()
+		&& (strcasecmp (maybe_ti.c_str(), stag_tr.c_str()) != 0) )
+	    {
 		continue; // tag does not match given stag_tr
+	    }
 
-	    if ( !slang_tr.empty() && lang_ti != slang_tr )
+	    if (!slang_tr.empty()
+		&& (strcasecmp (lang_ti.c_str(), slang_tr.c_str()) != 0) )
+	    {
 		continue; // tag does not match given slang_tr
+	    }
 
 	    // here we've got a valid tag
 	    _tagPos = lineBegin_ii;
@@ -336,9 +343,9 @@ TaggedParser::lookupEndTag (istream & stream_fr, const string & etag_tr, const s
 		continue;
 	    }
 
-	    if ((maybe_ti == etag_tr)		// the one we're expecting
-		&& ((elang_tr.size() == 0)	// no lang given
-		    || lang_ti == elang_tr))	// correct lang found
+	    if ((strcasecmp (maybe_ti.c_str(), etag_tr.c_str()) == 0)		// the one we're expecting
+		&& ((elang_tr.size() == 0)					// no lang given
+		    || (strcasecmp (lang_ti.c_str(), elang_tr.c_str()) == 0)))				// correct lang found
 	    {
 		_endPos = lineBegin_ii;
 

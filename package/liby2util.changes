@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Sep  8 16:53:32 CEST 2002 - kkaempf@suse.de
+
+- ignore case of end tags when parsing
+- 2.6.13
+
+-------------------------------------------------------------------
 Fri Sep  6 21:20:03 CEST 2002 - kkaempf@suse.de
 
 - dont output stderr of "diff" to console
