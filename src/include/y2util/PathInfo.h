@@ -277,6 +277,14 @@ class PathInfo {
     static int symlink( const Pathname & oldpath, const Pathname & newpath );
 
     /**
+     * Like '::link'. Creates a hard link named newpath to an existing file
+     * oldpath. If newpath exists it will not be overwritten.
+     *
+     * @return 0 on success, errno on failure.
+     **/
+    static int hardlink( const Pathname & oldpath, const Pathname & newpath );
+
+    /**
      * Like 'cp file dest'. Copy file to dest dir.
      *
      * @return 0 on success, EINVAL if file is not a file, ENOTDIR if dest

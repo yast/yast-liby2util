@@ -508,6 +508,23 @@ int PathInfo::symlink( const Pathname & oldpath, const Pathname & newpath )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::hardlink
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::hardlink( const Pathname & oldpath, const Pathname & newpath )
+{
+  DBG << "hardlink " << newpath << " -> " << oldpath;
+  if ( ::link( oldpath.asString().c_str(), newpath.asString().c_str() ) == -1 ) {
+    return _Log_Result( errno );
+  }
+  return _Log_Result( 0 );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::copy_file2dir
 //	METHOD TYPE : int
 //
