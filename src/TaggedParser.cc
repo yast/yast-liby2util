@@ -185,6 +185,10 @@ TaggedParser::tagOnLine (const string & cline_tr, string & tag_tr, string::size_
 	    lang_tr = cline_tr.substr (langpos, delim_ir-langpos);
 	}
     }
+    else
+    {
+	lang_tr.clear();
+    }
 
     if (type == NONE)
     {
