@@ -129,6 +129,7 @@ template <class ObjT> class RefObject {
     operator void *()  const { return ( body_p ? (void*)&body_p->obj_p : (void*)0 ); }
 
     ObjT * operator->() const { return assert_body(); }
+    ObjT & operator*() const { return *assert_body(); }
 
     friend std::ostream & operator<<( std::ostream & str, RefObject & obj ) {
 #ifdef RefObjectDEBUG
@@ -167,6 +168,7 @@ template <class ObjT, class BaseT> class DerRefObject : public RefObject<BaseT> 
   public:
 
     ObjT * operator->() const { return static_cast<ObjT*>(assert_body()); }
+    ObjT & operator*() const { return *static_cast<ObjT*>(assert_body()); }
 };
 
 ///////////////////////////////////////////////////////////////////
