@@ -148,6 +148,10 @@ class PathInfo {
     // stored by a PathiInfo.
     ///////////////////////////////////////////////////////////////////
 
+    ///////////////////////////////////////////////////////////////////
+    // Directories
+    ///////////////////////////////////////////////////////////////////
+
     /**
      * Like '::mkdir'. Attempt to create a new directory named path. mode
      * specifies the permissions to use. It is modified by the process's
@@ -172,13 +176,6 @@ class PathInfo {
      * @return 0 on success, errno on failure
      **/
     static int rmdir( const Pathname & path );
-
-    /**
-     * Like '::unlink'. Delete a file (symbolic link, socket, fifo or device).
-     *
-     * @return 0 on success, errno on failure
-     **/
-    static int unlink( const Pathname & path );
 
     /**
      * Like 'rm -r DIR'. Delete a directory, recursively removing its contents.
@@ -214,6 +211,25 @@ class PathInfo {
      **/
     static int readdir( std::list<std::string> & retlist,
 			const Pathname & path, bool dots = true );
+
+    ///////////////////////////////////////////////////////////////////
+    // Files
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Like '::unlink'. Delete a file (symbolic link, socket, fifo or device).
+     *
+     * @return 0 on success, errno on failure
+     **/
+    static int unlink( const Pathname & path );
+
+    /**
+     * Like 'cp file dest'. Copy file to dest dir.
+     *
+     * @return 0 on success, EINVAL if file is not a file, ENOTDIR if dest
+     * is no directory, otherwise the commands return value.
+     **/
+    static int copy_file2dir( const Pathname & file, const Pathname & dest );
 };
 
 ///////////////////////////////////////////////////////////////////
