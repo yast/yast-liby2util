@@ -1,6 +1,8 @@
 #ifndef GPGCHECK_H
 #define GPGCHECK_H
 
+#include <y2util/Pathname.h>
+
 #include <string>
 
 class GPGCheck
@@ -11,7 +13,7 @@ class GPGCheck
     /**
       Set keyring.
     */
-    void set_keyring ( const std::string& keyring );
+    void set_keyring ( const Pathname& keyring );
 
     /**
       Check signature of given file.
@@ -21,7 +23,7 @@ class GPGCheck
       
       @return True, if the signature is valid, false if not.
     */
-    bool check_file ( const std::string& filename, bool strip = false );
+    bool check_file ( const Pathname& filename, bool strip = false );
 
     /**
       Check signature of given file. Strip signature from file and write
@@ -33,8 +35,8 @@ class GPGCheck
       
       @return true, if signature is valid, false if not.
     */
-    bool check_file ( const std::string &sourceFile,
-                      const std::string &destFile );
+    bool check_file ( const Pathname &sourceFile,
+                      const Pathname &destFile );
 
   protected:
     std::string assembleCommand( const std::string &args );

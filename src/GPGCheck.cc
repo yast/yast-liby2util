@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include <y2util/PathInfo.h>
+#include <y2util/Y2SLog.h>
 
 #include <y2util/GPGCheck.h>
 
@@ -21,14 +22,14 @@ GPGCheck::GPGCheck ()
 
 
 void
-GPGCheck::set_keyring (const string& keyring)
+GPGCheck::set_keyring ( const Pathname& keyring )
 {
-    _keyring = keyring;
+    _keyring = keyring.asString();
 }
 
 
 bool
-GPGCheck::check_file (const string& filename, bool strip)
+GPGCheck::check_file ( const Pathname& filename, bool strip )
 {
   int ret;
 
@@ -37,20 +38,20 @@ GPGCheck::check_file (const string& filename, bool strip)
   } else {
     // only verify
 
-    string cmd = assembleCommand( "--verify " + filename );
+    string cmd = assembleCommand( "--verify " + filename.asString() );
     ret = system( cmd.c_str () );
   }
 
   return ret == 0;
 }
 
-bool GPGCheck::check_file( const string &sourceFile, const string &destFile )
+bool GPGCheck::check_file( const Pathname &sourceFile,
+                           const Pathname &destFile )
 {
   PathInfo::unlink( destFile );
 
-  string cmd = assembleCommand( "-o " + destFile + " " + sourceFile );
-
-  cerr << cmd << endl;
+  string cmd = assembleCommand( "-o " + destFile.asString() + " " +
+                                sourceFile.asString() );
 
   int ret = system( cmd.c_str() );
 
@@ -65,6 +66,8 @@ string GPGCheck::assembleCommand( const string &args )
   cmd += " --no-default-keyring";
   cmd += " --keyring " + _keyring;
   cmd += " " + args;
+
+  D__ << cmd << endl;
 
   return cmd;
 }
