@@ -12,11 +12,6 @@ LDFLAGS = -L$(libdir)			\
 	$(top_builddir)/src/liby2util.la	\
 	-Xlinker --no-whole-archive
 
-bin_PROGRAMS = validate_tagged	\
-	validate_packages	\
-	validate_packages_lang	\
-	validate_selection
-
 noinst_PROGRAMS = parser.prg	\
 	test_taggedparser.prg	\
 	test_Y2SLog.prg		\
@@ -28,8 +23,12 @@ noinst_PROGRAMS = parser.prg	\
         test_gpgcheck.prg	\
         test_df.prg		\
 	test_oldsel             \
-	test_timer             \
-        test_sysconfig
+	test_timer             	\
+        test_sysconfig		\
+	validate_tagged		\
+	validate_packages	\
+	validate_packages_lang	\
+	validate_selection
 
 test_oldsel_SOURCES = test_oldsel.cc
 
