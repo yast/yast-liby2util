@@ -60,7 +60,7 @@ digest_bin_LDADD = $(liby2util_la_LIBADD)
 test_digest: digest_bin
 	@echo "output of 2 and 1 is success"
 	@for algo in MD5 SHA1; do \
-		./digest_bin --openssl $$algo digest_bin; \
-		openssl dgst -$$algo digest_bin; \
+		./digest_bin --openssl $$algo /usr/bin/perl; \
+		openssl dgst -$$algo /usr/bin/perl; \
 	done | sort -u | wc -l
-	@(./digest_bin MD5 digest_bin; md5sum digest_bin) | sort -u | wc -l
+	@(./digest_bin MD5 /usr/bin/perl; md5sum /usr/bin/perl) | sort -u | wc -l
