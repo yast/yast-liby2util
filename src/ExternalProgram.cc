@@ -124,7 +124,14 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	}
     }
 
-    DBG << "Going to execute " << argv[0] << endl;
+    DBG << "Executing ";
+    for(int i=0; argv[i]; i++)
+    {
+	DBG << '\'';
+	DBG << argv[i];
+	DBG << "\' ";
+    }
+    DBG << endl;
 
     // Create module process
     if ((pid = fork()) == 0)
