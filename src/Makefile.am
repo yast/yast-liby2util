@@ -2,9 +2,9 @@
 # Makefile.am for liby2util/src
 #
 
-SUBDIRS = include qt
+SUBDIRS = include
 
-INCLUDES = -I$(srcdir)/qt -I$(srcdir)/include -I$(includedir)
+INCLUDES = -I$(srcdir)/include -I$(includedir)
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS)
 
@@ -30,20 +30,6 @@ liby2util_la_SOURCES = \
 	YStringTree.cc		\
 	YRpmGroupsTree.cc	\
 	diff.cc			\
-	qt/qbitarray.cpp	\
-	qt/qcstring.cpp		\
-	qt/qdatastream.cpp	\
-	qt/qgarray.cpp		\
-	qt/qgdict.cpp		\
-	qt/qglist.cpp		\
-	qt/qglobal.cpp		\
-	qt/qgvector.cpp		\
-	qt/qiodevice.cpp	\
-	qt/qptrcollection.cpp	\
-	qt/qregexp.cpp		\
-	qt/qstring.cpp		\
-	qt/qstringlist.cpp	\
-	qt/qtextstream.cpp      \
         GPGCheck.cc
 
 
