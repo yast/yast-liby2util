@@ -115,7 +115,8 @@ inline Pathname & Pathname::operator+=( const Pathname & path_tv ) {
 
 ///////////////////////////////////////////////////////////////////
 
-extern std::ostream & operator<<( std::ostream & str, const Pathname & obj );
+// creates ambiguity with << for string
+//extern std::ostream & operator<<( std::ostream & str, const Pathname & obj );
 
 ///////////////////////////////////////////////////////////////////
 

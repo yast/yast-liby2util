@@ -74,6 +74,23 @@ class PathInfo {
     bool stat()   { setMode( STAT );  return operator()(); }
     bool lstat()  { setMode( LSTAT ); return operator()(); }
     bool operator()();
+    
+    /** Create directory. works only if path is a directory, of course.
+     *
+     * @param mode specifies  the  permissions to use
+     *
+     * @return 0 on success, errno number on failure
+     * */
+    int mkdir(unsigned mode = 0755 ) { return mkdir(path_t,mode); }
+
+    /** Create directory. Works only if path is a directory, of course.
+     *
+     * @param path name of directory to create
+     * @param mode specifies  the  permissions to use
+     *
+     * @return 0 on success, errno number on failure
+     * */
+    static int mkdir(Pathname path, unsigned mode = 0755 );
 
   public:
 

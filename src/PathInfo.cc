@@ -17,10 +17,15 @@
 
 /-*/
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
+
 #include <iostream>
 #include <iomanip>
 
 #include <y2util/PathInfo.h>
+#include <y2util/Y2SLog.h>
 
 using namespace std;
 
@@ -109,6 +114,42 @@ bool PathInfo::operator()()
       error_i = errno;
   }
   return !error_i;
+}
+
+// create directory
+int PathInfo::mkdir(Pathname path, unsigned mode)
+{
+    string::size_type pos, lastpos = 0;
+    string spath = path.asString()+"/";
+    int ret = 0;
+
+    if(path.empty())
+	return 0;
+
+    // skip ./
+    if(path.relative())
+	lastpos=2;
+    // skip /
+    else
+	lastpos=1;
+
+    DBG << "about to create " << spath << endl;
+    while((pos = spath.find('/',lastpos)) != string::npos )
+    {
+	string dir = spath.substr(0,pos);
+	ret = ::mkdir(dir.c_str(), mode);
+	if(ret == -1)
+	{
+	    // ignore errors about already existing directorys
+	    if(errno == EEXIST)
+		ret=0;
+	    else
+		ret=errno;
+	}
+	DBG << "creating directory " << dir << (ret?" failed":" succeeded") << endl;
+	lastpos = pos+1;
+    }
+    return ret;
 }
 
 /******************************************************************

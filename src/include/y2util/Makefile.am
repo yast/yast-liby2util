@@ -18,7 +18,10 @@ pkginclude_HEADERS = \
 	Y2SLog.h	\
 	TagParser.h	\
 	CommonPkdParser.h \
-	timeclass.h
+	timeclass.h \
+	ExternalDataSource.h \
+		ExternalProgram.h
+
 
 #<INSTALL-HEADER-TARGET>
 

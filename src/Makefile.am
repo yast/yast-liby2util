@@ -19,12 +19,16 @@ liby2util_la_SOURCES = \
 	PathInfo.cc \
 	TagParser.cc \
 	CommonPkdParser.cc \
-	Y2SLog.cc
+	Y2SLog.cc \
+	ExternalDataSource.cc \
+		ExternalProgram.cc
+
 
 liby2util_la_LDFLAGS = -version-info 2:0
 
 liby2util_la_LIBADD = \
 	-L$(QTLIBDIR) -lqt-mt \
+	-lutil \
 	-lycp
 
 # for debug

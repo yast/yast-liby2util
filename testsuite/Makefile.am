@@ -17,7 +17,8 @@ LDFLAGS = -L$(libdir)			\
 noinst_PROGRAMS = parser.prg	\
 	test_Y2SLog.prg		\
 	test_Rep.prg		\
-	test_BitField.prg
+	test_BitField.prg	\
+	test_mkdir.prg
 
 
 parser_prg_SOURCES = parser.cc
@@ -31,6 +32,8 @@ test_Rep_prg_SOURCES = test_Rep.cc
 
 test_BitField_prg_SOURCES = test_BitField.cc
 #test_BitField_prg_LDFLAGS = -static
+
+test_mkdir_prg_SOURCES = test_mkdir.cc
 
 clean-local:
 	rm -f tmp.err.* tmp.out.* ycp.log ycp.sum site.exp libycp.log \
