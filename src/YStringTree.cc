@@ -35,11 +35,13 @@ YStringTree::~YStringTree()
 }
 
 
-void
+YStringTreeItem *
 YStringTree::addBranch( std::string 		content,
 			char 			delimiter,
 			YStringTreeItem * 	parent )
 {
+    YStringTreeItem * node = 0;
+    
     if ( ! parent )
 	parent = _root;
 
@@ -48,7 +50,7 @@ YStringTree::addBranch( std::string 		content,
 	// Simple case: No delimiter, simply create a new item for 'content'
 	// and insert it.
 
-	new YStringTreeItem( YTransText( content ), parent );
+	node = new YStringTreeItem( YTransText( content ), parent );
     }
     else
     {
@@ -87,7 +89,7 @@ YStringTree::addBranch( std::string 		content,
 		YTransText path_component_trans( path_component );
 
 		// Check if an entry with this text already exists
-		YStringTreeItem * node = findDirectChild( parent, path_component_trans);
+		node = findDirectChild( parent, path_component_trans);
 
 		if ( ! node )	// No entry with this text yet? Create one.
 		    node = new YStringTreeItem( path_component_trans, parent );
@@ -98,11 +100,14 @@ YStringTree::addBranch( std::string 		content,
 	    start = end;
 	}
     }
+
+    return node;
 }
 
 
 std::string
 YStringTree::completePath( const YStringTreeItem * item,
+			   bool translated,
 			   char delimiter,
 			   bool startWithDelimiter )
 {
@@ -110,11 +115,15 @@ YStringTree::completePath( const YStringTreeItem * item,
     
     if ( item )
     {
-	path = item->value().orig();
+	path = translated ? item->value().trans() : item->value().orig();
 
 	while ( item->parent() && item->parent() != _root )
 	{
-	    path = item->parent()->value().orig() + delimiter + path;
+	    std::string parentPath = translated ?
+		item->parent()->value().translation() :
+		item->parent()->value().orig();
+	    
+	    path = parentPath + delimiter + path;
 	    item = item->parent();
 	}
 	    
@@ -122,6 +131,34 @@ YStringTree::completePath( const YStringTreeItem * item,
 
     if ( startWithDelimiter )
 	path = delimiter + path;
+
+    return path;
+}
+
+
+YTransText
+YStringTree::path( const YStringTreeItem * item,
+		   char delimiter,
+		   bool startWithDelimiter )
+{
+    if ( ! item )
+	return YTransText( "", "" );
+    
+    YTransText path = item->value();
+
+    while ( item->parent() && item->parent() != _root )
+    {
+	path.setOrig       ( item->parent()->value().orig()  + delimiter + path.orig() );
+	path.setTranslation( item->parent()->value().trans() + delimiter + path.trans() );
+	    
+	item = item->parent();
+    }
+
+    if ( startWithDelimiter )
+    {
+	path.setOrig       ( delimiter + path.orig() );
+	path.setTranslation( delimiter + path.translation() );
+    }
 
     return path;
 }

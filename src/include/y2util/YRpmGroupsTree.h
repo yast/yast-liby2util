@@ -41,15 +41,35 @@ public:
      **/
     virtual ~YRpmGroupsTree();
 
+    /**
+     * Insert an RPM group into this tree if not already present.
+     * Splits the RPM group string ("abc/def/ghi") and creates tree items for
+     * each level as required.
+     * Returns the tree entry for this RPM group.
+     **/
+    YStringTreeItem * addRpmGroup( std::string rpmGroup )
+	{ return addBranch( rpmGroup, '/' ); }
+
+    /**
+     * Returns the complete (untranslated) RPM group tag string for 'node'.
+     **/
+    std::string rpmGroup( const YStringTreeItem * node )
+	{ return origPath( node, '/', false ); }
+    
+    /**
+     * Returns the complete translated RPM group tag string for 'node'.
+     **/
+    std::string translatedRpmGroup( const YStringTreeItem * node )
+	{ return translatedPath( node, '/', false ); }
+    
     
 protected:
     
     /**
-     * Add all RPM group tags to this filter
+     * Add a predefined set of fallback RPM groups
      **/
-    void addRpmGroups();
+    void addFallbackRpmGroups();
 };
-
 
 
 

@@ -23,7 +23,7 @@
 YRpmGroupsTree::YRpmGroupsTree()
     : YStringTree()
 {
-    addRpmGroups();
+    addFallbackRpmGroups();
 }
 
 
@@ -260,11 +260,14 @@ static const char *fallback_rpm_groups[] =
 
 
 void
-YRpmGroupsTree::addRpmGroups()
+YRpmGroupsTree::addFallbackRpmGroups()
 {
     for ( unsigned i=0; i < DIM( fallback_rpm_groups ); i++ )
     {
-	addBranch( fallback_rpm_groups[ i ], '/' );
+	YStringTreeItem * node = addRpmGroup( fallback_rpm_groups[ i ] );
+	fprintf( stderr, "Group: %s\t(%s)\n",
+		 rpmGroup( node ).c_str(),
+		 translatedRpmGroup( node ).c_str() );
     }
 
 #if 0
