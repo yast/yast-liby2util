@@ -17,15 +17,13 @@ $Id$
 
 /-*/
 
-#include "ycp/MemUsage.h"
+#include "y2util/MemUsage.h"
 #include <map>
 #include <string>
 #include <cstdio>
 #include <typeinfo>
 #include <cxxabi.h>
-/*
-std::map <std::string, int> MemUsage::m_mu_count;
-*/
+
 // top init priority, because all objects derived from MemUsage use it
 MemUsage::data MemUsage::m_mu_instances __attribute__ ((init_priority (101)));
 
@@ -75,7 +73,7 @@ void MemUsage::MuDumpVal (const char *aname)
 	std::string dname = demangle (typeid (**ii).name ());
 	if (dname == aname)
 	{
-	    fprintf (stderr, "(%s *)%p\n", aname, *ii);
+	    fprintf (stderr, "p *(%s *)%p\n", aname, *ii);
 	}
     }
 }

@@ -20,30 +20,16 @@ $Id$
 #ifndef MemUsage_h
 #define MemUsage_h
 
-/*
-#include <string>
-#include <map>
-#include <typeinfo>
-*/
 #include <set>
 
 /**
  * Counts instances of classes
+ * If you want to count a class, derive it form this one.
+ * Then call MuDump in gdb.
+ * Suggestions are welcome.
  */
 class MemUsage
 {
-/*
-protected:
-    static std::map <std::string, int> m_mu_count;
-
-    MemUsage () {
-	++ m_mu_count[typeid (this).name ()];
-    }
-
-    virtual ~MemUsage () {
-	-- m_mu_count[typeid (this).name ()];
-    }
-*/
 protected:
     typedef std::set <MemUsage *> data;
     static data m_mu_instances;
@@ -56,11 +42,14 @@ protected:
 	m_mu_instances.erase (this);
     }
 public:
+    //! dump all classes and nuber of their instances
     static void MuDump ();
+    //! for a given class, dump its instances' addresses,
+    //  ready to be printed in gdb
     static void MuDumpVal (const char *name);
 };
 
-// easier for gdb
+// this makes it easier for gdb.
 void MuDump ();
 void MuDumpVal (const char *name);
 

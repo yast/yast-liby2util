@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 17 14:58:07 CET 2004 - mvidner@suse.cz
+
+- Added MemUsage
+- 2.9.8
+
+-------------------------------------------------------------------
 Mon Feb  9 12:46:15 CET 2004 - msvec@suse.cz
 
 - added simple log mode (mainly for ycpc)
