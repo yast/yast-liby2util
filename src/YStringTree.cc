@@ -21,9 +21,13 @@
 #include <y2util/YStringTree.h>
 
 
-YStringTree::YStringTree()
+using std::string;
+
+
+YStringTree::YStringTree( const char * domain )
     : _root( 0 )
 {
+    setTextdomain( domain );
     _root = new YStringTreeItem( YTransText( "<root>" ) );
 }
 
@@ -36,7 +40,7 @@ YStringTree::~YStringTree()
 
 
 YStringTreeItem *
-YStringTree::addBranch( const std::string &	content,
+YStringTree::addBranch( const string &		content,
 			char 			delimiter,
 			YStringTreeItem * 	parent )
 {
@@ -50,14 +54,14 @@ YStringTree::addBranch( const std::string &	content,
 	// Simple case: No delimiter, simply create a new item for 'content'
 	// and insert it.
 
-	node = new YStringTreeItem( YTransText( content ), parent );
+	node = new YStringTreeItem( YTransText( content, translate( content ) ), parent );
     }
     else
     {
 	// Split 'content' into substrings and insert each subitem
 
-	std::string::size_type start = 0;
-	std::string::size_type end   = 0;
+	string::size_type start = 0;
+	string::size_type end   = 0;
 
 	while ( start < content.length() )
 	{
@@ -85,8 +89,8 @@ YStringTree::addBranch( const std::string &	content,
 
 	    if ( end > start )
 	    {
-		std::string path_component = content.substr( start, end - start );
-		YTransText path_component_trans( path_component );
+		string path_component = content.substr( start, end - start );
+		YTransText path_component_trans( path_component, translate( path_component ) );
 
 		// Check if an entry with this text already exists
 		node = findDirectChild( parent, path_component_trans);
@@ -105,13 +109,22 @@ YStringTree::addBranch( const std::string &	content,
 }
 
 
-std::string
+string
+YStringTree::translate( const string & orig )
+{
+    string trans( dgettext( _textdomain.c_str(), orig.c_str() ) );
+
+    return trans;
+}
+
+
+string
 YStringTree::completePath( const YStringTreeItem * item,
 			   bool translated,
 			   char delimiter,
 			   bool startWithDelimiter )
 {
-    std::string path;
+    string path;
     
     if ( item )
     {
@@ -119,7 +132,7 @@ YStringTree::completePath( const YStringTreeItem * item,
 
 	while ( item->parent() && item->parent() != _root )
 	{
-	    std::string parentPath = translated ?
+	    string parentPath = translated ?
 		item->parent()->value().translation() :
 		item->parent()->value().orig();
 	    
@@ -174,7 +187,7 @@ YStringTree::logTree()
 
 
 void
-YStringTree::logBranch( YStringTreeItem * branch, std::string indentation )
+YStringTree::logBranch( YStringTreeItem * branch, string indentation )
 {
     if ( branch )
     {

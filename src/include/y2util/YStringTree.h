@@ -26,6 +26,8 @@
 
 typedef SortedTreeItem<YTransText>	YStringTreeItem;
 
+using std::string;
+
 
 /**
  * @short Abstract base class for filter views with hierarchical filter
@@ -37,9 +39,16 @@ public:
 
     /**
      * Constructor.
+     *
+     * 'textdomain' specifies the gettext textdomain to use to translate
+     * pathname components as new branches are added.
+     *
+     * NOTE: This will NOT change the gettext environment in any way - the tree
+     * uses dgettext() internally. The caller is responsible to bind that
+     * textdomain to a message catalog (bindtextdomain() etc.).
      **/
 
-    YStringTree();
+    YStringTree( const char * textdomain );
 
     /**
      * Destructor.
@@ -47,14 +56,15 @@ public:
     virtual ~YStringTree();
 
     /**
-     * Add a unique new branch with text content 'content' to the tree, beginning at
-     * 'parent' (root if parent == 0).
-     * This content can be a path specification delimited with character
-     * 'delimiter' (if not 0), i.e. this method will split 'content' up into
-     * path components and insert tree items for each level as
-     * appropriate. Leading delimiters will be ignored.
-     * If 'delimiter' is 0, 'content' is not split but used 'as is'.
-     * Items are automatically sorted alphabetically.
+     * Add a unique new branch with text content 'content' to the tree,
+     * beginning at 'parent' (root if parent == 0).  This content can be a path
+     * specification delimited with character 'delimiter' (if not 0), i.e. this
+     * method will split 'content' up into path components and insert tree
+     * items for each level as appropriate. Leading delimiters will be ignored.
+     * If 'delimiter' is 0, 'content' is not split but used 'as is'.  Items are
+     * automatically sorted alphabetically. Pathname components are
+     * automatically translated using the textdomain specified in the
+     * constructor. 
      *
      * Returns the tree node for this branch - either newly created or the
      * existing one.
@@ -69,7 +79,7 @@ public:
      *  	"local"
      *			"bin"
      **/
-    YStringTreeItem * addBranch( const std::string &	content,
+    YStringTreeItem * addBranch( const string &		content,
 				 char 			delimiter = 0,
 				 YStringTreeItem *	parent 	  = 0 );
 
@@ -79,9 +89,9 @@ public:
      * 'startWithDelimiter' specifies whether or not the complete path should
      * start with the delimiter character.
      **/
-    std::string origPath( const YStringTreeItem * item,
-			  char delimiter,
-			  bool startWithDelimiter = true )
+    string origPath( const YStringTreeItem *	item,
+		     char 			delimiter,
+		     bool 			startWithDelimiter = true )
 	{ return completePath( item, false, delimiter, startWithDelimiter ); }
 
 
@@ -90,9 +100,9 @@ public:
      * 'startWithDelimiter' specifies whether or not the complete path should
      * start with the delimiter character.
      **/
-    std::string translatedPath( const YStringTreeItem * item,
-				char delimiter,
-				bool startWithDelimiter = true )
+    string translatedPath( const YStringTreeItem * item,
+			   char delimiter,
+			   bool startWithDelimiter = true )
 	{ return completePath( item, true, delimiter, startWithDelimiter ); }
 
 
@@ -104,7 +114,7 @@ public:
      * Note: origPath() or translatedPath() are much cheaper if only one
      * version (original or translated) is required.
      **/
-    YTransText path( const YStringTreeItem * item,
+    YTransText path( const YStringTreeItem *item,
 		     char delimiter,
 		     bool startWithDelimiter = true );
 
@@ -123,6 +133,31 @@ public:
      **/
     YStringTreeItem * root() const { return _root; }
 
+
+    /**
+     * Returns the textdomain used internally for translation of pathname
+     * components. 
+     **/
+    const char * textdomain() const { return _textdomain.c_str(); }
+
+    
+    /**
+     * Set the textdomain used internally for translation of pathname
+     * components.
+     *
+     * NOTE: This will NOT change the gettext environment in any way - the tree
+     * uses dgettext() internally. The caller is responsible to bind that
+     * textdomain to a message catalog (bindtextdomain() etc.).
+     **/
+    void setTextdomain( const char * domain )	{ _textdomain = domain; }
+
+    /**
+     * Translate message 'orig' using the internal textdomain. Returns the
+     * translated text or the original if there is no translation.
+     **/
+    string translate( const string & orig );
+    
+    
 protected:
 
     /**
@@ -130,20 +165,21 @@ protected:
      * item.  'startWithDelimiter' specifies whether or not the complete path
      * should start with the delimiter character.
      **/
-    std::string completePath( const YStringTreeItem * item,
-			      bool translated,
-			      char delimiter,
-			      bool startWithDelimiter );
+    string completePath( const YStringTreeItem * item,
+			 bool translated,
+			 char delimiter,
+			 bool startWithDelimiter );
 
     /**
      * Debugging - dump one branch of the tree into the log file.
      **/
-    void logBranch( YStringTreeItem * branch, std::string indentation );
+    void logBranch( YStringTreeItem * branch, string indentation );
 
 
     // Data members
 
-    YStringTreeItem * _root;
+    YStringTreeItem *	_root;
+    string		_textdomain;
 };
 
 

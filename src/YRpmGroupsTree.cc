@@ -21,7 +21,7 @@
 
 
 YRpmGroupsTree::YRpmGroupsTree()
-    : YStringTree()
+    : YStringTree( "rpm-groups" )
 {
 }
 

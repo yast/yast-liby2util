@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 11 12:54:52 CET 2003 - sh@suse.de
+
+- (Partial) fix for bug #19603: RPM groups not translated
+  YRpmGroupsTree / YStringTree now use dgettext( "rpm-groups", msg )
+  to retrieve the translations.
+
+-------------------------------------------------------------------
 Mon Feb  3 13:58:47 CET 2003 - ma@suse.de
 
 - Url::operator== should be 'const'.
