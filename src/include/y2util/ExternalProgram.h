@@ -94,6 +94,9 @@ public:
      * */
     pid_t getpid() { return pid; }
 
+protected:
+    int checkStatus( int );
+
 private:
 
     /**
@@ -103,6 +106,7 @@ private:
     bool use_pty;
 
     pid_t pid;
+    int _exitStatus;
 
     void start_program (const char *const *argv,
 			Stderr_Disposition stderr_disp = Normal_Stderr,

@@ -116,6 +116,7 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 				stderr_disp, int stderr_fd, bool default_locale, const char* root)
 {
     pid = -1;
+    _exitStatus = 0;
     int to_external[2], from_external[2];  // fds for pair of pipes
     int master_tty,	slave_tty;	   // fds for pair of ttys
 
@@ -251,7 +252,7 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 	    inputfile = fdopen(from_external[0], "r");
 	    outputfile = fdopen(to_external[1], "w");
 	}
-#if 0
+#if 1
 	DBG << "pid " << pid << " launched" << endl;
 #endif
 	if (!inputfile || !outputfile)
@@ -266,12 +267,12 @@ ExternalProgram::start_program (const char *const *argv, Stderr_Disposition
 int
 ExternalProgram::close()
 {
-    int status = 0;
     if (pid > 0)
     {
 	ExternalDataSource::close();
 	// Wait for child to exit
 	int ret;
+        int status = 0;
 	do
 	{
 	    ret = waitpid(pid, &status, 0);
@@ -281,42 +282,53 @@ ExternalProgram::close()
 
 	if (ret != -1)
 	{
-	    if (WIFEXITED (status))
-	    {
-		status = WEXITSTATUS (status);
-		if(status)
-		{
-		    DBG << "pid " << pid << " exited with status " << status << endl;
-		}
-		else
-		{
-		    // if 'launch' is logged, completion should be logged,
-		    // even if successfull.
-//		    DBG << "pid " << pid << " successfully completed" << endl;
-		}
-	    }
-	    else if (WIFSIGNALED (status))
-	    {
-		status = WTERMSIG (status);
-		WAR << "pid " << pid << " was killed by signal " << status
-			<< " (" << strsignal(status);
-		if (WCOREDUMP (status))
-		{
-		    WAR << ", core dumped";
-		}
-		WAR << ")" << endl;
-		status+=128;
-	    }
-	    else {
-		ERR << "pid " << pid << " exited with unknown error" << endl;
-//		abort ();
-	    }
+	    status = checkStatus( status );
 	}
+        pid = -1;
+        return status;
     }
-    pid = -1;
-    return status;
+    else
+    {
+        return _exitStatus;
+    }
 }
 
+
+int ExternalProgram::checkStatus( int status )
+{
+    if (WIFEXITED (status))
+    {
+	status = WEXITSTATUS (status);
+	if(status)
+	{
+	    DBG << "pid " << pid << " exited with status " << status << endl;
+	}
+	else
+	{
+	    // if 'launch' is logged, completion should be logged,
+	    // even if successfull.
+//		    DBG << "pid " << pid << " successfully completed" << endl;
+	}
+    }
+    else if (WIFSIGNALED (status))
+    {
+	status = WTERMSIG (status);
+	WAR << "pid " << pid << " was killed by signal " << status
+		<< " (" << strsignal(status);
+	if (WCOREDUMP (status))
+	{
+	    WAR << ", core dumped";
+	}
+	WAR << ")" << endl;
+	status+=128;
+    }
+    else {
+	ERR << "pid " << pid << " exited with unknown error" << endl;
+//		abort ();
+    }
+
+    return status;
+}
 
 bool
 ExternalProgram::kill()
@@ -333,5 +345,24 @@ ExternalProgram::kill()
 bool
 ExternalProgram::running()
 {
-    return pid != -1 && ::kill(pid, 0) == 0;
+    if ( pid < 0 ) return false;
+    
+    int status = 0;
+    int p = waitpid( pid, &status, WNOHANG );
+    if ( p < 0 ) return false;
+
+    INT << "Status: " << status << endl;
+
+    status = checkStatus( status );
+
+    if ( status == 0 )
+    {
+        return true;
+    }
+    else
+    {
+        _exitStatus = status;
+        pid = -1;
+        return false;
+    }
 }
