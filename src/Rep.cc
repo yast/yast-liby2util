@@ -96,8 +96,25 @@ void Rep::_dbg( const char f ) const
 //
 std::ostream & Rep::dumpOn( std::ostream & str ) const
 {
-  str << rep_name() << "(id:" << rep_id_i << " ref:" << rep_cnt_i << " [" << rep_Total << "])";
+  str << rep_name() << "[" << rep_id_i << "(" << rep_cnt_i << ")]";
   return str;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Rep::dumpRepStats
+//	METHOD TYPE : std::ostream &
+//
+//	DESCRIPTION :
+//
+std::ostream & Rep::dumpRepStats( std::ostream & str )
+{
+  str << "RepStats{";
+
+  str << "rep_Total = " << rep_Total;
+
+  return str << "}";
 }
 
 /******************************************************************
@@ -128,20 +145,4 @@ std::ostream & operator<<( std::ostream & str, const constRepPtr & obj )
   return obj.baseRep()->dumpOn( str );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Rep::dumpRepStats
-//	METHOD TYPE : std::ostream &
-//
-//	DESCRIPTION :
-//
-std::ostream & Rep::dumpRepStats( std::ostream & str )
-{
-  str << "RepStats(";
-
-  str << "rep_Total = " << rep_Total;
-
-  return str << ")";
-}
 
