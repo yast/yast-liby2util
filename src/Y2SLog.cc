@@ -39,7 +39,7 @@ static QAsciiDict<Y2Loglinestreamset> streamset_VpCm( 17, true, false );
 
 static bool init();
 
-Y2Logging::DbgEnableBm dbg_enabled_bm (init()) __attribute__((init_priority (201)));
+Y2Logging::DbgEnableBm dbg_enabled_bm (init());
 
 /******************************************************************
 **
