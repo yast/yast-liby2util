@@ -6,7 +6,7 @@ SUBDIRS = include
 
 INCLUDES = -I$(srcdir)/include -I$(includedir)
 
-AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"${localedir}\"
+AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"${localedir}\" -DD_MEMUSAGE
 
 lib_LTLIBRARIES = liby2util.la
 

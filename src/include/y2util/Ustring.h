@@ -21,7 +21,9 @@
 
 #include <iostream>
 #include <string>
-
+#ifdef D_MEMUSAGE
+#include "y2util/MemUsage.h"
+#endif
 #include <set>
 
 ///////////////////////////////////////////////////////////////////
@@ -34,7 +36,11 @@
  *
  * @see Ustring
  **/
-class UstringHash {
+class UstringHash
+#ifdef D_MEMUSAGE
+ : public MemUsage
+#endif
+ {
 
   protected:
 
@@ -53,6 +59,20 @@ class UstringHash {
      * Return the number of unique strings stored in the hash.
      **/
     unsigned size() const { return _UstringHash.size(); }
+    unsigned long sum() const {
+	UstringHash_type::const_iterator it = _UstringHash.begin();
+	UstringHash_type::const_iterator e = _UstringHash.end();
+	unsigned long sum = 0;
+	while (it != e)
+	{
+	    sum += it->size();
+	    it++;
+	}
+	return sum;
+    }
+#ifdef D_MEMUSAGE
+    virtual size_t mem_size () const { return sizeof (UstringHash); }
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -102,7 +122,11 @@ class UstringHash {
  *
  * @see UstringHash
  **/
-class Ustring {
+class Ustring
+#ifdef D_MEMUSAGE
+  : public MemUsage
+#endif
+ {
 
   private:
 
@@ -113,7 +137,9 @@ class Ustring {
     std::string _name;
 
   public:
-
+#ifdef D_MEMUSAGE
+    virtual size_t mem_size () const { return sizeof (Ustring); }
+#endif
     /**
      * Constructor calls @ref UstringHash::add on the given string,
      * and stores the string returned from the hash.

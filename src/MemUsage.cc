@@ -42,6 +42,7 @@ void MemUsage::MuDump ()
 {
     fprintf (stderr, "MemUsage dump:\n");
     std::map <std::string, int> m_mu_count;
+    std::map <std::string, int> m_mu_size;
     // determine the type of each instance. now it is possible
     // because we are not in the constructor
     data::iterator
@@ -50,16 +51,27 @@ void MemUsage::MuDump ()
     for (; ii != ie; ++ii)
     {
 	const char * name = typeid (**ii).name ();
-	++ m_mu_count[demangle (name)];
+	std::string dename = demangle (name);
+	if (m_mu_size.find (dename) == m_mu_size.end())
+	{
+	    m_mu_size[dename] = (**ii).mem_size();
+	}
+	++ m_mu_count[dename];
     }
 
     std::map <std::string, int>::iterator
 	i = m_mu_count.begin (),
 	e = m_mu_count.end ();
+    unsigned long sum = 0;
     for (; i != e; ++i)
     {
-	fprintf (stderr, "%9d %s\n", i->second, i->first.c_str ());
+	int size = m_mu_size[i->first];
+	unsigned long mem = i->second * size;
+	sum += mem;
+	fprintf (stderr, "%9d <%5d> [%9d] %s\n", i->second, size, mem, i->first.c_str ());
     }
+    fprintf (stderr, "%9d Total bytes\n", sum);
+
 }
 
 // for gdb copy and paste convenience

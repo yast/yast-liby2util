@@ -45,6 +45,7 @@
   public:						\
     virtual const char * repName() const 		\
       { return STRNAME; }				\
+    virtual size_t mem_size () const { return sizeof (CLNAME); }\
   private:
 
 ///////////////////////////////////////////////////////////////////
