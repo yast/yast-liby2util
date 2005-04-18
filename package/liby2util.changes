@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 18 09:10:36 CEST 2005 - lnussel@suse.de
+
+- fix redirect of stderr to stdout (#78098)
+- 2.11.6
+
+-------------------------------------------------------------------
 Tue Feb 22 15:54:00 CET 2005 - mvidner@suse.cz
 
 - When renumbering file descriptors, check whether we already have

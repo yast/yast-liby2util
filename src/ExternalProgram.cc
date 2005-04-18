@@ -168,8 +168,9 @@ ExternalProgram::start_program (const char *const *argv, const Environment & env
 	if (use_pty)
 	{
 	    setsid();
+	    if(slave_tty != 1)
+		dup2 (slave_tty, 1);	  // set new stdout
 	    renumber_fd (slave_tty, 0);	  // set new stdin
-	    dup2   (slave_tty, 1);	  // set new stdout
 	    ::close(master_tty);	  // Belongs to father process
 
 	    // We currently have no controlling terminal (due to setsid).
