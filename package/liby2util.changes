@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 23 13:37:35 CEST 2005 - visnov@suse.cz
+
+- fix printf arguments 
+
+-------------------------------------------------------------------
 Mon Apr 18 09:10:36 CEST 2005 - lnussel@suse.de
 
 - fix redirect of stderr to stdout (#78098)
