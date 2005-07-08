@@ -1,7 +1,15 @@
 -------------------------------------------------------------------
+Fri Jul  8 13:12:14 CEST 2005 - ma@suse.de
+
+- Added ifgzstream/ofgzstream (gzstream.h). Streams for reading and
+  writing gzip files. Adapted configure and spec file, as we now need
+  libz.
+- 2.12.1
+
+-------------------------------------------------------------------
 Mon May 23 13:37:35 CEST 2005 - visnov@suse.cz
 
-- fix printf arguments 
+- fix printf arguments
 
 -------------------------------------------------------------------
 Mon Apr 18 09:10:36 CEST 2005 - lnussel@suse.de

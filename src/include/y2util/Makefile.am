@@ -48,7 +48,8 @@ pkginclude_HEADERS =		\
 	timeclass.h		\
 	Digest.h		\
 	y2log.h			\
-	_Handle.h _Body.h
+	_Handle.h _Body.h	\
+	gzstream.h
 
 
 #<INSTALL-HEADER-TARGET>

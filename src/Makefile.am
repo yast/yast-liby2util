@@ -44,15 +44,13 @@ liby2util_la_SOURCES =		\
 	timeclass.cc		\
 	Digest.cc		\
 	y2log.cc		\
-	_Handle.cc _Body.cc
+	_Handle.cc _Body.cc	\
+	gzstream.cc
 
 
 liby2util_la_LDFLAGS = -version-info 3:0:0
 
-#liby2util_la_LDFLAGS = -version-info 2:0 \
-# 	-L$(QTLIBDIR)
-
-liby2util_la_LIBADD = -lutil $(OPENSSL_LIBS)
+liby2util_la_LIBADD = -lutil -lz $(OPENSSL_LIBS)
 
 noinst_PROGRAMS = digest_bin
 
