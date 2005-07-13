@@ -38,7 +38,7 @@ using namespace std;
 /**
  *
  **/
-struct ISOLanguage::_D : public _Body {
+struct ISOLanguage::_D : public Rep {
 
   typedef map<string,string> CodeMap;
 
@@ -133,7 +133,7 @@ ISOLanguage::ISOLanguage()
 ISOLanguage::ISOLanguage( const std::string & code_r )
 {
   if ( code_r.size() ) {
-    _d = new _D( code_r );
+    _d = makeVarPtr( new _D( code_r ) );
   }
 }
 

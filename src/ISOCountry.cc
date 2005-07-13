@@ -39,7 +39,7 @@ using namespace std;
 /**
  *
  **/
-struct ISOCountry::_D : public _Body {
+struct ISOCountry::_D : public Rep {
 
   typedef map<string,string> CodeMap;
 
@@ -134,7 +134,7 @@ ISOCountry::ISOCountry()
 ISOCountry::ISOCountry( const std::string & code_r )
 {
   if ( code_r.size() ) {
-    _d = new _D( code_r );
+    _d = makeVarPtr( new _D( code_r ) );
   }
 }
 

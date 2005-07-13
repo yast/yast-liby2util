@@ -7,6 +7,8 @@ pkgincludedir = $(includedir)/y2util
 # these go to $(pkgincludedir)
 
 pkginclude_HEADERS =		\
+	SourceCodeLocation.h 	\
+	Exception.h		\
 	CallBack.h		\
 	CommonPkdParser.h	\
 	Date.h			\
@@ -48,7 +50,6 @@ pkginclude_HEADERS =		\
 	timeclass.h		\
 	Digest.h		\
 	y2log.h			\
-	_Handle.h _Body.h	\
 	gzstream.h
 
 

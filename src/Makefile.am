@@ -11,6 +11,8 @@ AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"$
 lib_LTLIBRARIES = liby2util.la
 
 liby2util_la_SOURCES =		\
+	SourceCodeLocation.cc 	\
+	Exception.cc		\
 	CommonPkdParser.cc	\
 	Date.cc			\
 	DiskSpace.cc		\
@@ -44,7 +46,6 @@ liby2util_la_SOURCES =		\
 	timeclass.cc		\
 	Digest.cc		\
 	y2log.cc		\
-	_Handle.cc _Body.cc	\
 	gzstream.cc
 
 

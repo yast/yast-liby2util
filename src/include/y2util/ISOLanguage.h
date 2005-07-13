@@ -24,7 +24,7 @@
 #include <iosfwd>
 #include <string>
 
-#include <y2util/_Handle.h>
+#include <y2util/Rep.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -37,7 +37,7 @@ class ISOLanguage {
   private:
 
     struct _D;
-    _DHandle<_D> _d;
+    VarPtr<_D> _d;
 
   public:
 

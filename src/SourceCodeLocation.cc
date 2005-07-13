@@ -7,43 +7,43 @@
 |                        |_|\__,_|____/ |_| |_____|                    |
 |                                                                      |
 |                               core system                            |
-|                                                    (C) SuSE Linux AG |
+|                                         (C) SuSE Linux Products GmbH |
 \----------------------------------------------------------------------/
 
-  File:       _Handle.cc
+  File:       SourceCodeLocation.cc
 
   Author:     Michael Andres <ma@suse.de>
   Maintainer: Michael Andres <ma@suse.de>
 
-  Purpose: Handle/Body: Base for Handle classes manipuating a Body
+  Purpose:
 
 /-*/
 
 #include <iostream>
 
-#include <y2util/_Handle.h>
+#include "y2util/SourceCodeLocation.h"
 
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
+//	CLASS NAME : SourceCodeLocation
 //
-//	METHOD NAME : _Handle::dumpOn
-//	METHOD TYPE : std::ostream &
-//
-std::ostream & _Handle::dumpOn( std::ostream & str ) const
-{
-  return str << _body;
-}
+///////////////////////////////////////////////////////////////////
+
+const unsigned SourceCodeLocation::_unknown = unsigned(-1);
+
+///////////////////////////////////////////////////////////////////
 
 /******************************************************************
 **
-**
 **	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
+**	FUNCTION TYPE : std::ostream &
 */
-ostream & operator<<( ostream & str, const _Handle & obj )
+std::ostream &
+operator<<( std::ostream & str, const SourceCodeLocation & obj_r )
 {
-  return obj.dumpOn( str );
+  if ( ! obj_r )
+    return str << "unknown_location";
+  return str << obj_r.file() << "(" << obj_r.func() << "):" << obj_r.line();
 }
-
