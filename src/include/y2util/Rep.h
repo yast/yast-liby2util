@@ -536,6 +536,11 @@ class Ptr : public PtrBase<_Bt> {
      **/
     _Tp * operator->() const { return _ptr; }
 
+    /**
+     * Access the _Tp object (or SEGV if _ptr is NULL)
+     **/
+    _Tp & operator*() const { return *_ptr; }
+
   public:
 
     /**
@@ -633,7 +638,188 @@ class constPtr : public constPtrBase<_Bt> {
      * Access forwarded to the _Tp object (or SEGV if _ptr is NULL)
      **/
     const _Tp * operator->() const { return _ptr; }
+    /**
+     * Access the _Tp object (or SEGV if _ptr is NULL)
+     **/
+    const _Tp & operator*() const { return *_ptr; }
 };
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : VarPtr
+//
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : BasicRepPtr
+/**
+ * @short Base class wraping a @ref Rep* and managing reference counting.
+ *
+ * A @ref BasicRepPtr is explicity constructed from a @ref Rep*. It
+ * references @ref Rep while it holds the pointer and adjusts the
+ * reference counter on copy and assignment.
+ *
+ * It may serve as base for template classes operating on data classes
+ * derived from @ref Rep. For example @ref VarPtr.
+ **/
+class BasicRepPtr
+{
+  /**
+   * Print out the @ref Rep object.
+   **/
+  friend std::ostream &
+  operator<<( std::ostream & str, const BasicRepPtr & obj )
+  { return str << obj._ptr; }
+
+  public:
+    /**
+     * Allow easy test for NULL.
+     **/
+    operator const void *() const
+    { return _ptr; }
+
+  protected:
+    /**
+     * Default ctor: NULL
+     **/
+    BasicRepPtr()
+    : _ptr( NULL )
+    {}
+
+    explicit
+    BasicRepPtr( Rep * ptr )
+    : _ptr( NULL )
+    { _assign( ptr ); }
+
+    BasicRepPtr( const BasicRepPtr & rhs )
+    : _ptr( NULL )
+    { _assign( rhs._ptr ); }
+
+    BasicRepPtr &
+    operator=( const BasicRepPtr & rhs )
+    { _assign( rhs._ptr ); return *this; }
+
+    ~BasicRepPtr()
+    { _assign( NULL ); }
+
+    /**
+     * @return The @ref Rep*.
+     **/
+    Rep *
+    repPtr() const
+    { return _ptr; }
+
+  private:
+    /**
+     * The @ref Rep*.
+     **/
+    Rep * _ptr;
+
+    /**
+     * Takes care of reference counter when assigning
+     * _ptr a new value.
+     **/
+    void
+    _assign( Rep * new_r )
+    {
+      // Don't miss this test
+      if ( new_r != _ptr )
+        {
+          Rep::unref( _ptr );
+          _ptr = new_r;
+          Rep::ref( _ptr );
+        }
+    }
+};
+///////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : VarPtr
+/**
+ * @short Simple counted pointer with variable like const access.
+ *
+ * On construction and assignment it behaves like a pointer. I.e.
+ * a <code>'const VarPtr<_Tp>'</code> is a <code>'_Tp *const'</code>.
+ *
+ * But accessing _Tp (via @ref operator-> or @ref operator*) its
+ * constness is propagated to _Tp. I.e. <code>'VarPtr<_Tp>'</code>
+ * behaves like a <code>'_Tp *'</code> while a <code>'const VarPtr<_Tp>'</code>
+ * behaves as a <code>'const _Tp *'</code>.
+ *
+ * Used in some classes to hide implementation data from the interface:
+ * <PRE>
+ * class Foo
+ * {
+ *   class _Implementation;
+ *   VarPtr<_Implementation> _impl;
+ *   ...
+ * </PRE>
+ * All a @ref VarPtr does, is preventing accidential access to nonconst
+ * implementation data from const interface methods. If such access
+ * is intended is has to be expressed by using a cost_cast.
+ **/
+template<typename _Rep>
+  class VarPtr : public BasicRepPtr
+  {
+  public:
+
+    /**
+     * Default ctor: NULL
+     **/
+    VarPtr()
+    : BasicRepPtr()
+    {}
+
+    /**
+     * See @ref makeVarPtr for convenient construction.
+     **/
+    explicit
+    VarPtr( _Rep * ptr_r )
+    : BasicRepPtr( ptr_r )
+    {}
+
+  public:
+
+    _Rep *
+    operator->()
+    { return ptr(); }
+
+    const _Rep *
+    operator->() const
+    { return ptr(); }
+
+    _Rep &
+    operator*()
+    { return *ptr(); }
+
+    const _Rep &
+    operator*() const
+    { return *ptr(); }
+
+  private:
+
+    _Rep *
+    ptr() const
+    { return static_cast<_Rep *>( BasicRepPtr::repPtr() ); }
+  };
+///////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+
+/**
+ * Convenience @return @ref VarPtr&lt;_Rep> constructed from ptr.
+ **/
+template<typename _Rep>
+  inline VarPtr<_Rep>
+  makeVarPtr( _Rep * ptr )
+  { return VarPtr<_Rep>( ptr ); }
 
 ///////////////////////////////////////////////////////////////////
 
