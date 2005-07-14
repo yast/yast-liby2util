@@ -72,6 +72,6 @@ Exception::where() const throw()
 std::ostream &
 Exception::dumpOn( std::ostream & str ) const
 {
-  return str << "EXCEPTION: " << what() << " AT " << where();
+  return str << "EXCEPTION: " << what() << " AT " << verbose(where());
 }
 

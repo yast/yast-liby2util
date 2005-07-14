@@ -47,3 +47,17 @@ operator<<( std::ostream & str, const SourceCodeLocation & obj_r )
     return str << "unknown_location";
   return str << obj_r.file() << "(" << obj_r.func() << "):" << obj_r.line();
 }
+
+/******************************************************************
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : std::ostream &
+*/
+std::ostream &
+operator<<( std::ostream & str, const SourceCodeLocation::_Verbose & obj_r )
+{
+  const SourceCodeLocation & obj( obj_r._obj );
+  if ( ! obj )
+    return str << "unknown_location";
+  return str << obj.file() << "(" << obj.pretty_func() << "):" << obj.line();
+}

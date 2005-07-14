@@ -30,27 +30,51 @@
 //
 //	CLASS NAME : Exception
 /**
- * @short Base class for exceptions, stores message and sourcecode location.
- * Fore convenience use macro 'THROW( Exception("message") );'. It automatically
- * stores SOURCECODELOCATION. See class @ref SourceCodeLocation.
+ * @short Base class for exceptions, stores message and source code location.
+ *
+ * Fore convenience use macro <CODE>THROW( Exception("message") );</CODE>.
+ * It automatically stores SOURCECODELOCATION. See class @ref SourceCodeLocation.
  **/
 class Exception : public std::exception
 {
+  /**
+   * Stream output as ""EXCEPTION: 'what()' AT 'where()'"
+   **/
+  friend std::ostream &
+  operator<<( std::ostream & str, const Exception & obj_r )
+  { return obj_r.dumpOn( str ); }
+
   public:
 
     typedef SourceCodeLocation location_type;
 
+    /**
+     * Ctor: stores message
+     **/
     explicit
     Exception( const std::string & msg_r ) throw();
 
     virtual
     ~Exception() throw();
 
+    /**
+     * @return Message strored in ctor. Overloads
+     * std::exception::what.
+     **/
     virtual const char *
     what() const throw();
 
+    /**
+     * @return Source code location if provided.
+     **/
     const location_type &
     where() const throw();
+
+    /**
+     * Set source code location.
+     **/
+    void setLocation( const location_type & loc_r ) const throw()
+    { _loc = loc_r; }
 
     /**
      * Stream output, used by the default std::ostream::operator<<.
@@ -62,11 +86,6 @@ class Exception : public std::exception
 
     std::string           _msg;
     mutable location_type _loc;
-
-  public:
-
-    void setLocation( const location_type & loc_r ) const throw()
-    { _loc = loc_r; }
 };
 ///////////////////////////////////////////////////////////////////
 
@@ -75,15 +94,6 @@ class Exception : public std::exception
 template<typename _Ex>
   inline void Throw( const _Ex & exception_r, const Exception::location_type & loc_r )
   { exception_r.setLocation( loc_r ); throw exception_r; }
-
-///////////////////////////////////////////////////////////////////
-
-/**
- * Stream output as ""EXCEPTION: 'what()' AT 'where()'"
- **/
-inline std::ostream &
-operator<<( std::ostream & str, const Exception & obj_r )
-{ return obj_r.dumpOn( str ); }
 
 ///////////////////////////////////////////////////////////////////
 
