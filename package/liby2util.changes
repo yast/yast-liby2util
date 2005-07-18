@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Jul 18 18:14:47 CEST 2005 - ma@suse.de
+
+- Added SourceCodeLocation: helper for logging 'file(function):line'
+- Added Exception
+- Replaced _Body/_Handle with VarPtr<>
+- Added operator* for counted pointer classes
+- 2.12.2
+
+-------------------------------------------------------------------
 Fri Jul  8 13:12:14 CEST 2005 - ma@suse.de
 
 - Added ifgzstream/ofgzstream (gzstream.h). Streams for reading and
