@@ -239,6 +239,7 @@ PathInfo::file_type PathInfo::stat_mode::fileType() const
 */
 std::ostream & operator<<( std::ostream & str, const PathInfo::stat_mode & obj )
 {
+  ios::fmtflags state_ii = str.flags();
   char t = '?';
   if ( obj.isFile() )
     t = '-';
@@ -255,7 +256,9 @@ std::ostream & operator<<( std::ostream & str, const PathInfo::stat_mode & obj )
   else if ( obj.isSock() )
     t = 's';
 
-  return str << t << " " << setfill( '0' ) << setw( 4 ) << oct << obj.perm();
+  str << t << " " << setfill( '0' ) << setw( 4 ) << oct << obj.perm();
+  str.flags( state_ii );
+  return str;
 }
 
 /******************************************************************

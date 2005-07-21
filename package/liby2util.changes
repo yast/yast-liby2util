@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jul 21 21:15:29 CEST 2005 - ma@suse.de
+
+- PathInfo: Save and restore ostream state when using format
+  manipulator.
+- Stringutils: Added atoi like functions to convert strings to
+  numbers.
+  
+-------------------------------------------------------------------
 Mon Jul 18 18:14:47 CEST 2005 - ma@suse.de
 
 - Added SourceCodeLocation: helper for logging 'file(function):line'

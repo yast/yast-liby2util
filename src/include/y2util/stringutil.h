@@ -144,6 +144,52 @@ inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*l
 inline std::string octstring( long long n,     int w = 0 ) { return form( "%#0*llo",  w, n ); }
 inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "%#0*llo",  w, n ); }
 
+/**
+ * String to integer type.
+ **/
+inline int                strtoi  ( const std::string & val ) { return ::atoi    ( val.c_str() ); }
+inline long               strtol  ( const std::string & val ) { return ::strtol  ( val.c_str(), NULL, 0 ); }
+inline long long          strtoll ( const std::string & val ) { return ::strtoll ( val.c_str(), NULL, 0 ); }
+inline unsigned           strtou  ( const std::string & val ) { return ::atoi    ( val.c_str() ); }
+inline unsigned long      strtoul ( const std::string & val ) { return ::strtoul ( val.c_str(), NULL, 0 ); }
+inline unsigned long long strtoull( const std::string & val ) { return ::strtoull( val.c_str(), NULL, 0 ); }
+
+template<typename _It>
+  inline bool strtonum( const std::string & str, _It & num )
+  { return false; }
+
+template<>
+  inline bool strtonum( const std::string & str, int & num )
+  { num = strtoi( str ); return true; }
+template<>
+  inline bool strtonum( const std::string & str, long & num )
+  { num = strtol( str ); return true; }
+template<>
+  inline bool strtonum( const std::string & str, long long & num )
+  { num = strtoll( str ); return true; }
+
+template<>
+  inline bool strtonum( const std::string & str, unsigned & num )
+  { num = strtou( str ); return true; }
+template<>
+  inline bool strtonum( const std::string & str, unsigned long & num )
+  { num = strtoul( str ); return true; }
+template<>
+  inline bool strtonum( const std::string & str, unsigned long long & num )
+  { num = strtoull( str ); return true; }
+
+
+/**
+ * Clip negative signed values to zero. Usefull when parsing unsigned values and you
+ * do not want negative values to become big (e.g. rpm epoch).
+ **/
+inline unsigned           clipneg( int                val ) { return val < 0 ? 0 : val; }
+inline unsigned long      clipneg( long               val ) { return val < 0 ? 0 : val; }
+inline unsigned long long clipneg( long long          val ) { return val < 0 ? 0 : val; }
+inline unsigned           clipneg( unsigned           val ) { return val; }
+inline unsigned long      clipneg( unsigned long      val ) { return val; }
+inline unsigned long long clipneg( unsigned long long val ) { return val; }
+
 /** \brief read one line from a stream
  * Return one line read from istream. Afterwards the streampos is behind the delimiting '\n'
  * (or at EOF). The delimiting '\n' is <b>not</b> returned.
