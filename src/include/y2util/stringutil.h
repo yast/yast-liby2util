@@ -97,13 +97,15 @@ inline std::string form( const char * format, ... ) {
  * numstring(42,-4)        -> "42  "
  * </PRE>
  **/
-inline std::string numstring( char n,          int w = 0 ) { return form( "%*hhd", w, n ); }
-inline std::string numstring( unsigned char n, int w = 0 ) { return form( "%*hhu", w, n ); }
-inline std::string numstring( int n,           int w = 0 ) { return form( "%*d",   w, n ); }
-inline std::string numstring( unsigned n,      int w = 0 ) { return form( "%*u",   w, n ); }
-inline std::string numstring( long n,          int w = 0 ) { return form( "%*ld",  w, n ); }
-inline std::string numstring( unsigned long n, int w = 0 ) { return form( "%*lu",  w, n ); }
-inline std::string numstring( long long n,     int w = 0 ) { return form( "%*lld",  w, n ); }
+inline std::string numstring( char n,               int w = 0 ) { return form( "%*hhd",  w, n ); }
+inline std::string numstring( unsigned char n,      int w = 0 ) { return form( "%*hhu",  w, n ); }
+inline std::string numstring( short n,              int w = 0 ) { return form( "%*hd",   w, n ); }
+inline std::string numstring( unsigned short n,     int w = 0 ) { return form( "%*hu",   w, n ); }
+inline std::string numstring( int n,                int w = 0 ) { return form( "%*d",    w, n ); }
+inline std::string numstring( unsigned n,           int w = 0 ) { return form( "%*u",    w, n ); }
+inline std::string numstring( long n,               int w = 0 ) { return form( "%*ld",   w, n ); }
+inline std::string numstring( unsigned long n,      int w = 0 ) { return form( "%*lu",   w, n ); }
+inline std::string numstring( long long n,          int w = 0 ) { return form( "%*lld",  w, n ); }
 inline std::string numstring( unsigned long long n, int w = 0 ) { return form( "%*llu",  w, n ); }
 
 /**
@@ -116,14 +118,16 @@ inline std::string numstring( unsigned long long n, int w = 0 ) { return form( "
  * hexstring(42,-4)        -> "0x2a"
  * </PRE>
  **/
-inline std::string hexstring( char n,          int w = 4 ) { return form( "%#0*hhx", w, n ); }
-inline std::string hexstring( unsigned char n, int w = 4 ) { return form( "%#0*hhx", w, n ); }
-inline std::string hexstring( int n,           int w = 10 ){ return form( "%#0*x",   w, n ); }
-inline std::string hexstring( unsigned n,      int w = 10 ){ return form( "%#0*x",   w, n ); }
-inline std::string hexstring( long n,          int w = 10 ){ return form( "%#0*lx",  w, n ); }
-inline std::string hexstring( unsigned long n, int w = 10 ){ return form( "%#0*lx",  w, n ); }
-inline std::string hexstring( long long n,     int w = 0 ) { return form( "%#0*llx",  w, n ); }
-inline std::string hexstring( unsigned long long n, int w = 0 ) { return form( "%#0*llx",  w, n ); }
+inline std::string hexstring( char n,               int w = 4 ) { return form( "%#0*hhx", w, n ); }
+inline std::string hexstring( unsigned char n,      int w = 4 ) { return form( "%#0*hhx", w, n ); }
+inline std::string hexstring( short n,              int w = 10 ){ return form( "%#0*hx",  w, n ); }
+inline std::string hexstring( unsigned short n,     int w = 10 ){ return form( "%#0*hx",  w, n ); }
+inline std::string hexstring( int n,                int w = 10 ){ return form( "%#0*x",   w, n ); }
+inline std::string hexstring( unsigned n,           int w = 10 ){ return form( "%#0*x",   w, n ); }
+inline std::string hexstring( long n,               int w = 10 ){ return form( "%#0*lx",  w, n ); }
+inline std::string hexstring( unsigned long n,      int w = 10 ){ return form( "%#0*lx",  w, n ); }
+inline std::string hexstring( long long n,          int w = 0 ) { return form( "%#0*llx", w, n ); }
+inline std::string hexstring( unsigned long long n, int w = 0 ) { return form( "%#0*llx", w, n ); }
 
 /**
  * Print number as octal value with leading '0'. Optional second argument sets the minimal
@@ -135,60 +139,46 @@ inline std::string hexstring( unsigned long long n, int w = 0 ) { return form( "
  * octstring(42,-4)        -> "052 "
  * </PRE>
  **/
-inline std::string octstring( char n,          int w = 4 ) { return form( "%#0*hho", w, n ); }
-inline std::string octstring( unsigned char n, int w = 4 ) { return form( "%#0*hho", w, n ); }
-inline std::string octstring( int n,           int w = 5 ) { return form( "%#0*o",    w, n ); }
-inline std::string octstring( unsigned n,      int w = 5 ) { return form( "%#0*o",    w, n ); }
-inline std::string octstring( long n,          int w = 5 ) { return form( "%#0*lo",   w, n ); }
-inline std::string octstring( unsigned long n, int w = 5 ) { return form( "%#0*lo",   w, n ); }
-inline std::string octstring( long long n,     int w = 0 ) { return form( "%#0*llo",  w, n ); }
+inline std::string octstring( char n,               int w = 4 ) { return form( "%#0*hho",  w, n ); }
+inline std::string octstring( unsigned char n,      int w = 4 ) { return form( "%#0*hho",  w, n ); }
+inline std::string octstring( short n,              int w = 5 ) { return form( "%#0*ho",   w, n ); }
+inline std::string octstring( unsigned short n,     int w = 5 ) { return form( "%#0*ho",   w, n ); }
+inline std::string octstring( int n,                int w = 5 ) { return form( "%#0*o",    w, n ); }
+inline std::string octstring( unsigned n,           int w = 5 ) { return form( "%#0*o",    w, n ); }
+inline std::string octstring( long n,               int w = 5 ) { return form( "%#0*lo",   w, n ); }
+inline std::string octstring( unsigned long n,      int w = 5 ) { return form( "%#0*lo",   w, n ); }
+inline std::string octstring( long long n,          int w = 0 ) { return form( "%#0*llo",  w, n ); }
 inline std::string octstring( unsigned long long n, int w = 0 ) { return form( "%#0*llo",  w, n ); }
 
 /**
- * String to integer type.
+ * String to integer type determined by template arg: time_t t = strtonum<time_t>( "42" );
  **/
-inline int                strtoi  ( const std::string & val ) { return ::atoi    ( val.c_str() ); }
-inline long               strtol  ( const std::string & val ) { return ::strtol  ( val.c_str(), NULL, 0 ); }
-inline long long          strtoll ( const std::string & val ) { return ::strtoll ( val.c_str(), NULL, 0 ); }
-inline unsigned           strtou  ( const std::string & val ) { return ::atoi    ( val.c_str() ); }
-inline unsigned long      strtoul ( const std::string & val ) { return ::strtoul ( val.c_str(), NULL, 0 ); }
-inline unsigned long long strtoull( const std::string & val ) { return ::strtoull( val.c_str(), NULL, 0 ); }
-
 template<typename _It>
-  inline bool strtonum( const std::string & str, _It & num )
-  { return false; }
+  inline _It strtonum( const std::string & str );
 
 template<>
-  inline bool strtonum( const std::string & str, int & num )
-  { num = strtoi( str ); return true; }
+  inline short              strtonum( const std::string & str ) { return ::strtol  ( str.c_str(), NULL, 0 ); }
 template<>
-  inline bool strtonum( const std::string & str, long & num )
-  { num = strtol( str ); return true; }
+  inline int                strtonum( const std::string & str ) { return ::strtol  ( str.c_str(), NULL, 0 ); }
 template<>
-  inline bool strtonum( const std::string & str, long long & num )
-  { num = strtoll( str ); return true; }
+  inline long               strtonum( const std::string & str ) { return ::strtol  ( str.c_str(), NULL, 0 ); }
+template<>
+  inline long long          strtonum( const std::string & str ) { return ::strtoll ( str.c_str(), NULL, 0 ); }
 
 template<>
-  inline bool strtonum( const std::string & str, unsigned & num )
-  { num = strtou( str ); return true; }
+  inline unsigned short     strtonum( const std::string & str ) { return ::strtoul ( str.c_str(), NULL, 0 ); }
 template<>
-  inline bool strtonum( const std::string & str, unsigned long & num )
-  { num = strtoul( str ); return true; }
+  inline unsigned           strtonum( const std::string & str ) { return ::strtoul ( str.c_str(), NULL, 0 ); }
 template<>
-  inline bool strtonum( const std::string & str, unsigned long long & num )
-  { num = strtoull( str ); return true; }
-
+  inline unsigned long      strtonum( const std::string & str ) { return ::strtoul ( str.c_str(), NULL, 0 ); }
+template<>
+  inline unsigned long long strtonum( const std::string & str ) { return ::strtoull( str.c_str(), NULL, 0 ); }
 
 /**
- * Clip negative signed values to zero. Usefull when parsing unsigned values and you
- * do not want negative values to become big (e.g. rpm epoch).
+ * String to integer type detemined function arg: time_t t; strtonum( "42", t );
  **/
-inline unsigned           clipneg( int                val ) { return val < 0 ? 0 : val; }
-inline unsigned long      clipneg( long               val ) { return val < 0 ? 0 : val; }
-inline unsigned long long clipneg( long long          val ) { return val < 0 ? 0 : val; }
-inline unsigned           clipneg( unsigned           val ) { return val; }
-inline unsigned long      clipneg( unsigned long      val ) { return val; }
-inline unsigned long long clipneg( unsigned long long val ) { return val; }
+template<typename _It>
+  inline _It strtonum( const std::string & str, _It & i ) { return i = strtonum<_It>( str ); }
 
 /** \brief read one line from a stream
  * Return one line read from istream. Afterwards the streampos is behind the delimiting '\n'
