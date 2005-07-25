@@ -338,6 +338,13 @@ class PathInfo {
      **/
     static std::string md5sum( const Pathname & file );
 
+    /**
+     * Compute a files sha1sum.
+     *
+     * @return the files sha1sum on success, otherwise an empty string..
+     **/
+    static std::string sha1sum( const Pathname & file );
+
     ///////////////////////////////////////////////////////////////////
     // permissions
     ///////////////////////////////////////////////////////////////////

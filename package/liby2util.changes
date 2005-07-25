@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul 25 15:49:57 CEST 2005 - ma@suse.de
+
+- Added PathInfo::sha1sum: Compute a files SHA1 digest
+
+-------------------------------------------------------------------
 Thu Jul 21 21:15:29 CEST 2005 - ma@suse.de
 
 - PathInfo: Save and restore ostream state when using format

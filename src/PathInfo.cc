@@ -679,6 +679,24 @@ std::string PathInfo::md5sum( const Pathname & file )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::sha1sum
+//	METHOD TYPE : std::string
+//
+std::string PathInfo::sha1sum( const Pathname & file )
+{
+  if ( ! PathInfo( file ).isFile() ) {
+    return string();
+  }
+  ifstream istr( file.asString().c_str() );
+  if ( ! istr ) {
+    return string();
+  }
+  return Digest::digest( "SHA1", istr );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::chmod
 //	METHOD TYPE : int
 //
