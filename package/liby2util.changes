@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jul 29 13:35:16 CEST 2005 - ma@suse.de
+
+- Fixed potential buffer overflow when assigning Pathnames.
+
+-------------------------------------------------------------------
 Mon Jul 25 15:49:57 CEST 2005 - ma@suse.de
 
 - Added PathInfo::sha1sum: Compute a files SHA1 digest
