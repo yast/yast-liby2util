@@ -46,9 +46,9 @@ class TmpPath::Impl :public Rep
       {
         NoOp         = 0,
         Autodelete   = 1L << 0,
-        DirRecursive = 1L << 1,
+        KeepTopdir   = 1L << 1,
         //
-        CtorDefault  = Autodelete | DirRecursive
+        CtorDefault  = Autodelete
       };
 
   public:
@@ -69,10 +69,10 @@ class TmpPath::Impl :public Rep
       int res = 0;
       if ( p.isDir() )
         {
-          if ( _flags & DirRecursive )
-            res = PathInfo::recursive_rmdir( _path );
-          else
+          if ( _flags & KeepTopdir )
             res = PathInfo::clean_dir( _path );
+          else
+            res = PathInfo::recursive_rmdir( _path );
         }
       else
         res = PathInfo::unlink( _path );

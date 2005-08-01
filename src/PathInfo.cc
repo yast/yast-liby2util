@@ -697,6 +697,28 @@ std::string PathInfo::sha1sum( const Pathname & file )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : PathInfo::erase
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int PathInfo::erase( const Pathname & path )
+{
+  int res = 0;
+  PathInfo p( path, LSTAT );
+  if ( p.isExist() )
+    {
+      if ( p.isDir() )
+        res = PathInfo::recursive_rmdir( path );
+      else
+        res = PathInfo::unlink( path );
+    }
+  return res;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : PathInfo::chmod
 //	METHOD TYPE : int
 //

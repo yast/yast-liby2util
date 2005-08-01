@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug  1 22:58:33 CEST 2005 - ma@suse.de
+
+- Added PathInfo::erase. Remove whatever happens to be located
+  at path (file or directory).
+
+-------------------------------------------------------------------
 Mon Aug  1 15:43:29 CEST 2005 - ma@suse.de
 
 - Added TmpFile, TmpDir: Reference counted class providing
