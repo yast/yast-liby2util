@@ -1,9 +1,11 @@
 -------------------------------------------------------------------
-Fri Jul 29 22:05:32 CEST 2005 - ma@suse.de
+Mon Aug  1 15:43:29 CEST 2005 - ma@suse.de
 
-- Added TmpDir: Reference counted class providing a temporary
-  directory and automaticaly removes it when the last reference
-  droped.
+- Added TmpFile, TmpDir: Reference counted class providing
+  temporary files or directories.
+- Added TmpPath: Reference counted class automaticaly removing
+  files or directories when the last reference drops.
+- 2.12.4
 
 -------------------------------------------------------------------
 Fri Jul 29 13:35:16 CEST 2005 - ma@suse.de

@@ -26,7 +26,7 @@ liby2util_la_SOURCES =		\
 	MemUsage.cc		\
 	PathInfo.cc		\
 	Pathname.cc		\
-	TmpDir.cc		\
+	TmpPath.cc		\
 	ProgressCounter.cc	\
 	Rep.cc			\
 	SysConfig.cc		\

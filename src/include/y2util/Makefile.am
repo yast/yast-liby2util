@@ -24,7 +24,7 @@ pkginclude_HEADERS =		\
 	MemUsage.h		\
 	PathInfo.h		\
 	Pathname.h		\
-	TmpDir.h		\
+	TmpPath.h		\
 	ProgressCounter.h	\
 	Rep.h			\
 	RepDef.h		\
