@@ -51,7 +51,9 @@ pkginclude_HEADERS =		\
 	timeclass.h		\
 	Digest.h		\
 	y2log.h			\
-	gzstream.h
+	gzstream.h		\
+	LibXMLHelper.h		\
+	XMLNodeIterator.h
 
 
 #<INSTALL-HEADER-TARGET>

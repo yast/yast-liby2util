@@ -4,7 +4,9 @@
 
 SUBDIRS = include
 
-INCLUDES = -I$(srcdir)/include
+INCLUDES = -I$(srcdir)/include -I$(oldincludedir)/libxml2 
+
+AM_LDFLAGS = -L$(libdir)
 
 AM_CPPFLAGS = -DY2LOG=\"liby2util\" $(DEBUG_FLAGS) -D_GNU_SOURCE -DLOCALEDIR=\"${localedir}\"
 
@@ -47,12 +49,16 @@ liby2util_la_SOURCES =		\
 	timeclass.cc		\
 	Digest.cc		\
 	y2log.cc		\
-	gzstream.cc
+	gzstream.cc		\
+	LibXMLHelper.cc		\
+	XMLNodeIterator.cc
 
 
 liby2util_la_LDFLAGS = -version-info 3:0:0
 
-liby2util_la_LIBADD = -lutil -lz $(OPENSSL_LIBS)
+liby2util_la_LIBADD = -lutil -lz $(OPENSSL_LIBS) -lxml2
+
+
 
 noinst_PROGRAMS = digest_bin
 

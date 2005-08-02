@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  2 16:26:16 CEST 2005 - mir@suse.de
+
+- Added utilies for XML parsing, nice for parsing large XML files 
+  "twig by twig" (XMLNodeIterator, LibXMLHelper)
+
+-------------------------------------------------------------------
 Mon Aug  1 22:58:33 CEST 2005 - ma@suse.de
 
 - Added PathInfo::erase. Remove whatever happens to be located
