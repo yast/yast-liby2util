@@ -10,7 +10,7 @@ Summary:	-
 
 @HEADER-DEVEL@
 Summary:	-
-Requires: glibc-devel libstdc++-devel zlib-devel openssl-devel pkgconfig
+Requires: glibc-devel libstdc++-devel zlib-devel openssl-devel pkgconfig libxml2-devel
 
 %description devel
 -
