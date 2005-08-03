@@ -3,6 +3,7 @@ Wed Aug  3 19:03:42 CEST 2005 - ma@suse.de
 
 - Fixed missing configure checks and spec file dependencies for
   libxml2
+- 2.12.6
 
 -------------------------------------------------------------------
 Tue Aug  2 16:26:16 CEST 2005 - mir@suse.de
