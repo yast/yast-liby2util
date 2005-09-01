@@ -27,6 +27,7 @@
 
 #include "y2util/y2log.h"
 #include "y2util/miniini.h"
+#include "y2util/stringutil.h"
 #include <syslog.h>
 
 /* Defines */
@@ -63,8 +64,8 @@ static bool did_read_logconf = false;
 
 static char *logname;
 
-static int maxlogsize;
-static int maxlognum;
+static off_t maxlogsize;
+static int   maxlognum;
 
 static bool log_debug = false;
 static bool log_to_file = true;
@@ -272,7 +273,11 @@ void set_log_filename (string fname)
     const char *filename = fname.c_str();
 
     char *env_maxlogsize = getenv("Y2MAXLOGSIZE");
-    maxlogsize = env_maxlogsize ? atoi(env_maxlogsize) * 1024 : Y2LOG_MAXSIZE;
+    if ( env_maxlogsize ) {
+      stringutil::strtonum( env_maxlogsize, maxlogsize );
+      maxlogsize *= 1024;
+    } else 
+      maxlogsize = Y2LOG_MAXSIZE;
 
     char *env_maxlognum = getenv("Y2MAXLOGNUM");
     maxlognum = env_maxlognum ? atoi(env_maxlognum) : Y2LOG_MAXNUM;

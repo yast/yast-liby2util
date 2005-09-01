@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep  1 17:19:10 CEST 2005 - ma@suse.de
+
+- Fix overflow in y2log::maxlogsize which causes y2log files 
+  being rotated after every line. (#106734)
+- 2.12.7
+
+-------------------------------------------------------------------
 Wed Aug  3 19:03:42 CEST 2005 - ma@suse.de
 
 - Fixed missing configure checks and spec file dependencies for
