@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Wed Sep  7 17:22:49 CEST 2005 - ma@suse.de
+
+- Fixed untranslated language and country names. (#106104)
+- 2.12.8
+
+-------------------------------------------------------------------
 Thu Sep  1 17:19:10 CEST 2005 - ma@suse.de
 
-- Fix overflow in y2log::maxlogsize which causes y2log files 
+- Fix overflow in y2log::maxlogsize which causes y2log files
   being rotated after every line. (#106734)
 - 2.12.7
 

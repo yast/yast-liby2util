@@ -22,3 +22,6 @@ install-sh
 Makefile.am.common
 liby2util.pc
 autodocs-ycp.ami
+OUTPUT
+OUTPUT2
+*.ami
