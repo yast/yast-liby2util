@@ -21,6 +21,7 @@ parseurl_SOURCES = parseurl.cc
 noinst_PROGRAMS = parser.prg	\
 	test_taggedparser.prg	\
 	test_Y2SLog.prg		\
+	test_ISOLanguage.prg	\
         test_CallBack.prg	\
 	test_strutil.prg	\
 	test_mkdir.prg		\
@@ -47,12 +48,12 @@ parser_prg_SOURCES = parser.cc
 test_taggedparser_prg_SOURCES = test_taggedparser.cc
 
 test_Y2SLog_prg_SOURCES = test_Y2SLog.cc
-#test_Y2SLog_prg_LDFLAGS = -static
+
+test_ISOLanguage_prg_SOURCES = test_ISOLanguage.cc
 
 test_CallBack_prg_SOURCES = test_CallBack.cc
 
 test_strutil_prg_SOURCES = test_strutil.cc
-#test_strutil_prg_LDFLAGS = -static
 
 test_mkdir_prg_SOURCES = test_mkdir.cc
 

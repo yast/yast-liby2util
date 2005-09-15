@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 15 20:25:02 CEST 2005 - ma@suse.de
+
+- ISOLanguage: Support ISO 639-2 (3-letter) codes. (#113949)
+- 2.13.0
+
+-------------------------------------------------------------------
 Wed Sep  7 17:22:49 CEST 2005 - ma@suse.de
 
 - Fixed untranslated language and country names. (#106104)
