@@ -98,15 +98,18 @@ inline bool operator!=( const LangCode & lhs, const std::string & rhs ) {
 
 ///////////////////////////////////////////////////////////////////
 
-template<>
-inline bool std::less<LangCode>::operator()( const LangCode & lhs,
-					     const LangCode & rhs ) const
-{
-  if ( std::less<ISOLanguage>()( lhs.language(), rhs.language() ) )
-    return true;
-  if ( std::less<ISOLanguage>()( rhs.language(), lhs.language() ) )
-    return false;
-  return std::less<ISOCountry>()( lhs.country(), rhs.country() );
+
+namespace std {
+  template<>
+    inline bool less<LangCode>::operator()( const LangCode & lhs,
+                                            const LangCode & rhs ) const
+    {
+      if ( less<ISOLanguage>()( lhs.language(), rhs.language() ) )
+        return true;
+      if ( less<ISOLanguage>()( rhs.language(), lhs.language() ) )
+        return false;
+      return less<ISOCountry>()( lhs.country(), rhs.country() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////

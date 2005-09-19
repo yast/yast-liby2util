@@ -80,11 +80,13 @@ inline bool operator!=( const ISOCountry & lhs, const std::string & rhs ) {
 
 ///////////////////////////////////////////////////////////////////
 
-template<>
-inline bool std::less<ISOCountry>::operator()( const ISOCountry & lhs,
-					       const ISOCountry & rhs ) const
-{
-  return( lhs.code() < rhs.code() );
+namespace std {
+  template<>
+    inline bool less<ISOCountry>::operator()( const ISOCountry & lhs,
+                                              const ISOCountry & rhs ) const
+    {
+      return( lhs.code() < rhs.code() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////

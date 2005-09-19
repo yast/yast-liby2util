@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep 19 13:22:04 CEST 2005 - ma@suse.de
+
+- PathInfo::copy_dir: Don't preserve mode and ownership. (#117649)
+- Adjust template specializations to correct namespace.
+- 2.13.1
+
+-------------------------------------------------------------------
 Thu Sep 15 20:25:02 CEST 2005 - ma@suse.de
 
 - ISOLanguage: Support ISO 639-2 (3-letter) codes. (#113949)
