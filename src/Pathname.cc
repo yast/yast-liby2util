@@ -136,7 +136,7 @@ void Pathname::_assign( const string & name_tv )
   string   Tprfx;
   DirStack Stack_Ci;
 
-  char         Buf_aci[512];
+  char         Buf_aci[name_tv.length() + 1];
   char *       W_pci      = Buf_aci;
   const char * R_pci      = name_tv.c_str();
 
@@ -146,7 +146,6 @@ void Pathname::_assign( const string & name_tv )
        && (    'a' <= name_t[0] && name_t[0] <= 'z'
 	    || 'A' <= name_t[0] && name_t[0] <= 'Z' ) ) {
     Tprfx  = name_t.substr( 0, 2 );
-    name_t.erase( 0, 2 );
     prfx_i = 2;
     R_pci += 2;
   }
