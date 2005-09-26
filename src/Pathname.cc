@@ -136,7 +136,7 @@ void Pathname::_assign( const string & name_tv )
   string   Tprfx;
   DirStack Stack_Ci;
 
-  char         Buf_aci[name_tv.length() + 1];
+  char *       Buf_aci    = new char[name_tv.length() + 1];
   char *       W_pci      = Buf_aci;
   const char * R_pci      = name_tv.c_str();
 
@@ -176,7 +176,7 @@ void Pathname::_assign( const string & name_tv )
     }
   } while( *R_pci++ );
 
-
+  delete Buf_aci;
   name_t = Tprfx + Stack_Ci.str();
 }
 
