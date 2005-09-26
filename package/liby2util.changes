@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 26 13:49:20 CEST 2005 - ma@suse.de
+
+- PathInfo::copy_dir: Don't preserve mode and ownership. (#117649)
+- 2.12.9
+
+-------------------------------------------------------------------
 Wed Sep  7 17:22:49 CEST 2005 - ma@suse.de
 
 - Fixed untranslated language and country names. (#106104)

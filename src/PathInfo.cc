@@ -449,7 +449,7 @@ int PathInfo::copy_dir( const Pathname & srcpath, const Pathname & destpath )
     return _Log_Result( EEXIST );
   }
 
-  string cmd( stringutil::form( "cp -a '%s' '%s'",
+  string cmd( stringutil::form( "cp -dR '%s' '%s'",
 				srcpath.asString().c_str(),
 				destpath.asString().c_str() ) );
   ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
