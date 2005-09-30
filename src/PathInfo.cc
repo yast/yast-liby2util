@@ -449,10 +449,16 @@ int PathInfo::copy_dir( const Pathname & srcpath, const Pathname & destpath )
     return _Log_Result( EEXIST );
   }
 
-  string cmd( stringutil::form( "cp -dR '%s' '%s'",
-				srcpath.asString().c_str(),
-				destpath.asString().c_str() ) );
-  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+
+  const char *const argv[] = {
+    "/bin/cp",
+    "-dR",
+    "--",
+    srcpath.asString().c_str(),
+    destpath.asString().c_str(),
+    NULL
+  };
+  ExternalProgram prog( argv, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
   }
@@ -580,10 +586,14 @@ int PathInfo::copy( const Pathname & file, const Pathname & dest )
     return _Log_Result( EISDIR );
   }
 
-  string cmd( stringutil::form( "cp '%s' '%s'",
-				file.asString().c_str(),
-				dest.asString().c_str() ) );
-  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  const char *const argv[] = {
+    "/bin/cp",
+    "--",
+    file.asString().c_str(),
+    dest.asString().c_str(),
+    NULL
+  };
+  ExternalProgram prog( argv, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
   }
@@ -647,10 +657,14 @@ int PathInfo::copy_file2dir( const Pathname & file, const Pathname & dest )
     return _Log_Result( ENOTDIR );
   }
 
-  string cmd( stringutil::form( "cp '%s' '%s'",
-				file.asString().c_str(),
-				dest.asString().c_str() ) );
-  ExternalProgram prog( cmd, ExternalProgram::Stderr_To_Stdout );
+  const char *const argv[] = {
+    "/bin/cp",
+    "--",
+    file.asString().c_str(),
+    dest.asString().c_str(),
+    NULL
+  };
+  ExternalProgram prog( argv, ExternalProgram::Stderr_To_Stdout );
   for ( string output( prog.receiveLine() ); output.length(); output = prog.receiveLine() ) {
     DBG << "  " << output;
   }
