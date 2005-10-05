@@ -134,7 +134,7 @@ class SysConfig
     void writeEntry( const std::string &key, int value );
 
   protected:
-    std::string SysConfig::createLine( const std::string &key,
+    std::string createLine( const std::string &key,
                                        const std::string &value );
  
   private:
