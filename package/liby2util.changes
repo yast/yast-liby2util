@@ -1,8 +1,15 @@
 -------------------------------------------------------------------
+Thu Oct  6 16:12:22 CEST 2005 - ma@suse.de
+
+- Provide macros to define pointer classes within a namespace.
+  Required with GCC 4.1.
+- 2.13.3
+
+-------------------------------------------------------------------
 Wed Oct  5 16:11:20 CEST 2005 - visnov@suse.cz
 
 - fix build with GCC 4.1
-- 2.13.2 
+- 2.13.2
 
 -------------------------------------------------------------------
 Mon Sep 19 13:22:04 CEST 2005 - ma@suse.de

@@ -57,6 +57,15 @@
   extern template class RepPtrStore<NAME>;			\
   extern template class RepPtrStore<const NAME>;
 
+#define DEFINE_BASE_POINTER_IN_NAMESPACE(NS,NAME)		\
+  namespace NS {                                                \
+  class NAME;							\
+  typedef Ptr<NAME>      NAME##Ptr;				\
+  typedef constPtr<NAME> const##NAME##Ptr;			\
+  }                                                             \
+  extern template class RepPtrStore<NS::NAME>;			\
+  extern template class RepPtrStore<const NS::NAME>;
+
 #define DEFINE_DERIVED_POINTER(NAME,BASE)			\
   class NAME;							\
   typedef Ptr<NAME,BASE>      NAME##Ptr;			\
@@ -64,15 +73,32 @@
   extern template class RepPtrStore<NAME,BASE>;			\
   extern template class RepPtrStore<const NAME,const BASE>;
 
+#define DEFINE_DERIVED_POINTER_IN_NAMESPACE(NS,NAME,BASE)	\
+  namespace NS {                                                \
+  class NAME;							\
+  typedef Ptr<NAME,BASE>      NAME##Ptr;			\
+  typedef constPtr<NAME,BASE> const##NAME##Ptr;			\
+  }                                                             \
+  extern template class RepPtrStore<NS::NAME,BASE>;		\
+  extern template class RepPtrStore<const NS::NAME,const BASE>;
+
 ///////////////////////////////////////////////////////////////////
 
 #define IMPL_BASE_POINTER(NAME)					\
 template class RepPtrStore<NAME>;				\
 template class RepPtrStore<const NAME>;
 
+#define IMPL_BASE_POINTER_IN_NAMESPACE(NS,NAME)			\
+template class RepPtrStore<NS::NAME>;				\
+template class RepPtrStore<const NS::NAME>;
+
 #define IMPL_DERIVED_POINTER(NAME,BASE)				\
 template class RepPtrStore<NAME,BASE>;				\
 template class RepPtrStore<const NAME,const BASE>;
+
+#define IMPL_DERIVED_POINTER_IN_NAMESPACE(NS,NAME,BASE)		\
+template class RepPtrStore<NS::NAME,BASE>;			\
+template class RepPtrStore<const NS::NAME,const BASE>;
 
 ///////////////////////////////////////////////////////////////////
 
