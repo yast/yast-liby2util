@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 21 13:14:07 CET 2005 - mvidner@suse.cz
+
+- Fixed a new[]/delete mismatch in Pathname::_assign
+
+-------------------------------------------------------------------
 Thu Oct  6 16:12:22 CEST 2005 - ma@suse.de
 
 - Provide macros to define pointer classes within a namespace.
