@@ -131,7 +131,7 @@ struct ISOLanguage::_D : public Rep {
   string name() const {
     if ( _index->second.empty() )
       {
-        string ret( _("Unknown language: ") );
+        string ret( _("Unknown Language: ") );
         ret += "'";
         ret += _index->first;
         ret += "'";
@@ -273,7 +273,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: ale
   iso639_2["ale"]                                    = __( "Aleut" );
   // language code: alg
-  iso639_2["alg"]                                    = __( "Algonquian languages" );
+  iso639_2["alg"]                                    = __( "Algonquian Languages" );
   // language code: alt
   iso639_2["alt"]                                    = __( "Southern Altai" );
   // language code: amh am
@@ -281,7 +281,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: ang
   iso639_2["ang"]                                    = __( "English, Old (ca.450-1100)" );
   // language code: apa
-  iso639_2["apa"]                                    = __( "Apache languages" );
+  iso639_2["apa"]                                    = __( "Apache Languages" );
   // language code: ara ar
   iso639_2["ara"]                   = iso639_1["ar"] = __( "Arabic" );
   // language code: arc
@@ -303,9 +303,9 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: ast
   iso639_2["ast"]                                    = __( "Asturian" );
   // language code: ath
-  iso639_2["ath"]                                    = __( "Athapascan languages" );
+  iso639_2["ath"]                                    = __( "Athapascan Languages" );
   // language code: aus
-  iso639_2["aus"]                                    = __( "Australian languages" );
+  iso639_2["aus"]                                    = __( "Australian Languages" );
   // language code: ava av
   iso639_2["ava"]                   = iso639_1["av"] = __( "Avaric" );
   // language code: ave ae
@@ -319,7 +319,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: bad
   iso639_2["bad"]                                    = __( "Banda" );
   // language code: bai
-  iso639_2["bai"]                                    = __( "Bamileke languages" );
+  iso639_2["bai"]                                    = __( "Bamileke Languages" );
   // language code: bak ba
   iso639_2["bak"]                   = iso639_1["ba"] = __( "Bashkir" );
   // language code: bal
@@ -405,7 +405,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: chm
   iso639_2["chm"]                                    = __( "Mari" );
   // language code: chn
-  iso639_2["chn"]                                    = __( "Chinook jargon" );
+  iso639_2["chn"]                                    = __( "Chinook Jargon" );
   // language code: cho
   iso639_2["cho"]                                    = __( "Choctaw" );
   // language code: chp
@@ -419,7 +419,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: chy
   iso639_2["chy"]                                    = __( "Cheyenne" );
   // language code: cmc
-  iso639_2["cmc"]                                    = __( "Chamic languages" );
+  iso639_2["cmc"]                                    = __( "Chamic Languages" );
   // language code: cop
   iso639_2["cop"]                                    = __( "Coptic" );
   // language code: cor kw
@@ -427,17 +427,17 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: cos co
   iso639_2["cos"]                   = iso639_1["co"] = __( "Corsican" );
   // language code: cpe
-  iso639_2["cpe"]                                    = __( "Creoles and pidgins, English based (Other)" );
+  iso639_2["cpe"]                                    = __( "Creoles and Pidgins, English-Based (Other)" );
   // language code: cpf
-  iso639_2["cpf"]                                    = __( "Creoles and pidgins, French-based (Other)" );
+  iso639_2["cpf"]                                    = __( "Creoles and Pidgins, French-Based (Other)" );
   // language code: cpp
-  iso639_2["cpp"]                                    = __( "Creoles and pidgins, Portuguese-based (Other)" );
+  iso639_2["cpp"]                                    = __( "Creoles and Pidgins, Portuguese-Based (Other)" );
   // language code: cre cr
   iso639_2["cre"]                   = iso639_1["cr"] = __( "Cree" );
   // language code: crh
   iso639_2["crh"]                                    = __( "Crimean Tatar" );
   // language code: crp
-  iso639_2["crp"]                                    = __( "Creoles and pidgins (Other)" );
+  iso639_2["crp"]                                    = __( "Creoles and Pidgins (Other)" );
   // language code: csb
   iso639_2["csb"]                                    = __( "Kashubian" );
   // language code: cus
@@ -635,7 +635,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: ira
   iso639_2["ira"]                                    = __( "Iranian (Other)" );
   // language code: iro
-  iso639_2["iro"]                                    = __( "Iroquoian languages" );
+  iso639_2["iro"]                                    = __( "Iroquoian Languages" );
   // language code: ita it
   iso639_2["ita"]                   = iso639_1["it"] = __( "Italian" );
   // language code: jav jv
@@ -753,7 +753,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: luo
   iso639_2["luo"]                                    = __( "Luo (Kenya and Tanzania)" );
   // language code: lus
-  iso639_2["lus"]                                    = __( "lushai" );
+  iso639_2["lus"]                                    = __( "Lushai" );
   // language code: mac mkd mk
   iso639_2["mac"] = iso639_2["mkd"] = iso639_1["mk"] = __( "Macedonian" );
   // language code: mad
@@ -793,7 +793,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: min
   iso639_2["min"]                                    = __( "Minangkabau" );
   // language code: mis
-  iso639_2["mis"]                                    = __( "Miscellaneous languages" );
+  iso639_2["mis"]                                    = __( "Miscellaneous Languages" );
   // language code: mkh
   iso639_2["mkh"]                                    = __( "Mon-Khmer (Other)" );
   // language code: mlg mg
@@ -805,7 +805,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: mni
   iso639_2["mni"]                                    = __( "Manipuri" );
   // language code: mno
-  iso639_2["mno"]                                    = __( "Manobo languages" );
+  iso639_2["mno"]                                    = __( "Manobo Languages" );
   // language code: moh
   iso639_2["moh"]                                    = __( "Mohawk" );
   // language code: mol mo
@@ -815,9 +815,9 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: mos
   iso639_2["mos"]                                    = __( "Mossi" );
   // language code: mul
-  iso639_2["mul"]                                    = __( "Multiple languages" );
+  iso639_2["mul"]                                    = __( "Multiple Languages" );
   // language code: mun
-  iso639_2["mun"]                                    = __( "Munda languages" );
+  iso639_2["mun"]                                    = __( "Munda Languages" );
   // language code: mus
   iso639_2["mus"]                                    = __( "Creek" );
   // language code: mwl
@@ -825,7 +825,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: mwr
   iso639_2["mwr"]                                    = __( "Marwari" );
   // language code: myn
-  iso639_2["myn"]                                    = __( "Mayan languages" );
+  iso639_2["myn"]                                    = __( "Mayan Languages" );
   // language code: myv
   iso639_2["myv"]                                    = __( "Erzya" );
   // language code: nah
@@ -869,7 +869,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: nso
   iso639_2["nso"]                                    = __( "Northern Sotho" );
   // language code: nub
-  iso639_2["nub"]                                    = __( "Nubian languages" );
+  iso639_2["nub"]                                    = __( "Nubian Languages" );
   // language code: nwc
   iso639_2["nwc"]                                    = __( "Classical Newari" );
   // language code: nya ny
@@ -897,7 +897,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: ota
   iso639_2["ota"]                                    = __( "Turkish, Ottoman (1500-1928)" );
   // language code: oto
-  iso639_2["oto"]                                    = __( "Otomian languages" );
+  iso639_2["oto"]                                    = __( "Otomian Languages" );
   // language code: paa
   iso639_2["paa"]                                    = __( "Papuan (Other)" );
   // language code: pag
@@ -929,7 +929,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: por pt
   iso639_2["por"]                   = iso639_1["pt"] = __( "Portuguese" );
   // language code: pra
-  iso639_2["pra"]                                    = __( "Prakrit languages" );
+  iso639_2["pra"]                                    = __( "Prakrit Languages" );
   // language code: pro
   iso639_2["pro"]                                    = __( "Provencal, Old (to 1500)" );
   // language code: pus ps
@@ -963,7 +963,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: sai
   iso639_2["sai"]                                    = __( "South American Indian (Other)" );
   // language code: sal
-  iso639_2["sal"]                                    = __( "Salishan languages" );
+  iso639_2["sal"]                                    = __( "Salishan Languages" );
   // language code: sam
   iso639_2["sam"]                                    = __( "Samaritan Aramaic" );
   // language code: san sa
@@ -995,7 +995,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: sin si
   iso639_2["sin"]                   = iso639_1["si"] = __( "Sinhala" );
   // language code: sio
-  iso639_2["sio"]                                    = __( "Siouan languages" );
+  iso639_2["sio"]                                    = __( "Siouan Languages" );
   // language code: sit
   iso639_2["sit"]                                    = __( "Sino-Tibetan (Other)" );
   // language code: sla
@@ -1009,7 +1009,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: sme se
   iso639_2["sme"]                   = iso639_1["se"] = __( "Northern Sami" );
   // language code: smi
-  iso639_2["smi"]                                    = __( "Sami languages (Other)" );
+  iso639_2["smi"]                                    = __( "Sami Languages (Other)" );
   // language code: smj
   iso639_2["smj"]                                    = __( "Lule Sami" );
   // language code: smn
@@ -1111,7 +1111,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: tum
   iso639_2["tum"]                                    = __( "Tumbuka" );
   // language code: tup
-  iso639_2["tup"]                                    = __( "Tupi languages" );
+  iso639_2["tup"]                                    = __( "Tupi Languages" );
   // language code: tur tr
   iso639_2["tur"]                   = iso639_1["tr"] = __( "Turkish" );
   // language code: tut
@@ -1149,7 +1149,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: vot
   iso639_2["vot"]                                    = __( "Votic" );
   // language code: wak
-  iso639_2["wak"]                                    = __( "Wakashan languages" );
+  iso639_2["wak"]                                    = __( "Wakashan Languages" );
   // language code: wal
   iso639_2["wal"]                                    = __( "Walamo" );
   // language code: war
@@ -1159,7 +1159,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: wel cym cy
   iso639_2["wel"] = iso639_2["cym"] = iso639_1["cy"] = __( "Welsh" );
   // language code: wen
-  iso639_2["wen"]                                    = __( "Sorbian languages" );
+  iso639_2["wen"]                                    = __( "Sorbian Languages" );
   // language code: wln wa
   iso639_2["wln"]                   = iso639_1["wa"] = __( "Walloon" );
   // language code: wol wo
@@ -1177,7 +1177,7 @@ void ISOLanguage::_D::setDefaultCodeMaps( ISOLanguage::_D::CodeMap & iso639_1,
   // language code: yor yo
   iso639_2["yor"]                   = iso639_1["yo"] = __( "Yoruba" );
   // language code: ypk
-  iso639_2["ypk"]                                    = __( "Yupik languages" );
+  iso639_2["ypk"]                                    = __( "Yupik Languages" );
   // language code: zap
   iso639_2["zap"]                                    = __( "Zapotec" );
   // language code: zen

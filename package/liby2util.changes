@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Dec 21 10:56:19 CET 2005 - visnov@suse.cz
+
+- Merged proofread ISO language names 
+
+-------------------------------------------------------------------
 Mon Nov 21 13:14:07 CET 2005 - mvidner@suse.cz
 
 - Fixed a new[]/delete mismatch in Pathname::_assign
