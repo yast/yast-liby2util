@@ -1,8 +1,8 @@
 @HEADER-COMMENT@
 
-# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel yast2-devtools doxygen libpng tcl expect dejagnu openssl-devel pkgconfig zlib zlib-devel libxml2 libxml2-devel
 
 @HEADER@
+BuildRequires:	dejagnu doxygen gcc-c++ libxcrypt-devel libxml2-devel openssl-devel pkgconfig yast2-devtools
 Summary:	-
 
 %description
