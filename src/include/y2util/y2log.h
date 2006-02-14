@@ -38,6 +38,8 @@ void y2_logger_function (loglevel_t level, const char *component, const char *fi
 void y2_vlogger_function (loglevel_t level, const char *component, const char *file,
 		 const int line, const char *func, const char *format, va_list ap);
 
+void y2_logger_raw( const char* message );
+
 /* Logging defines */
 
 #ifdef y2log_subcomponent
@@ -97,6 +99,8 @@ do {									\
 #define y2error(format, args...)	y2logger(LOG_ERROR,format,##args)
 #define y2security(format, args...)	y2logger(LOG_SECURITY,format,##args)
 #define y2internal(format, args...)	y2logger(LOG_INTERNAL,format,##args)
+
+#define y2lograw(message)		y2_logger_raw(message)
 
 /**
  */

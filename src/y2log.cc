@@ -38,6 +38,7 @@
 #define Y2LOG_FORMAT	"%s <%d> %s(%d)%s %s%s:%d %s%s"
 #define Y2LOG_SIMPLE	"%2$s%3$s:%4$d %1$s %5$s%6$s"	/* this is GNU gettext parameter reordering */
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
+#define Y2LOG_SYSLOGRAW	"%s"
 #define Y2LOG_MAXSIZE	1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
 
@@ -255,6 +256,42 @@ void y2_vlogger_function(loglevel_t level, const char *component, const char *fi
 
     if (logtext)
 	free (logtext);
+}
+
+void y2_logger_raw( const char* logmessage )
+{
+#warning cut'n'paste copy, need a clean up
+    /* Prepare the logfile name */
+    if(!did_set_logname) set_log_filename("");
+
+    if(log_to_syslog) {
+	syslog (LOG_NOTICE, Y2LOG_SYSLOGRAW, logmessage);
+    }
+
+    if(!log_to_file) {
+	return;
+    }
+
+    /* Prepare the logfile */
+    shift_log_files (string (logname));
+
+    FILE *logfile = Y2LOG_STDERR;
+    if (*logname != '-') {
+	logfile = fopen (logname, "a");
+	if (!logfile && !log_simple) {
+	    fprintf (Y2LOG_STDERR, "y2log: Error opening logfile '%s': %s.\n",
+		     logname, strerror (errno));
+	    return;
+	}
+    }
+
+    fprintf (logfile, logmessage);
+
+    /* Clean everything */
+    if (logfile && logfile != Y2LOG_STDERR)
+	fclose (logfile);
+    else
+	fflush (logfile);
 }
 
 /**
