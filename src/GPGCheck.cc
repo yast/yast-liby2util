@@ -91,6 +91,10 @@ bool GPGCheck::check_file( const Pathname &sourceFile,
     return false;
   }
 
+  ret = check_file (sourceFile, false);
+  if (!ret)
+    return ret;
+
   vector<const char*> args;
   args.push_back("-o");
   args.push_back(destFile.asString().c_str());
