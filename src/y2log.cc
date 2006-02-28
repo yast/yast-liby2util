@@ -39,7 +39,7 @@
 #define Y2LOG_SIMPLE	"%2$s%3$s:%4$d %1$s %5$s%6$s"	/* this is GNU gettext parameter reordering */
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
 #define Y2LOG_SYSLOGRAW	"%s"
-#define Y2LOG_MAXSIZE	1024 * 1024		/* Maximal logfile size */
+#define Y2LOG_MAXSIZE	10* 1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
 
 // FIXME

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 28 10:16:28 CET 2006 - mvidner@suse.cz
+
+- Increased the log size from 10*1MB to 10*10MB because zypp still
+  logs like hell. Hopefully it can be reverted once things settle
+  down (#153306).
+- 2.13.6
+
+-------------------------------------------------------------------
 Mon Feb 20 12:36:15 CET 2006 - visnov@suse.cz
 
 - fix gpg signature check (meissner@suse.de)
