@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Mar 10 14:19:48 CET 2006 - hh@suse.cz
+
+- Prevent log truncation because of integer overflow on machines
+  with lots of memory (#156149).
+- 2.13.7
+
+-------------------------------------------------------------------
 Tue Feb 28 10:16:28 CET 2006 - mvidner@suse.cz
 
 - Increased the log size from 10*1MB to 10*10MB because zypp still

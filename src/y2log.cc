@@ -312,7 +312,13 @@ void set_log_filename (string fname)
     char *env_maxlogsize = getenv("Y2MAXLOGSIZE");
     if ( env_maxlogsize ) {
       stringutil::strtonum( env_maxlogsize, maxlogsize );
-      maxlogsize *= 1024;
+      // prevent overflow (#156149)
+      const off_t limit = std::numeric_limits<off_t>::max();
+      const off_t limit_k = limit / 1024;
+      if (maxlogsize <= limit_k)
+	  maxlogsize *= 1024;
+      else
+	  maxlogsize = limit;
     } else 
       maxlogsize = Y2LOG_MAXSIZE;
 
