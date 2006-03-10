@@ -309,7 +309,7 @@ void set_log_filename (string fname)
     struct passwd *pw = getpwuid( geteuid() );
     const char *filename = fname.c_str();
 
-    char *env_maxlogsize = getenv("Y2MAXLOGSIZE");
+    char *env_maxlogsize = getenv(Y2LOG_VAR_SIZE);
     if ( env_maxlogsize ) {
       stringutil::strtonum( env_maxlogsize, maxlogsize );
       // prevent overflow (#156149)
@@ -322,7 +322,7 @@ void set_log_filename (string fname)
     } else 
       maxlogsize = Y2LOG_MAXSIZE;
 
-    char *env_maxlognum = getenv("Y2MAXLOGNUM");
+    char *env_maxlognum = getenv(Y2LOG_VAR_NUM);
     maxlognum = env_maxlognum ? atoi(env_maxlognum) : Y2LOG_MAXNUM;
 
     /* Assign logfile name */
