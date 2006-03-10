@@ -38,6 +38,7 @@
 #define Y2LOG_FORMAT	"%s <%d> %s(%d)%s %s%s:%d %s%s"
 #define Y2LOG_SIMPLE	"%2$s%3$s:%4$d %1$s %5$s%6$s"	/* this is GNU gettext parameter reordering */
 #define Y2LOG_SYSLOG	"<%d>%s %s%s:%d %s%s"
+#define Y2LOG_RAW	"%s"
 #define Y2LOG_SYSLOGRAW	"%s"
 #define Y2LOG_MAXSIZE	10* 1024 * 1024		/* Maximal logfile size */
 #define Y2LOG_MAXNUM	10			/* Maximum logfiles number */
@@ -285,7 +286,7 @@ void y2_logger_raw( const char* logmessage )
 	}
     }
 
-    fprintf (logfile, logmessage);
+    fprintf (logfile, Y2LOG_RAW, logmessage);
 
     /* Clean everything */
     if (logfile && logfile != Y2LOG_STDERR)
