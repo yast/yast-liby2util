@@ -44,8 +44,8 @@ TimeClass_private::TimeClass_private()
 
 struct timeval TimeClass_private::difftonow()
 {
-    struct timeval now = {0};
-    struct timeval diff = {0};
+    struct timeval now = {0, 0};
+    struct timeval diff = {0, 0};
 
     if(running)
     {

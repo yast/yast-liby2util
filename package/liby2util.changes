@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Sep  1 15:05:04 CEST 2006 - mvidner@suse.cz
+
+- Fixed some warnings when compiling with -W.
+
+-------------------------------------------------------------------
 Fri Mar 10 14:19:48 CET 2006 - hh@suse.cz
 
 - Prevent log truncation because of integer overflow on machines

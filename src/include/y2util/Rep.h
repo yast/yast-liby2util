@@ -73,11 +73,11 @@ class Rep {
     /**
      * CopyConstructor. Initial reference count is zero.
      **/
-    Rep( const Rep & rhs ) : _counter( 0 ) {}
+    Rep( const Rep & /* rhs */ ) : _counter( 0 ) {}
     /**
      * Assignment. Reference count remains untouched.
      **/
-    Rep & operator=( const Rep & rhs ) { return *this; }
+    Rep & operator=( const Rep & /* rhs */ ) { return *this; }
     /**
      * Destructor. Throws exception if reference count is not zero.
      **/
