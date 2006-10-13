@@ -1,5 +1,11 @@
 -------------------------------------------------------------------
-Fri Mar 10 14:19:48 CET 2006 - hh@suse.cz
+Fri Sep  1 15:05:04 CEST 2006 - mvidner@suse.cz
+
+- Fixed warnings in code using Rep.h when compiling with -W.
+- 2.13.8
+
+-------------------------------------------------------------------
+Fri Mar 10 14:19:48 CET 2006 - mvidner@suse.cz
 
 - Prevent log truncation because of integer overflow on machines
   with lots of memory (#156149).
