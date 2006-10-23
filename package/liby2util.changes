@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Oct 23 10:05:04 CEST 2006 - mvidner@suse.cz
+
+- Fixed *_LDFLAGS to work with automake-1.9b.
+- 2.14.0
+
+-------------------------------------------------------------------
 Fri Sep  1 15:05:04 CEST 2006 - mvidner@suse.cz
 
 - Fixed warnings in code using Rep.h when compiling with -W.

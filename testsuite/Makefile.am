@@ -61,7 +61,7 @@ test_url_prg_SOURCES = test_url.cc
 test_df_prg_SOURCES = test_df.cc
 
 test_chroot_prg_SOURCES = test_chroot.cc
-test_chroot_prg_LDFLAGS = -static
+test_chroot_prg_LDFLAGS = $(AM_LDFLAGS) -static
 
 test_gpgcheck_prg_SOURCES = test_gpgcheck.cc
 
