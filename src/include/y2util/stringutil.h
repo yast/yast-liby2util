@@ -25,6 +25,7 @@
 
 #include <cstdio>
 #include <cstdarg>
+#include <cstdlib>
 
 #include <iosfwd>
 #include <vector>
@@ -65,8 +66,8 @@ inline std::string form( const char * format, ... ) {
   va_start( ap, format );
 
 #if 1
-  vasprintf( &buf, format, ap );
-  if ( buf ) {
+  int numprinted = vasprintf( &buf, format, ap );
+  if ( numprinted >= 0 ) {
     val = buf;
     free( buf );
   }
@@ -265,7 +266,7 @@ extern std::string join( const std::vector<std::string> & words_r,
 inline std::list<std::string> splitToLines( const std::string text_r, const std::string & sep_r = "\n" )
 {
   std::vector<std::string> lines;
-  stringutil::split( text_r, lines, "\n", true );
+  stringutil::split( text_r, lines, sep_r, true );
   std::list<std::string> ret;
   for ( unsigned i = 0; i < lines.size(); ++i ) {
     ret.push_back( lines[i] );
