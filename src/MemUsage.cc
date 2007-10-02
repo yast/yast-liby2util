@@ -18,6 +18,7 @@ $Id$
 /-*/
 
 #include "y2util/MemUsage.h"
+#include <stdlib.h>
 #include <map>
 #include <string>
 #include <cstdio>

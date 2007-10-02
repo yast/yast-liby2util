@@ -24,6 +24,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <limits>
 
 #include "y2util/y2log.h"
 #include "y2util/miniini.h"

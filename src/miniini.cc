@@ -8,6 +8,7 @@
  */
 
 #include "y2util/miniini.h"
+#include <string.h>
 #define MAXLINE 1024
 
 char *cutblanks(char *c) {

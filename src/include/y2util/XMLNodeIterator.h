@@ -29,6 +29,7 @@
 #include <sstream>
 #include <cassert>
 #include <iterator>
+#include <memory>
 
 extern "C" {
   typedef void * xmlTextReaderLocatorPtr;

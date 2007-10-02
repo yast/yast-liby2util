@@ -1,5 +1,6 @@
 #include <fstream>
 #include <y2util/CommonPkdParser.h>
+#include <stdlib.h>
 
 #define CREATETAG(tagname,num) \
     t = new CommonPkdParser::Tag(tagname,CommonPkdParser::Tag::ACCEPTONCE); \

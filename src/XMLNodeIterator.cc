@@ -23,6 +23,7 @@
 #include <libxml2/libxml/xmlreader.h>
 #include <libxml2/libxml/xmlerror.h>
 #include <y2util/Y2SLog.h>
+#include <string.h>
 
 using namespace std;
 

@@ -19,6 +19,7 @@
 
 /-*/
 
+#include <cstring>
 #include <cstdio> // snprintf
 #include <openssl/evp.h>
 #include <string>

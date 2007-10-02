@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 
 #include <y2util/GPGCheck.h>
 

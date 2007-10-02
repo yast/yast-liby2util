@@ -24,6 +24,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <string>
 

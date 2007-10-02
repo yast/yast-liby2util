@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <string.h>
 
 #include <y2util/PathInfo.h>
 

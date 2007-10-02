@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  2 15:24:02 CEST 2007 - mvidner@suse.cz
+
+- Fixed compilation errors with GCC 4.3 by adding missing includes.
+- 2.16.0
+
+-------------------------------------------------------------------
 Mon Oct 23 10:05:04 CEST 2006 - mvidner@suse.cz
 
 - Fixed *_LDFLAGS to work with automake-1.9b.
