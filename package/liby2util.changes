@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug  5 08:54:30 CEST 2011 - mvidner@suse.cz
+
+- Prevent YaST hanging when threads are used (bnc#708367), backport:
+  Use thread safe functions in logging fuctions (bnc#493152#c30)
+- 2.13.8.1
+
+-------------------------------------------------------------------
 Fri Sep  1 15:05:04 CEST 2006 - mvidner@suse.cz
 
 - Fixed warnings in code using Rep.h when compiling with -W.
