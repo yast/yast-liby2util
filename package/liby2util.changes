@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 30 08:29:03 UTC 2013 - yast-devel@opensuse.org
+
+- version 3.0.0
+
+-------------------------------------------------------------------
 Fri Aug  5 08:54:30 CEST 2011 - mvidner@suse.cz
 
 - Prevent YaST hanging when threads are used (bnc#708367), backport:
