@@ -1,9 +1,0 @@
-Input: https://abcdef/ghij
-asString: https://abcdef/ghij
-isValid: true
-isLocal: false
-protocol: https
-host: abcdef
-port: -1
-path: /ghij
-options: 
