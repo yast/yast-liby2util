@@ -1,9 +1,0 @@
-Input: ftp:///
-asString: ftp:///
-isValid: true
-isLocal: true
-protocol: ftp
-host: 
-port: -1
-path: /
-options: 
