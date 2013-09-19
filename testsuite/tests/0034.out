@@ -1,9 +1,0 @@
-Input: dvd:///
-asString: dvd:///
-isValid: true
-isLocal: true
-protocol: dvd
-host: 
-port: -1
-path: /
-options: 

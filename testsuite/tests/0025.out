@@ -1,9 +1,0 @@
-Input: file:/absolute/path/to/dir/
-asString: file:/absolute/path/to/dir/
-isValid: true
-isLocal: true
-protocol: file
-host: 
-port: -1
-path: /absolute/path/to/dir/
-options: 
